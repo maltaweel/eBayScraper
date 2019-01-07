@@ -3,52 +3,88 @@ Created on Jan 7, 2019
 
 @author: mark
 '''
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import urllib
-from lxml import etree
+from bs4 import BeautifulSoup
+import requests
+import os
+import csv
 
-try:
-    print("running with lxml.etree")
-except ImportError:
-    print("It appears you either have an outdated Python version, or you haven't installed lxml. See README.md file for details on how to address this error.")
+# List of item names to search on eBay
+name_list = ["Near East Antiquities"]
 
-# start Firefox instance
-driver = webdriver.Chrome()
+objects=[]
+prices=[]
+figures=[]
 
-# change this value to alter the number of tries before a url request times out
-num_requests = 10
+# Returns a list of urls that search eBay for an item
+def make_urls(names):
+    # eBay url that can be modified to search for a specific item on eBay
+    url = "https://www.ebay.com/sch/91101/i.html?_from=R40&_nkw="
+    # List of urls created
+    urls = []
 
-found = False
+    for name in names:
+        # Adds the name of item being searched to the end of the eBay url and appends it to the urls list
+        # In order for it to work the spaces need to be replaced with a +
+        urls.append(url + name.replace(" ", "+"))
 
-# change this value to alter the default url to scrape
-url = "http://www.ebay.co.uk/sch/Near-Eastern"
+    # Returns the list of completed urls
+    return urls
 
-while(num_requests > 0):
-    try:
-        driver.get(url)
-        print(driver.title)
-        num_requests = 0
-        found = True
-    except:
-        num_requests -= 1
-        print("warning: a parsing error occured -- " + num_requests + " requests left")
-        pass
 
-if(found == True):
-    try:
-        # change this value if you want to do something
-        # other than return terms based on searches
-        inputElement = driver.find_element_by_id("gh-ac")
-        # change term to search for something other than shoes
-        inputElement.send_keys("")
+# Scrapes and prints the url, name, and price of the first item result listed on eBay
+def ebay_scrape(urls):
+    for url in urls:
+        # Downloads the eBay page for processing
+        res = requests.get(url)
+        # Raises an exception error if there's an error downloading the website
+        res.raise_for_status()
+        # Creates a BeautifulSoup object for HTML parsing
+        soup = BeautifulSoup(res.text, 'html.parser')
+        # Scrapes the first listed item's name
+        name = soup.find_all("h3", {"class": "s-item__title"})
+        # .get_text(separator=u" ")
+        for n in name:
+            objects.append(n)
+        # Scrapes the first listed item's price
+        price = soup.find_all("span", {"class": "s-item__price"})
         
-        # enter search data
-        inputElement.submit()
-    except:
-        print("this element does not exist")
-else:
-    print("no website found at URL")
+        for p in price:
+            prices.append(p)
 
+        # Prints the url, listed item name, and the price of the item
+
+def printResults():
+    fieldnames = ['Object','Price','Figure']
+     
+    filename=filenameToOutput()
+    
+    with open(filename, 'wb') as csvf:
+        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
+
+        writer.writeheader()      
+        
+        i=0
+        for o in objects:
+            p=prices[i]
+            f=figures[i]
+            
+            i+=1
+            
+            writer.writerow({'Object':str(o),'Price':str(p),'Figure':str(f)})
+
+def filenameToOutput():
+        '''
+        The file name to output the results
+        filename-- the filename for the output
+        '''  
+        pn=os.path.abspath(__file__)
+        pn=pn.split("src")[0]  
+        filename=os.path.join(pn,'output','termFrequencies.csv')
+        
+        return filename
+    
+''''
+The main to launch this module
+'''
+if __name__ == '__main__':
+    ebay_scrape(make_urls(name_list))
