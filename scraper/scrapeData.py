@@ -50,6 +50,12 @@ def ebay_scrape(urls):
         
         for p in price:
             prices.append(p)
+            
+        images=soup.find_all("img",{"class":"s-item__image-img"})
+        
+        for im in images:
+            src=im['src']
+            figures.append(src)
 
         # Prints the url, listed item name, and the price of the item
 
