@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import csv
+import urllib2
+import time
 
 # List of item names to search on eBay
 name_list = ["Near East Antiquities"]
@@ -14,6 +16,7 @@ name_list = ["Near East Antiquities"]
 objects=[]
 prices=[]
 figures=[]
+figuresKeep=[]
 
 # Returns a list of urls that search eBay for an item
 def make_urls(names):
@@ -44,25 +47,72 @@ def ebay_scrape(urls):
         name = soup.find_all("h3", {"class": "s-item__title"})
         # .get_text(separator=u" ")
         for n in name:
-            objects.append(n)
+            info=n.get_text(separator=u" ")
+            objects.append(info)
+            
         # Scrapes the first listed item's price
         price = soup.find_all("span", {"class": "s-item__price"})
         
         for p in price:
-            prices.append(p)
+            pr=p.get_text(separator=u" ")
+            prices.append(pr)
             
-        images=soup.find_all("img",{"class":"s-item__image-img"})
+        images=soup.find_all("img",{"class": "s-item__image-img"})
         
         for im in images:
+            
+            
             src=im['src']
+            
+            
+            if 'images' not in src:
+                src=im['data-src']
+                
+            
+            
             figures.append(src)
+        
+        printImages()
 
         # Prints the url, listed item name, and the price of the item
+
+def printImages():
+    
+    for i in range(0,len(figures)):
+        f=figures[i]
+        
+        #get the current time
+        
+        try:
+            download_img = urllib2.urlopen(f)
+        
+            
+        except urllib2.HTTPError:
+            continue
+        
+        
+        np=filenameToOutput()
+        
+        path_to_data=os.path.join(np,'images','.%s.jpg'% i)
+        
+        
+        figuresKeep.append('%s.jpg'% i)
+        
+        #create the image stream (should go to your current folder this module is in)
+        txt = open(path_to_data, "wb")
+    
+        #write the binary data
+    
+        txt.write(download_img.read())
+
+        #close the image file
+        txt.close()
 
 def printResults():
     fieldnames = ['Object','Price','Figure']
      
     filename=filenameToOutput()
+    filename=os.path.join(filename,'output','output.csv')
     
     with open(filename, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
@@ -71,11 +121,12 @@ def printResults():
         
         i=0
         for o in objects:
-            p=prices[i]
-            f=figures[i]
+            p=prices[i].encode('utf-8').strip()
+            f=figuresKeep[i].encode('utf-8').strip()
             
             i+=1
             
+            o=o.encode('utf-8').strip()
             writer.writerow({'Object':str(o),'Price':str(p),'Figure':str(f)})
 
 def filenameToOutput():
@@ -85,12 +136,12 @@ def filenameToOutput():
         '''  
         pn=os.path.abspath(__file__)
         pn=pn.split("src")[0]  
-        filename=os.path.join(pn,'output','termFrequencies.csv')
         
-        return filename
+        return pn
     
 ''''
 The main to launch this module
 '''
 if __name__ == '__main__':
     ebay_scrape(make_urls(name_list))
+    printResults()
