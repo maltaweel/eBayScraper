@@ -11,7 +11,11 @@ import urllib2
 import time
 
 # List of item names to search on eBay
-name_list = ["Near East Antiquities"]
+#name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
+#             'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities'
+#             'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
+#             'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
+name_list=['Roman Antiquities']
 
 objects=[]
 prices=[]
@@ -20,8 +24,10 @@ figuresKeep=[]
 
 # Returns a list of urls that search eBay for an item
 def make_urls(names):
-    # eBay url that can be modified to search for a specific item on eBay
-    url = "https://www.ebay.com/sch/91101/i.html?_from=R40&_nkw="
+  # eBay url that can be modified to search for a specific item on eBay
+#    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
+#    url='https://www.ebay.com/sch/i.html?_from=R40&_nkw='
+    url='https://www.ebay.com/sch/37907/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
     # List of urls created
     urls = []
 
@@ -29,6 +35,7 @@ def make_urls(names):
         # Adds the name of item being searched to the end of the eBay url and appends it to the urls list
         # In order for it to work the spaces need to be replaced with a +
         urls.append(url + name.replace(" ", "+"))
+        
 
     # Returns the list of completed urls
     return urls
@@ -38,42 +45,64 @@ def make_urls(names):
 def ebay_scrape(urls):
     for url in urls:
         # Downloads the eBay page for processing
-        res = requests.get(url)
-        # Raises an exception error if there's an error downloading the website
-        res.raise_for_status()
-        # Creates a BeautifulSoup object for HTML parsing
-        soup = BeautifulSoup(res.text, 'html.parser')
-        # Scrapes the first listed item's name
-        name = soup.find_all("h3", {"class": "s-item__title"})
-        # .get_text(separator=u" ")
-        for n in name:
-            info=n.get_text(separator=u" ")
-            objects.append(info)
             
-        # Scrapes the first listed item's price
-        price = soup.find_all("span", {"class": "s-item__price"})
+        n=1
+        while(True):
+            
+            
+            url=url+'+%27&_pgn='+str(n)
+            
+            print(url)
+            res = requests.get(url)
         
-        for p in price:
-            pr=p.get_text(separator=u" ")
-            prices.append(pr)
-            
-        images=soup.find_all("img",{"class": "s-item__image-img"})
         
-        for im in images:
+            # Raises an exception error if there's an error downloading the website
+            res.raise_for_status()
+            
+           
+            # Creates a BeautifulSoup object for HTML parsing
+            soup = BeautifulSoup(res.text, 'html.parser')
+            
+            num=soup.find('h1',{"class":'srp-controls__count-heading'})
+            number=num.get_text(separator=u" ").split(" results")[0]
+            number=number.replace(',','')
+            
+            print(int(number))
+            
+            if int(number)==0:
+                break
+            else:
+                n=+1
+            # Scrapes the first listed item's name
+            name = soup.find_all("h3", {"class": "s-item__title"})
+        
+            # .get_text(separator=u" ")
+            for n in name:
+                info=n.get_text(separator=u" ")
+                objects.append(info)
+            
+            # Scrapes the first listed item's price
+            price = soup.find_all("span", {"class": "s-item__price"})
+        
+            for p in price:
+                pr=p.get_text(separator=u" ")
+                prices.append(pr)
+            
+            images=soup.find_all("img",{"class": "s-item__image-img"})
+        
+            for im in images:
             
             
-            src=im['src']
+                src=im['src']
             
             
-            if 'images' not in src:
-                src=im['data-src']
+                if 'images' not in src:
+                    src=im['data-src']
                 
             
             
-            figures.append(src)
+                    figures.append(src)
         
-        printImages()
-
         # Prints the url, listed item name, and the price of the item
 
 def printImages():
@@ -93,7 +122,7 @@ def printImages():
         
         np=filenameToOutput()
         
-        path_to_data=os.path.join(np,'images','.%s.jpg'% i)
+        path_to_data=os.path.join(np,'images','%s.jpg'% i)
         
         
         figuresKeep.append('%s.jpg'% i)
@@ -144,4 +173,6 @@ The main to launch this module
 '''
 if __name__ == '__main__':
     ebay_scrape(make_urls(name_list))
+    printImages()
     printResults()
+    print('Finished')
