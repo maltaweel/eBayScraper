@@ -19,8 +19,8 @@ name_list=['Roman Antiquities']
 
 objects=[]
 prices=[]
-figures=[]
-figuresKeep=[]
+figures={}
+figuresKeep={}
 
 # Returns a list of urls that search eBay for an item
 def make_urls(names):
@@ -45,12 +45,15 @@ def make_urls(names):
 def ebay_scrape(urls):
     for url in urls:
         # Downloads the eBay page for processing
-            
-        n=1
+        originalUrl=url
+           
+        nn=1
         while(True):
             
+            if nn==5:
+                break
             
-            url=url+'+%27&_pgn='+str(n)
+            url=originalUrl+'+%27&_pgn='+str(nn)
             
             print(url)
             res = requests.get(url)
@@ -67,18 +70,19 @@ def ebay_scrape(urls):
             number=num.get_text(separator=u" ").split(" results")[0]
             number=number.replace(',','')
             
-            print(int(number))
+#           print(int(number))
             
             if int(number)==0:
                 break
             else:
-                n=+1
+                nn+=1
             # Scrapes the first listed item's name
             name = soup.find_all("h3", {"class": "s-item__title"})
         
             # .get_text(separator=u" ")
             for n in name:
                 info=n.get_text(separator=u" ")
+                print(info)
                 objects.append(info)
             
             # Scrapes the first listed item's price
@@ -89,27 +93,31 @@ def ebay_scrape(urls):
                 prices.append(pr)
             
             images=soup.find_all("img",{"class": "s-item__image-img"})
-        
+            
             for im in images:
             
             
                 src=im['src']
-            
+                alt=im['alt']
             
                 if 'images' not in src:
                     src=im['data-src']
                 
             
             
-                    figures.append(src)
+                    figures[alt]=src
         
         # Prints the url, listed item name, and the price of the item
 
 def printImages():
     
-    for i in range(0,len(figures)):
-        f=figures[i]
+    i=0
+    for n in figures.keys():
+        print(n)
         
+        f=figures[n]
+        
+#        print(f)
         #get the current time
         
         try:
@@ -122,10 +130,11 @@ def printImages():
         
         np=filenameToOutput()
         
-        path_to_data=os.path.join(np,'images','%s.jpg'% i)
+        fileJ='%s.jpg'% i
+        path_to_data=os.path.join(np,'images',fileJ)
         
         
-        figuresKeep.append('%s.jpg'% i)
+        figuresKeep[n]=fileJ
         
         #create the image stream (should go to your current folder this module is in)
         txt = open(path_to_data, "wb")
@@ -136,6 +145,7 @@ def printImages():
 
         #close the image file
         txt.close()
+        i+=1
 
 def printResults():
     fieldnames = ['Object','Price','Figure']
@@ -149,9 +159,17 @@ def printResults():
         writer.writeheader()      
         
         i=0
+        
+        
         for o in objects:
             p=prices[i].encode('utf-8').strip()
-            f=figuresKeep[i].encode('utf-8').strip()
+            
+            no=o.split("2019 ")[1]
+            
+            if no in figuresKeep.keys():
+                f=figuresKeep[no].encode('utf-8').strip()
+            else:
+                f=""
             
             i+=1
             
