@@ -82,7 +82,7 @@ def ebay_scrape(urls):
             # .get_text(separator=u" ")
             for n in name:
                 info=n.get_text(separator=u" ")
-                print(info)
+#               print(info)
                 objects.append(info)
             
             # Scrapes the first listed item's price
@@ -113,7 +113,7 @@ def printImages():
     
     i=0
     for n in figures.keys():
-        print(n)
+#        print(n)
         
         f=figures[n]
         
