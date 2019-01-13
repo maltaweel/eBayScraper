@@ -8,14 +8,13 @@ import requests
 import os
 import csv
 import urllib2
-import time
 
 # List of item names to search on eBay
 #name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
 #             'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities'
 #             'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
 #             'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
-name_list=['Roman Antiquities']
+name_list=['Antiquities']
 
 objects=[]
 prices=[]
@@ -27,7 +26,8 @@ def make_urls(names):
   # eBay url that can be modified to search for a specific item on eBay
 #    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
 #    url='https://www.ebay.com/sch/i.html?_from=R40&_nkw='
-    url='https://www.ebay.com/sch/37907/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
+#    url='https://www.ebay.com/sch/37907/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
+    url='https://www.ebay.com/sch/37903/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
     # List of urls created
     urls = []
 
@@ -50,8 +50,8 @@ def ebay_scrape(urls):
         nn=1
         while(True):
             
-            if nn==5:
-                break
+#            if nn==5:
+#                break
             
             url=originalUrl+'+%27&_pgn='+str(nn)
             
@@ -101,10 +101,8 @@ def ebay_scrape(urls):
                 alt=im['alt']
             
                 if 'images' not in src:
+                    
                     src=im['data-src']
-                
-            
-            
                     figures[alt]=src
         
         # Prints the url, listed item name, and the price of the item
