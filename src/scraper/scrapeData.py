@@ -10,12 +10,14 @@ import csv
 import urllib2
 
 # List of item names to search on eBay
-#name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
-#             'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities'
-#             'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
-#             'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
-name_list=['Antiquities']
+name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
+             'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities'
+             'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
+             'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
+#name_list=['Antiquities']
 
+ii=0
+tt=0
 objects=[]
 prices=[]
 figures={}
@@ -27,14 +29,14 @@ def make_urls(names):
 #    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
 #    url='https://www.ebay.com/sch/i.html?_from=R40&_nkw='
 #    url='https://www.ebay.com/sch/37907/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
-    url='https://www.ebay.com/sch/37903/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
+    url='https://www.ebay.com/sch/37903/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27+'
     # List of urls created
-    urls = []
+    urls = {}
 
     for name in names:
         # Adds the name of item being searched to the end of the eBay url and appends it to the urls list
         # In order for it to work the spaces need to be replaced with a +
-        urls.append(url + name.replace(" ", "+"))
+        urls[name]=url + name.replace(" ", "+")
         
 
     # Returns the list of completed urls
@@ -42,74 +44,94 @@ def make_urls(names):
 
 
 # Scrapes and prints the url, name, and price of the first item result listed on eBay
-def ebay_scrape(urls):
-    for url in urls:
-        # Downloads the eBay page for processing
-        originalUrl=url
+def ebay_scrape(url,tt):
+    
+    # Downloads the eBay page for processing
+    originalUrl=url
            
-        nn=1
-        while(True):
+    nn=1
+    
+    run=True
+    
+    while(run):
             
 #            if nn==5:
 #                break
             
-            url=originalUrl+'+%27&_pgn='+str(nn)
+        url=originalUrl+'+%27&_pgn='+str(nn)
             
-            print(url)
-            res = requests.get(url)
+        print(url)
+        res = requests.get(url)
         
         
-            # Raises an exception error if there's an error downloading the website
-            res.raise_for_status()
+        # Raises an exception error if there's an error downloading the website
+        res.raise_for_status()
             
            
-            # Creates a BeautifulSoup object for HTML parsing
-            soup = BeautifulSoup(res.text, 'html.parser')
+        # Creates a BeautifulSoup object for HTML parsing
+        soup = BeautifulSoup(res.text, 'html.parser')
             
-            num=soup.find('h1',{"class":'srp-controls__count-heading'})
-            number=num.get_text(separator=u" ").split(" results")[0]
-            number=number.replace(',','')
+        num=soup.find('h1',{"class":'srp-controls__count-heading'})
+        number=num.get_text(separator=u" ").split(" results")[0]
+        number=number.replace(',','')
             
-#           print(int(number))
+#       print(int(number))
             
-            if int(number)==0:
-                break
-            else:
-                nn+=1
-            # Scrapes the first listed item's name
-            name = soup.find_all("h3", {"class": "s-item__title"})
+        if int(number)==0:
+            run=False
+            break
+        else:
+            nn+=1
         
-            # .get_text(separator=u" ")
-            for n in name:
-                info=n.get_text(separator=u" ")
-#               print(info)
+        # Scrapes the first listed item's name
+        name = soup.find_all("h3", {"class": "s-item__title"})
+        
+        # .get_text(separator=u" ")
+        for n in name:
+            info=n.get_text(separator=u" ")
+#           print(info)
+            tt+=1
+            
+            if tt>int(number):
+                run=False
+                break
+            
+            else:
                 objects.append(info)
             
             # Scrapes the first listed item's price
-            price = soup.find_all("span", {"class": "s-item__price"})
+        price = soup.find_all("span", {"class": "s-item__price"})
         
-            for p in price:
-                pr=p.get_text(separator=u" ")
-                prices.append(pr)
+        if tt>int(number):
+            break
+        
+        for p in price:
+            pr=p.get_text(separator=u" ")
+            prices.append(pr)
             
-            images=soup.find_all("img",{"class": "s-item__image-img"})
+        images=soup.find_all("img",{"class": "s-item__image-img"})
             
-            for im in images:
+        for im in images:
             
             
-                src=im['src']
-                alt=im['alt']
+            src=im['src']
+            alt=im['alt']
             
-                if 'images' not in src:
+            if 'images' not in src:
                     
+                try:
                     src=im['data-src']
-                    figures[alt]=src
+                except:
+                    continue
+                    
+                figures[alt]=src
         
+        print(tt)
         # Prints the url, listed item name, and the price of the item
 
-def printImages():
+def printImages(ii):
     
-    i=0
+   
     for n in figures.keys():
 #        print(n)
         
@@ -128,7 +150,7 @@ def printImages():
         
         np=filenameToOutput()
         
-        fileJ='%s.jpg'% i
+        fileJ='%s.jpg'% ii
         path_to_data=os.path.join(np,'images',fileJ)
         
         
@@ -143,13 +165,13 @@ def printImages():
 
         #close the image file
         txt.close()
-        i+=1
+        ii+=1
 
-def printResults():
+def printResults(name):
     fieldnames = ['Object','Price','Figure']
      
     filename=filenameToOutput()
-    filename=os.path.join(filename,'output','output.csv')
+    filename=os.path.join(filename,'output',name+'.csv')
     
     with open(filename, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
@@ -162,7 +184,10 @@ def printResults():
         for o in objects:
             p=prices[i].encode('utf-8').strip()
             
-            no=o.split("2019 ")[1]
+            try:
+                no=o.split("2019 ")[1]
+            except:
+                no=o.split("2018 ")[1]
             
             if no in figuresKeep.keys():
                 f=figuresKeep[no].encode('utf-8').strip()
@@ -188,7 +213,14 @@ def filenameToOutput():
 The main to launch this module
 '''
 if __name__ == '__main__':
-    ebay_scrape(make_urls(name_list))
-    printImages()
-    printResults()
+    urls=make_urls(name_list)
+    
+    ii=0
+    for name in urls.keys():
+        tt=0
+        url=urls[name]
+        ebay_scrape(url,tt)
+        printImages(ii)
+        printResults(name)
+        
     print('Finished')
