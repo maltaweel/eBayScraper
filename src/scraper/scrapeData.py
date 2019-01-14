@@ -22,6 +22,8 @@ objects=[]
 prices=[]
 figures={}
 figuresKeep={}
+links={}
+location={}
 
 # Returns a list of urls that search eBay for an item
 def make_urls(names):
@@ -105,27 +107,45 @@ def ebay_scrape(url,tt):
             pr=p.get_text(separator=u" ")
             prices.append(pr)
             
-        images=soup.find_all("img",{"class": "s-item__image-img"})
+          
+        imags=soup.find_all("a",{"class": "s-item__link"})
         
-    
-        for im in images:
+        iit=0
+        for im in imags:
+            name=objects[iit]
+            
+            href=im['href']
+            res2 = requests.get(href)
+            soup2 = BeautifulSoup(res2.text, 'html.parser')
+            
+#           location1 = soup2.find_all("div", {"class": "u-flL"})
+            location2 = soup2.find_all("div",{"class": "sh-loc"})
+            
+            links[name]=href
+            
+            for lc2 in location2:
+                prr=lc2.get_text(separator=u" ").split("location: ")[1]
+                location[name]=href
+#                print(prr)
         
             
-            src=im['src']
-            alt=im['alt']
+            iit+=1
+#            src=im['src']
+#            alt=im['alt']
             
-            if 'images' not in src:
+#            if 'images' not in src:
                     
                     
-                try:
-                    src=im['data-src']
-                except:
-                    continue
+ #               try:
+ #                   src=im['data-src']
+ #               except:
+ #                   continue
                     
-            figures[alt]=src
+#            figures[alt]=src
             
         
-        print(tt)
+##        print(tt)
+        
         # Prints the url, listed item name, and the price of the item
 
 def printImages(ii):
@@ -166,7 +186,7 @@ def printImages(ii):
         ii+=1
 
 def printResults(name):
-    fieldnames = ['Object','Price','Figure']
+    fieldnames = ['Object','Price','Location','Links']
      
     filename=filenameToOutput()
     filename=os.path.join(filename,'output',name+'.csv')
@@ -195,7 +215,17 @@ def printResults(name):
             i+=1
             
             o=o.encode('utf-8').strip()
-            writer.writerow({'Object':str(o),'Price':str(p),'Figure':str(f)})
+            
+            l=location[o]
+            liks=links[o]
+            
+            writer.writerow({'Object':str(o),'Price':str(p),'Location':str(l),'Links':str(liks)})
+    
+    prices[:]
+    figures.clear()
+    figuresKeep.clear()
+    links.clear()
+    location.clear()
 
 def filenameToOutput():
         '''
@@ -218,7 +248,7 @@ if __name__ == '__main__':
         tt=0
         url=urls[name]
         ebay_scrape(url,tt)
-        printImages(ii)
+#       printImages(ii)
         printResults(name)
         
     print('Finished')
