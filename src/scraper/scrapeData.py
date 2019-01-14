@@ -11,7 +11,7 @@ import urllib2
 
 # List of item names to search on eBay
 name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
-             'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities'
+             'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities',
              'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
              'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
 #name_list=['Antiquities']
@@ -83,48 +83,47 @@ def ebay_scrape(url,tt):
         else:
             nn+=1
         
-        # Scrapes the first listed item's name
-        name = soup.find_all("h3", {"class": "s-item__title"})
-        
-        # .get_text(separator=u" ")
-        for n in name:
-            info=n.get_text(separator=u" ")
-#           print(info)
-            tt+=1
-            
-            if tt>int(number):
+        if tt>int(number):
                 run=False
                 break
-            
-            else:
-                objects.append(info)
-            
+        # Scrapes the first listed item's name
+        name = soup.find_all("h3", {"class": "s-item__title"})
+
+        # .get_text(separator=u" ")
+        
+        for n in name:
+            info=n.get_text(separator=u" ")
+#          
+            objects.append(info)
+            tt+=1
+                
             # Scrapes the first listed item's price
+       
         price = soup.find_all("span", {"class": "s-item__price"})
-        
-        if tt>int(number):
-            break
-        
+                
         for p in price:
             pr=p.get_text(separator=u" ")
             prices.append(pr)
             
         images=soup.find_all("img",{"class": "s-item__image-img"})
-            
+        
+    
         for im in images:
-            
+        
             
             src=im['src']
             alt=im['alt']
             
             if 'images' not in src:
                     
+                    
                 try:
                     src=im['data-src']
                 except:
                     continue
                     
-                figures[alt]=src
+            figures[alt]=src
+            
         
         print(tt)
         # Prints the url, listed item name, and the price of the item
@@ -142,8 +141,7 @@ def printImages(ii):
         
         try:
             download_img = urllib2.urlopen(f)
-        
-            
+           
         except urllib2.HTTPError:
             continue
         
