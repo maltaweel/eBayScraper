@@ -125,8 +125,8 @@ def ebay_scrape(url,tt):
             
             for lc2 in location2:
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
-                location[name]=href
-#                print(prr)
+                location[name]=prr
+                print(prr)
         
             
             iit+=1
@@ -216,9 +216,19 @@ def printResults(name):
             
             o=o.encode('utf-8').strip()
             
-            l=location[o]
-            liks=links[o]
+            l=""
+            liks=''
             
+            try:
+                l=location[o]
+            except:
+                l=""
+            
+            try:
+                liks=links[o]
+            except:
+                liks=""
+                
             writer.writerow({'Object':str(o),'Price':str(p),'Location':str(l),'Links':str(liks)})
     
     prices[:]
