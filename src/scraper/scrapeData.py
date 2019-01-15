@@ -110,6 +110,9 @@ def ebay_scrape(url,tt):
           
         imags=soup.find_all("a",{"class": "s-item__link"})
         
+        soup.decompose()
+        
+        
         iit=0
         for im in imags:
             name=objects[iit]
@@ -220,12 +223,12 @@ def printResults(name):
             liks=''
             
             try:
-                l=location[o]
+                l=location[o].encode('utf-8').strip()
             except:
                 l=""
             
             try:
-                liks=links[o]
+                liks=links[o].encode('utf-8').strip()
             except:
                 liks=""
                 
