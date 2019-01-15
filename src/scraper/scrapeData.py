@@ -126,7 +126,7 @@ def ebay_scrape(url,tt):
             for lc2 in location2:
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
-                print(prr)
+ #               print(prr)
         
             
             iit+=1
