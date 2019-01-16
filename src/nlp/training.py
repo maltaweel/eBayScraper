@@ -9,7 +9,6 @@ import random
 spacy.prefer_gpu()
 nlp = spacy.load('en')
 
-
 def train_model():
     TRAIN_DATA = [
      ("Roman blew through $1 million a week", {'entities': [(0, 5, 'NORP')]}),
@@ -20,7 +19,10 @@ def train_model():
      ('Meotian sword. Meoty. 4th century. Very good condition. Length 70 cm.',{'entities': [(0,7, "NORP")]}), 
      ('PHOENICIAN GLASS FACE',{'entities': [(0,10, "NORP")]}),
      ('GREEK STATUE',{'entities':[(0,5, "NORP")]}),
-     ('CHRISTIAN BILLON RING',{'entities':[(0,9, "NORP")]})
+     ('CHRISTIAN BILLON RING',{'entities':[(0,9, "NORP")]}),
+     ('Medieval BILLON RING',{'entities':[(0,7, "NORP")]}),
+     ('Crusader Ring',{'entities':[(0,8, "NORP")]}),
+     ('Sold  Dec 19, 2018 Superb Roman bronze coin with desirable patina',{'entities':[(24,28, "NORP")]}),
      ]
       
 

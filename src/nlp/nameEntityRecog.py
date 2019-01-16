@@ -9,10 +9,20 @@ import csv
 import nltk
 import os
 import random
+import re
+
 
 spacy.prefer_gpu()
 nlp = spacy.load('en')
 
+
+words={'roman','byzantine','celtic','egyptian','phoenician','greek','viking','native american','revolutionary'}
+
+entities={}
+
+def findWholeWord(w,doc):
+    return re.findall(w, doc.lower())
+    
 
 def preprocess(sent):
     sent = nltk.word_tokenize(sent)
@@ -29,8 +39,10 @@ def loadData():
 
     results={}
     
-    for fil in os.listdir(pathway):
-        with open(os.path.join(pathway,fil),'rU') as csvfile:
+    for word in words:
+        
+        for fil in os.listdir(pathway):
+            with open(os.path.join(pathway,fil),'rU') as csvfile:
                 reader = csv.DictReader(csvfile)
                 
                 
@@ -42,10 +54,28 @@ def loadData():
                         obj={}
                         
                         objct=row['Object']
+                        
+                        df=findWholeWord(word,objct)
+                        
+                        if len(df)==0:
+                            continue
+                        
+                        else:
+                            if word in entities:
+                                lst=entities[word]
+                                lst.append(objct)
+                                entities[word]=lst
+                            
+                            else:
+                                lst=[]
+                                lst.append(objct)
+                                entities[word]=lst
+                        
                         date1=objct.split("2019")
                         date2=objct.split("2018")
                         
                         dateKeep=''
+                            
                         if len(date1)>1:
                             s1=date1[0].replace("Sold","").strip()
                             dateKeep=s1+" 2019"
@@ -78,7 +108,6 @@ def lookAtText(results):
         
         objc=obj['object']
         u = unicode(objc, "utf-8")
-        
         doc = nlp(u)
     
         print([(X.text, X.label_) for X in doc.ents])
