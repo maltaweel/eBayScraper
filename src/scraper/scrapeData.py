@@ -124,7 +124,7 @@ def ebay_scrape(url,tt):
             location1 = soup2.find_all("div", {"class": "u-flL"})
             location2 = soup2.find_all("div",{"class": "sh-loc"})
             
-            print(href)
+#            print(href)
             links[name]=href
             
             tr=False
