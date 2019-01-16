@@ -68,12 +68,23 @@ def loadData():
                         
     return results
 
-def lookAtText(text):
-    doc = nlp(text)
+def lookAtText(results):
     
-    print([(X.text, X.label_) for X in doc.ents])
+    keys=results.keys()
+    
+    for d in results:
+        obj=results[d]
+        
+        objc=obj['object']
+        u = unicode(objc, "utf-8")
+        
+        doc = nlp(u)
+    
+        print([(X.text, X.label_) for X in doc.ents])
     
 if __name__ == '__main__':
    results=loadData()
+   
+   lookAtText(results)
    
    print("Finished")
