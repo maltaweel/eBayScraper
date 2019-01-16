@@ -121,16 +121,30 @@ def ebay_scrape(url,tt):
             res2 = requests.get(href)
             soup2 = BeautifulSoup(res2.text, 'html.parser')
             
-#           location1 = soup2.find_all("div", {"class": "u-flL"})
+            location1 = soup2.find_all("div", {"class": "u-flL"})
             location2 = soup2.find_all("div",{"class": "sh-loc"})
             
+            print(href)
             links[name]=href
             
+            tr=False
             for lc2 in location2:
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
+                tr=True
  #               print(prr)
-        
+            
+            loc=False
+            if tr is False:
+                for lc3 in location1:
+                    text=lc3.get_text(separator=u" ")
+                    if "location" in text:
+                        loc=True
+                        continue
+                    if loc is True:
+                        prr=lc3.get_text(separator=u" ")
+                        location[name]=prr
+                        break
             
             iit+=1
 #            src=im['src']
