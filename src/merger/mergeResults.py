@@ -1,31 +1,16 @@
-'''
-Created on Jan 17, 2019
-
-@author: mark
-'''
-
-import pysal
-import os
 import csv
+import os
+import pysal
 
 
-oldNodes={}
-nodes={}
-links=[]
-nodesS=[]
-linkz={}
-
-'''
-Load the data and creating the links for the network from street segment file.
-@param fileName the shapefile name to assess.
-'''
-def load(dbfName,csvName):
+def load(dbF,csvName): 
+    
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
         
     #The data file path is now created where the data folder and dataFile.csv is referenced
-    filename=os.path.join(pn,'data',dbfName)
-        
+    filename=os.path.join(pn,'data',dbF)
+    
     dbf = pysal.open(filename)
     
     countries = dbf.by_col('NAME')
@@ -33,7 +18,8 @@ def load(dbfName,csvName):
     pathway=os.path.join(pn,'data',csvName)
 
     results={}
-    
+    prices={}
+    category={}
         
     with open(pathway) as csvfile:
             reader = csv.DictReader(csvfile)
@@ -44,7 +30,36 @@ def load(dbfName,csvName):
                         i+=1
                         
                     else:
-                        print('')
+                        date=row['Date']
+                        obj=row['Object']
+                        price=row['Price']
+                        cat=row['Category']
+                        link=row['Link']
+                        loc=row['Location']
+                        
+                        for c in countries:
+                            
+                            rslt=[]
+                            prc=[]
+                            ctg=[]
+                            if c in results:
+                                rslt=results[c]
+                                prc=prices[c]
+                                rslt.append(loc)
+                                prc.append(price)
+                                ctg.append(cat)
+                                
+                            else:
+                                rslt.append(loc)
+                                prc.append(price)
+                                ctg.append(cat)
+                            
+                            results[c]=rslt
+                            prices[c]=prc
+                            category[c]=ctg
+                               
+                                
+                        
                         
 
 
