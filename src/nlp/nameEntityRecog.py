@@ -10,13 +10,14 @@ import nltk
 import os
 import random
 import re
-
+from datetime import datetime
 
 spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
-words={'roman','byzantine','celtic','egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance','saxon'}
+words={'roman','byzantine','celt','egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance',
+       'saxon','nordic','Khazar','mogul','khanate'}
 
 entities={}
 
@@ -130,13 +131,27 @@ def printResults(results):
             obj=results[d]
             
             res0=obj['date']
+            
+            date=datetime.strptime(res0, '%b %d, %Y')
+            
             res1=obj['object']
             res2=obj['price']
-            res3=obj['location']
+            
+            v=str(res2.replace("$","").strip()).replace(',','').strip()
+            res2F=float(v)
+            res3=obj['location'].split(",")
+            
+            loc=""
+            if len(res3)>1:
+                loc=res3[len(res3)-1].strip()
+            else:
+                loc=res3[0]
+            
+           
             res4=obj['category']
             res5=obj['links']
             
-            writer.writerow({'Date': str(res0),'Object':str(res1),'Price':str(res2),'Location':str(res3),'Category':str(res4),
+            writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
                              'Link':str(res5)})
             
 def lookAtNewText():
