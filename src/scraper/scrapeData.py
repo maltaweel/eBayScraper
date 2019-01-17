@@ -14,7 +14,7 @@ name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The
              'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities',
              'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
              'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
-#name_list=['Antiquities']
+#name_list=['Byzantine Antiquities']
 
 ii=0
 tt=0
@@ -56,7 +56,8 @@ def ebay_scrape(url,tt):
     run=True
     
     while(run):
-            
+        iit=0   
+        localNames=[]
 #            if nn==5:
 #                break
             
@@ -97,7 +98,9 @@ def ebay_scrape(url,tt):
             info=n.get_text(separator=u" ")
 #          
             objects.append(info)
+            localNames.append(info)
             tt+=1
+            iit+=1
                 
             # Scrapes the first listed item's price
        
@@ -115,7 +118,7 @@ def ebay_scrape(url,tt):
         
         iit=0
         for im in imags:
-            name=objects[iit]
+            name=localNames[iit]
             
             href=im['href']
             res2 = requests.get(href)
@@ -132,7 +135,7 @@ def ebay_scrape(url,tt):
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
                 tr=True
- #               print(prr)
+#                print(prr)
             
             loc=False
             if tr is False:
@@ -143,6 +146,7 @@ def ebay_scrape(url,tt):
                         continue
                     if loc is True:
                         prr=lc3.get_text(separator=u" ")
+#                        print(prr)
                         location[name]=prr
                         break
             
@@ -203,7 +207,7 @@ def printImages(ii):
         ii+=1
 
 def printResults(name):
-    fieldnames = ['Object','Price','Location','Links']
+    fieldnames = ['Object','Price','Location','Link']
      
     filename=filenameToOutput()
     filename=os.path.join(filename,'output',name+'.csv')
@@ -237,17 +241,18 @@ def printResults(name):
             liks=''
             
             try:
-                l=location[o].encode('utf-8').strip()
+                l=location[o].encode('utf8').strip()
             except:
                 l=""
             
             try:
-                liks=links[o].encode('utf-8').strip()
+                liks=links[o].encode('utf8').strip()
             except:
                 liks=""
                 
-            writer.writerow({'Object':str(o),'Price':str(p),'Location':str(l),'Links':str(liks)})
+            writer.writerow({'Object':str(o),'Price':str(p),'Location':str(l),'Link':str(liks)})
     
+    objects[:]
     prices[:]
     figures.clear()
     figuresKeep.clear()

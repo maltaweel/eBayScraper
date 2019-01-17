@@ -16,7 +16,7 @@ spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
-words={'roman','byzantine','celtic','egyptian','phoenician','greek','viking','native american','revolutionary'}
+words={'roman','byzantine','celtic','egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance','saxon'}
 
 entities={}
 
@@ -82,7 +82,7 @@ def loadData():
                             
                         else:
                             s2=date2[0].replace("Sold","").strip()
-                            dateKeep=s2+" 2019"
+                            dateKeep=s2+" 2018"
                         
                         
                         price=row['Price']
@@ -94,6 +94,7 @@ def loadData():
                         obj["price"]=price
                         obj['links']=link
                         obj['location']=location
+                        obj['category']=word
                         
                         results[objct]=obj
                         
@@ -114,7 +115,7 @@ def lookAtText(results):
 
 def printResults(results):
     
-    fieldnames = ['Object','Price','Location','Links']
+    fieldnames = ['Date','Object','Price','Location','Category','Link']
      
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
@@ -128,20 +129,30 @@ def printResults(results):
         for d in results:
             obj=results[d]
             
-            res1=""
-            res2=""
-            res3=""
-            res4=""
+            res0=obj['date']
+            res1=obj['object']
+            res2=obj['price']
+            res3=obj['location']
+            res4=obj['category']
+            res5=obj['links']
             
-            writer.writerow({'Object':str(res1),'Price':str(res2),'Location':str(res3),'Links':str(res4)})
+            writer.writerow({'Date': str(res0),'Object':str(res1),'Price':str(res2),'Location':str(res3),'Category':str(res4),
+                             'Link':str(res5)})
+            
+def lookAtNewText():
+  
+    for d in entities:
+        lst=entities[d]
+        
+        print(d+" "+"Length: "+str(len(lst)))
     
 
     
 def run():
 #    train_model()
     results=loadData()
-    lookAtText(results)
-   
+#    lookAtNewText()
+    printResults(results)
     print("Finished")
    
 if __name__ == '__main__':
