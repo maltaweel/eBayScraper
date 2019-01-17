@@ -11,17 +11,18 @@ import os
 import random
 import re
 from datetime import datetime
+from boto.mturk import price
 
 spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
 words={'roman','byzantine',  'egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance',
-       'saxon','nordic','Khazar','mogul','khanate','bronze age','iron age','russian','celt'}
+       'saxon','nordic','Khazar','mogul','khanate','bronze age','iron age','russian','celt','paleolithic'}
 
 done=[]
 
-equals={'celt':'seltic'}
+equals={'celt':'seltic','paleolithic': 'stone age','egytpian':'egypt'}
 
 entities={}
 
@@ -72,17 +73,22 @@ def loadData():
                         obj={}
                         
                         objct=row['Object']
+                        price=row['Price']
                         
+                        totalP=objct+' '+price
+                    
+                            
                         df=findWholeWord(word,objct.lower())
+                        
                         
                         if len(df)==0:
                             continue
                         
                         else:
-                            if objct in done:
+                            if totalP in done:
                                 continue
                             else:
-                                done.append(objct)
+                                done.append(totalP)
                                 
                             if word in entities:
                                 lst=entities[word]
@@ -108,7 +114,7 @@ def loadData():
                             dateKeep=s2+" 2018"
                         
                         
-                        price=row['Price']
+                        
                         location=row['Location']
                         link=row['Links']
                         
