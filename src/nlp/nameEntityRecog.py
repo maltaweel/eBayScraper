@@ -16,13 +16,30 @@ spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
-words={'roman','byzantine','celt','egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance',
-       'saxon','nordic','Khazar','mogul','khanate'}
+words={'roman','byzantine',  'egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance',
+       'saxon','nordic','Khazar','mogul','khanate','bronze age','iron age','russian','celt'}
+
+done=[]
+
+equals={'celt':'seltic'}
 
 entities={}
 
 def findWholeWord(w,doc):
-    return re.findall(w, doc.lower())
+    
+    
+    if w in equals:
+        w=equals[w]
+        t=re.findall(w, doc.lower())
+        if len(t)>0:
+            return t
+        
+    
+   
+    t=re.findall(w, doc.lower())
+    
+   
+    return t
     
 
 def preprocess(sent):
@@ -56,12 +73,17 @@ def loadData():
                         
                         objct=row['Object']
                         
-                        df=findWholeWord(word,objct)
+                        df=findWholeWord(word,objct.lower())
                         
                         if len(df)==0:
                             continue
                         
                         else:
+                            if objct in done:
+                                continue
+                            else:
+                                done.append(objct)
+                                
                             if word in entities:
                                 lst=entities[word]
                                 lst.append(objct)
@@ -147,6 +169,8 @@ def printResults(results):
             else:
                 loc=res3[0]
             
+            if 'Russian Federation' in loc:
+                loc="Russia"
            
             res4=obj['category']
             res5=obj['links']
