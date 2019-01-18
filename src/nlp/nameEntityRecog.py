@@ -17,23 +17,29 @@ spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
-words={'roman','byzantine',  'egyptian','phoenician','greek','viking','native american','revolutionary', 'renaissance',
-       'saxon','nordic','Khazar','mogul','khanate','bronze age','iron age','russian','celt','paleolithic'}
+words={'roman','byzantine','islamic',  'egyptian','phoenician','greek','viking','revolutionary', 'renaissance',
+       'saxon','nordic','Khazar','mogul','khanate','bronze age','iron age','russian','celt','paleolithic',
+       'america','pre-historic','china','japan','buddhist'}
 
 done=[]
 
-equals={'celt':'seltic','paleolithic': 'stone age','egytpian':'egypt'}
+equals={'celt':'seltic,scythian','paleolithic': 'stone age','egytpian':'egypt', 
+        'america':'columbian,maya,aztec,native american',
+        'islamic':'yemen,ottoman,afghan,arabic,koran,quran,persia,khazar','buddhist':'bamiyan',
+        'roman':'rome,romano'}
 
 entities={}
 
 def findWholeWord(w,doc):
-    
-    
+        
     if w in equals:
-        w=equals[w]
-        t=re.findall(w, doc.lower())
-        if len(t)>0:
-            return t
+        d=equals[w]
+        wrds=d.split(",")
+        
+        for wo in wrds:
+            t=re.findall(wo, doc.lower())
+            if len(t)>0:
+                return t
         
     
    
@@ -116,7 +122,7 @@ def loadData():
                         
                         
                         location=row['Location']
-                        link=row['Links']
+                        link=row['Link']
                         
                         obj['date']=dateKeep
                         obj["object"]=objct
