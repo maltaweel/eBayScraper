@@ -1,6 +1,7 @@
 import csv
 import os
 import pysal
+import sys
 
 
 def load(dbF,csvName): 
@@ -11,9 +12,8 @@ def load(dbF,csvName):
     #The data file path is now created where the data folder and dataFile.csv is referenced
     filename=os.path.join(pn,'data',dbF)
     
-    dbf = pysal.open(filename)
+    shp = pysal.open(filename.replace('.csv','.shp'))
     
-    countries = dbf.by_col('NAME')
     
     pathway=os.path.join(pn,'data',csvName)
 
@@ -37,26 +37,38 @@ def load(dbF,csvName):
                         link=row['Link']
                         loc=row['Location']
                         
-                        for c in countries:
+                        ii=0
+                        
+                        with open(filename) as csvf:
+                            readerr = csv.DictReader(csvf)
+                             
+                             
+                            for r in readerr:
                             
-                            rslt=[]
-                            prc=[]
-                            ctg=[]
-                            if c in results:
-                                rslt=results[c]
-                                prc=prices[c]
-                                rslt.append(loc)
-                                prc.append(price)
-                                ctg.append(cat)
+                                rslt=[]
+                                prc=[]
+                                ctg=[]
+                                c=r['NAME']
+                                if c in results:
+                                    rslt=results[c]
+                                    prc=prices[c]
+                                    rslt.append(loc)
+                                    prc.append(price)
+                                    ctg.append(cat)
                                 
-                            else:
-                                rslt.append(loc)
-                                prc.append(price)
-                                ctg.append(cat)
+                                else:
+                                    rslt.append(loc)
+                                    prc.append(price)
+                                    ctg.append(cat)
                             
-                            results[c]=rslt
-                            prices[c]=prc
-                            category[c]=ctg
+                                results[c]=rslt
+                                prices[c]=prc
+                                category[c]=ctg
+                            
+                                s=shp[i]
+                            
+                            
+                            ii+=1
                                
                                 
                         
