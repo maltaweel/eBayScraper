@@ -10,7 +10,7 @@ def load(dbF,csvName):
     pn=pn.split("src")[0]
         
     #The data file path is now created where the data folder and dataFile.csv is referenced
-    filename=os.path.join(pn,'data',dbF)
+    filename=os.path.join(pn,'shp',dbF)
     
     shp = pysal.open(filename.replace('.csv','.shp'))
     

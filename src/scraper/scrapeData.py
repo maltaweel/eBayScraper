@@ -130,7 +130,7 @@ def ebay_scrape(url,tt):
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
                 tr=True
-                print(prr)
+#                print(prr)
             
             loc=False
             if tr is False:
