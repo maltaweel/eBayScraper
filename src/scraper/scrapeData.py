@@ -18,12 +18,7 @@ name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The
 
 ii=0
 tt=0
-objects=[]
-prices=[]
-figures={}
-figuresKeep={}
-links={}
-location={}
+
 
 # Returns a list of urls that search eBay for an item
 def make_urls(names):
@@ -135,7 +130,7 @@ def ebay_scrape(url,tt):
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
                 tr=True
-#                print(prr)
+                print(prr)
             
             loc=False
             if tr is False:
@@ -277,6 +272,13 @@ if __name__ == '__main__':
     
     ii=0
     for name in urls.keys():
+        objects=[]
+        prices=[]
+        figures={}
+        figuresKeep={}
+        links={}
+        location={}
+        
         tt=0
         url=urls[name]
         ebay_scrape(url,tt)
