@@ -2,6 +2,7 @@ import csv
 import os
 import pysal
 from dbfpy import dbf
+import shapefile
 
 
 def load(dbF,csvName): 
@@ -13,7 +14,7 @@ def load(dbF,csvName):
     filename=os.path.join(pn,'shp',dbF)
     
     db = pysal.open(filename)
-    shp = pysal.open(filename.replace('.dbf','.shp'))
+    shp = pysal.open(filename.replace('.csv','.dbf'))
     
     
     pathway=os.path.join(pn,'data',csvName)
@@ -66,7 +67,7 @@ def load(dbF,csvName):
                             
                                 s=shp[ii]
                                 try:
-                                    place[r]=s[0][3]
+                                    place[r]=s
                                 except:
                                     print("stop")
                             
@@ -77,21 +78,38 @@ def load(dbF,csvName):
             return results, prices, category, place           
                         
 
-def finalizeResults(results,prices,category,place):
+def finalizeResults(results,prices,category,place,dbF):
     
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
-    filename=os.path.join(pn,'shp','output.dbf')
+    filename=os.path.join(pn,'shp',dbF.replace('.csv','.shp'))
+         
+    db = dbf.Dbf(filename.replace('.shp','.dbf'),ignoreErrors=True)
+    shp = pysal.open(filename,'w')
     
+   
     totalCats={}
     names={}
-    lcs={}
+   
     
     totals={}
     location=[]
     
     i=0
+    recs=[]
+    
     for r in results:
+        
+        rec=''
+        for re in db:
+            nm=re['NAME']
+            if nm in r:
+                rec=re
+                break
+            else:
+                recs.append(re)
+                continue    
+            
         price=prices[r]
         cat=category[r]
         
@@ -102,27 +120,7 @@ def finalizeResults(results,prices,category,place):
             else:
                 listCats[c]=1
             names[c]=c
-            
-        totalCats[r]=listCats
-               
-        total=sum(price)
-        totals[r]=total
         
-        shp=place[r]
-        lcs[shp]=r   
-        location.append(shp)
-         
-        i+=1
-        
-    db = dbf.Dbf(filename, new=True)
-    db.addField( ("NAME", "C", 15),("TOTAL","F",10,10),("TOP","C",15))
-
-    for shp in location:
-        
-        r=lcs[shp]
-        listCats=totalCats[r]
-        t=totals[r]
-    
         top=''
         ss=0
         
@@ -132,14 +130,27 @@ def finalizeResults(results,prices,category,place):
             if lst>ss:
                 ss=lst
                 top=n
-        
-        rec = db.newRecord()
-        rec["NAME"] = r
-        rec["TOTAL"] = t
+            
+        totalCats[r]=listCats
+               
+        total=sum(price)
+        totals[r]=total
+        s=place[r]
+       
+        rec["TOTAL"] = total
         rec["TOP"] = top
         rec.store()
-
+        
+        location.append(s)
+         
+        i+=1
+    
+   
+        
+           
     db.close()
+    
+    
     
                         
 def run():
@@ -148,7 +159,7 @@ def run():
     
     results, prices, category, place=load(dbf,csvF)
     
-    finalizeResults(results,prices,category,place)
+    finalizeResults(results,prices,category,place,dbf)
     
     print("Finished")
    
