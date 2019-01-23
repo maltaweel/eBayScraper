@@ -2,7 +2,13 @@ import csv
 import os
 import pysal
 from dbfpy import dbf
-import shapefile
+
+words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN','phoenician':'PHOENICIAN',
+       'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
+       'saxon':'SAXON','nordic':'NORDIC','Khazar':'KHAZAR','mogul':'MOGUL','khanate':'KHANATE','bronze age':'BRONZE_AGE',
+       'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT','paleolithic':'PALEOLITH',
+       'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST'}
+
 
 
 def load(dbF,csvName): 
@@ -99,7 +105,6 @@ def finalizeResults(results,prices,category,place,dbF):
     recs=[]
     
     for r in results:
-        
         rec=''
         for re in db:
             nm=re['NAME']
@@ -114,12 +119,21 @@ def finalizeResults(results,prices,category,place,dbF):
         cat=category[r]
         
         listCats={}
+        
+        ii=0
         for c in cat:
             if c in listCats:
-                listCats[c]=listCats[c]+1
+                listCats[c]=listCats[c]+price[ii]
             else:
-                listCats[c]=1
-            names[c]=c
+                listCats[c]=price[ii]
+            
+            ii+=1
+        
+        for c in listCats:   
+            sCats=listCats[c]
+            w=words[c]
+            
+            rec[w]=sCats
         
         top=''
         ss=0

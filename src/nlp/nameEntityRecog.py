@@ -24,7 +24,7 @@ words={'roman','byzantine','islamic',  'egyptian','phoenician','greek','viking',
 done=[]
 
 equals={'celt':'seltic,scythian','paleolithic': 'stone age','egytpian':'egypt', 
-        'america':'columbian,maya,aztec,native american',
+        'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian',
         'islamic':'yemen,ottoman,afghan,arabic,koran,quran,persia,khazar','buddhist':'bamiyan',
         'roman':'rome,romano'}
 
@@ -183,6 +183,7 @@ def printResults(results):
             
             if 'Russian Federation' in loc:
                 loc="Russia"
+                
            
             res4=obj['category']
             res5=obj['links']
