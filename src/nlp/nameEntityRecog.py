@@ -17,23 +17,28 @@ spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
-words={'roman','byzantine','islamic',  'egyptian','phoenician','greek','viking','revolutionary', 'renaissance',
-       'saxon','nordic','Khazar','mogul','khanate','bronze age','iron age','russian','celt','paleolithic',
-       'america','pre-historic','china','japan','buddhist'}
+words={'roman','byzantine','islamic',  'egyptian','greek','viking','revolutionary', 'renaissance',
+       'khazar','mogul','bronze age','iron age','russian','celt',
+       'america','pre-historic','china','japan','buddhist','near east','mongul','indus'}
 
 done=[]
 
-equals={'celt':'seltic,scythian','paleolithic': 'stone age','egytpian':'egypt', 
-        'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian',
-        'islamic':'yemen,ottoman,afghan,arabic,koran,quran,persia,khazar','buddhist':'bamiyan',
-        'roman':'rome,romano'}
+equals={'celt':'seltic,scythian','egytpian':'egypt', 
+        'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian,indian',
+        'islamic':'yemen,ottoman,afghan,khanate,arabic,koran,andalus,yamani,yemani,qajar,quran,persia,khazar,sulimani','buddhist':'bamiyan',
+        'roman':'rome,romano', 'greek':'cypriot,athena,greco,mycenaean,macedonia',
+         'russian':'russiam','indus':'indo,gandhara','pre-historic':'neolithic,pre historic,stone age,mesolithic,chalcolithic,paleolithic,palaeolithic',
+         'near east':'near east,persian,bactrian,judaea,holy land,phoenician,mesopotamia,middle east,israel,canaanite,crusader',
+         'egyptian':'pharao,ptolemaic','viking':'saxon,nordic',
+         'china':'chinese','renaissance':'baroque,italian',
+         'japan':'japanese','khazar':'kazar'}
 
 entities={}
 
 def findWholeWord(w,doc):
-        
-    if w in equals:
-        d=equals[w]
+
+    if w.lower() in equals:
+        d=equals[w]      
         wrds=d.split(",")
         
         for wo in wrds:

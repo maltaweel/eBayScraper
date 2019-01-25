@@ -3,11 +3,12 @@ import os
 import pysal
 from dbfpy import dbf
 
-words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN','phoenician':'PHOENICIAN',
+words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
-       'saxon':'SAXON','nordic':'NORDIC','Khazar':'KHAZAR','mogul':'MOGUL','khanate':'KHANATE','bronze age':'BRONZE_AGE',
-       'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT','paleolithic':'PALEOLITH',
-       'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST'}
+       'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE',
+       'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT',
+       'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
+       'mongul':'MONGUL','indus':'INDUS'}
 
 
 
