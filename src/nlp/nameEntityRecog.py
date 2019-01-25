@@ -188,6 +188,9 @@ def printResults(results):
             
             if 'Russian Federation' in loc:
                 loc="Russia"
+            
+            if 'Yugoslavia' in loc:
+                loc='Serbia'
                 
            
             res4=obj['category']

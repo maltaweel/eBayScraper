@@ -47,15 +47,13 @@ def load(dbF,csvName):
                         link=row['Link']
                         loc=row['Location']
                         
+                        if loc.strip() =='':
+                                continue
                         ii=0
-                        
-#                        with open(filename) as csvf:
-#                            readerr = csv.DictReader(csvf)
-                             
-                        
+
                         for r in db.by_col['NAME']:
-                            
-                            if r.lower() in loc.lower():
+                                
+                            if loc.lower().strip() in r.lower():
                                 rslt=[]
                                 prc=[]
                                 ctg=[]
@@ -71,15 +69,13 @@ def load(dbF,csvName):
                                 results[r]=rslt
                                 prices[r]=prc
                                 category[r]=ctg
-                            
+                               
                                 s=shp[ii]
-                                try:
-                                    place[r]=s
-                                except:
-                                    print("stop")
+                                
+                                place[r]=s
+                                
                             
-                            
-                        ii+=1
+                            ii+=1
                                
                                 
             return results, prices, category, place           
@@ -96,7 +92,6 @@ def finalizeResults(results,prices,category,place,dbF):
     
    
     totalCats={}
-    names={}
    
     
     totals={}
@@ -115,6 +110,7 @@ def finalizeResults(results,prices,category,place,dbF):
             else:
                 recs.append(re)
                 continue    
+       
             
         price=prices[r]
         cat=category[r]
@@ -134,7 +130,10 @@ def finalizeResults(results,prices,category,place,dbF):
             sCats=listCats[c]
             w=words[c]
             
-            rec[w]=sCats
+            try:
+                rec[w]=sCats
+            except:
+                print('case')
         
         top=''
         ss=0
