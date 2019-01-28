@@ -17,13 +17,19 @@ spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
-objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask'}
+objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
 
-objectExtra={'weapon':'axe,sword,shield,sabre,helmet','vessel':'pottery,vessel,vase','statue':'statue,bust,idol,statuette,statuete,figurine,plaque',
-             'jewellery':'necklace,bead,earing,amulet,seal,signet,bracelet','text':'tablet,inscription,writing',
-             'clothing':'brooch,pin,sock,shoe,buckle','household':'altar,nail,hammer,glass,mirror','coin':'money'}
+objectExtra={'weapon':'axe,sword,dark,points,mace head,dagger,projectile,shield,sabre,helmet,arrowhead,spear','vessel':'pottery,teapot,cosmetic,kettle,jar,cup,jug,flask,vessel,bowl,cup,vase',
+             'statue':'statue,bust,idol,engraving,anthropomorphic,statuette,statuete,figurine,plaque,shabti,',
+             'jewellery':'necklace,stone head,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
+             'text':'tablet,inscription,writing,inscribed,book,manuscript',
+             'clothing':'brooch,pin,sock,shoe,buckle,button,pin',
+             'household':'smoking pipe,furniture,altar,cigarette holder,nail,box,mosaic,hammer,mirror,foundation cone',
+             'coin':'money,denarius',
+             'religious':'cross,crucifix,qoran,quran,baptism,koran,holy',
+             'tool':'scale,sickle,quern stone,pestle,mortar,knife,lithics,artifact,obsidian,chisle,spindle'}
 
-words={'roman','byzantine','islamic',  'egyptian','greek','viking','revolutionary', 'renaissance',
+words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
        'america','pre-historic','china','japan','buddhist','near east','mongul','indus'}
 
