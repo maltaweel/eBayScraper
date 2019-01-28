@@ -17,6 +17,12 @@ spacy.prefer_gpu()
 nlp = spacy.load('en')
 
 
+objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask'}
+
+objectExtra={'weapon':'axe,sword,shield,sabre,helmet','vessel':'pottery,vessel,vase','statue':'statue,bust,idol,statuette,statuete,figurine,plaque',
+             'jewellery':'necklace,bead,earing,amulet,seal,signet,bracelet','text':'tablet,inscription,writing',
+             'clothing':'brooch,pin,sock,shoe,buckle','household':'altar,nail,hammer,glass,mirror','coin':'money'}
+
 words={'roman','byzantine','islamic',  'egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
        'america','pre-historic','china','japan','buddhist','near east','mongul','indus'}
@@ -142,20 +148,34 @@ def loadData():
 
 def lookAtText(results):
     
-    keys=results.keys()
-    
     for d in results:
         obj=results[d]
         
         objc=obj['object']
-        u = unicode(objc, "utf-8")
-        doc = nlp(u)
-    
-        print([(X.text, X.label_) for X in doc.ents])
+       
+        resultType=''
+        for x in objectTypes:
+            if x not in objc.lower():
+                if x not in objectExtra:
+                    continue
+                
+                wdds=objectExtra[x]
+                wrds=wdds.split(",")
+                
+                for wo in wrds:
+                    t=re.findall(wo, objc.lower())
+                    if len(t)>0:
+                        resultType=x
+            else:
+                resultType=x
+         
+        
+        obj['objecT']=resultType   
+        results[d]=obj     
 
 def printResults(results):
     
-    fieldnames = ['Date','Object','Price','Location','Category','Link']
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
      
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
@@ -196,8 +216,10 @@ def printResults(results):
             res4=obj['category']
             res5=obj['links']
             
+            res6=obj['objecT']
+            
             writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
-                             'Link':str(res5)})
+                            'Object Type':str(res6), 'Link':str(res5)})
             
 def lookAtNewText():
   
@@ -211,7 +233,7 @@ def lookAtNewText():
 def run():
 #    train_model()
     results=loadData()
-#    lookAtNewText()
+    lookAtText(results)
     printResults(results)
     print("Finished")
    
