@@ -19,16 +19,16 @@ nlp = spacy.load('en')
 
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
 
-objectExtra={'weapon':'axe,sword,arrow,points,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear',
-             'vessel':'pottery,chalice,teapot,cosmetic,lamp,kettle,jar,cup,jug,flaggon,bottle,flask,vessel,bowl,cup,vase',
-             'statue':'statue,bust,idol,engraving,bust,anthropomorphic,statuette,stone carving,statuete,figurine,plaque,shabti',
+objectExtra={'weapon':'axe,sword,arrow,chariot fitting,point,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
+             'vessel':'pottery,chalice,teapot,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
+             'statue':'statue,bust,idol,engraving,bust,head fragment,anthropomorphic,statuette,stone carving,statuete,figurine,plaque,shabti',
              'jewellery':'ring,band,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
-             'text':'tablet,inscription,writing,inscribed,book,manuscript,foundation cone,hieroglyphics',
-             'clothing':'brooch,broach,pin,sock,fibula,gilt mount,shoe,buckle,button,belt',
-             'household':'smoking pipe,strapend,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,hammer,mirror',
-             'coin':'money,denarius,stater',
+             'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
+             'clothing':'brooch,broach,pin,sock,fibula,gilt mount,cloth,shoe,buckle,button,belt',
+             'household':'smoking pipe,strapend,fire striker,headrest,furniture,key,razor,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,hammer,mirror,triptych',
+             'coin':'money,denarius,stater,follis,sceat,sceatta',
              'religious':'cross,crucifix,qoran,quran,baptism,koran,holy,orthodox,buddha,hindu',
-             'tool':'scale,sickle,quern stone,pestle,mortar,hook,knife,chisel,lithics,obsidian,chisle,spindle,weight'}
+             'tool':'scale,sickle,quern stone,adze,pestle,mortar,hook,knife,chisel,lithics,obsidian,chisle,spindle,weight,medical'}
 
 words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
