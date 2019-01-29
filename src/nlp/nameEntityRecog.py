@@ -19,16 +19,16 @@ nlp = spacy.load('en')
 
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
 
-objectExtra={'weapon':'axe,sword,dark,points,mace head,dagger,projectile,shield,sabre,helmet,arrowhead,spear',
-             'vessel':'pottery,chalice,teapot,cosmetic,kettle,jar,cup,jug,flask,vessel,bowl,cup,vase',
-             'statue':'statue,bust,idol,engraving,anthropomorphic,statuette,statuete,figurine,plaque,shabti',
-             'jewellery':'ring,band,necklace,stone head,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
-             'text':'tablet,inscription,writing,inscribed,book,manuscript',
-             'clothing':'brooch,pin,sock,shoe,buckle,button,pin',
-             'household':'smoking pipe,furniture,altar,cigarette holder,nail,box,mosaic,hammer,mirror,foundation cone',
-             'coin':'money,denarius',
-             'religious':'cross,crucifix,qoran,quran,baptism,koran,holy',
-             'tool':'scale,sickle,quern stone,pestle,mortar,knife,lithics,artifact,obsidian,chisle,spindle'}
+objectExtra={'weapon':'axe,sword,arrow,points,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear',
+             'vessel':'pottery,chalice,teapot,cosmetic,lamp,kettle,jar,cup,jug,flaggon,bottle,flask,vessel,bowl,cup,vase',
+             'statue':'statue,bust,idol,engraving,bust,anthropomorphic,statuette,stone carving,statuete,figurine,plaque,shabti',
+             'jewellery':'ring,band,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
+             'text':'tablet,inscription,writing,inscribed,book,manuscript,foundation cone,hieroglyphics',
+             'clothing':'brooch,broach,pin,sock,fibula,gilt mount,shoe,buckle,button,belt',
+             'household':'smoking pipe,strapend,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,hammer,mirror',
+             'coin':'money,denarius,stater',
+             'religious':'cross,crucifix,qoran,quran,baptism,koran,holy,orthodox,buddha,hindu',
+             'tool':'scale,sickle,quern stone,pestle,mortar,hook,knife,chisel,lithics,obsidian,chisle,spindle,weight'}
 
 words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
