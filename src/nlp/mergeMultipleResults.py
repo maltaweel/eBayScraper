@@ -8,7 +8,14 @@ import csv
 import os
 from docutils.nodes import row
 
-title=''
+dates=[]
+objects=[]
+prices=[]
+locations=[]
+categories=[]
+objectTypes=[]
+links=[]
+totalThings=[]
 
 
 def loadData():
@@ -26,25 +33,37 @@ def loadData():
         with open(os.path.join(pathway,fil),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
                 
-                
-            i=0
             for row in reader:
-                if i==0:
-                    title=row
-                    i+=1
-                    
+                date=row['Date']
+                object=row['Object']
+                price=row['Price']
+                location=row['Location']
+                cat=row['Category']
+                objT=row['Object Type']
+                link=row['Link']
+                
+                totalThing=object+" : "+price
+                
+                if totalThing in totalThings:
+                    continue
+                
                 else:
-                    if row in totals:
-                        continue
-                    else:
-                        
-                        totals.append(row)
-    
+                    totalThings.append(totalThing)
+                    dates.append(date)
+                    objects.append(object)
+                    prices.append(price)
+                    locations.append(location)
+                    categories.append(cat)
+                    objectTypes.append(objT)
+                    links.append(link)
+                
+                
+                
     return totals            
                         
 def printResults(results):
     
-    fieldnames = title
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
      
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
@@ -55,8 +74,10 @@ def printResults(results):
 
         writer.writeheader()      
     
-        for d in results:
-            writer.writerow({fieldnames: str(d)})
+        for i in range(0,len(objects)):
+           
+            writer.writerow({'Date': str(dates[i]),'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Category':
+                str(categories[i]),'Object Type':str(objectTypes[i]),'Link':str(links[i])})
             
 def run():
 #    train_model()
