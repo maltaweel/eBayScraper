@@ -185,7 +185,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs):
             rec[t]=objsN[t]
        
         rec["TOTAL"] = total
-        rec["TOP"] = top
+        rec["TOP"] = top.capitalize()
         rec.store()
         
         location.append(s)
