@@ -58,7 +58,6 @@ def loadData():
                     links.append(link)
                 
                 
-                
     return totals            
                         
 def printResults(results):

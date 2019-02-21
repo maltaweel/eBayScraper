@@ -8,7 +8,6 @@ import spacy
 import csv
 import nltk
 import os
-import random
 import re
 from datetime import datetime
 from boto.mturk import price
@@ -19,16 +18,16 @@ nlp = spacy.load('en')
 
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
 
-objectExtra={'weapon':'axe,sword,arrow,chariot fitting,point,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
-             'vessel':'pottery,chalice,teapot,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
-             'statue':'statue,bust,idol,engraving,bust,head fragment,anthropomorphic,statuette,stone carving,statuete,figurine,plaque,shabti',
-             'jewellery':'ring,band,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
+objectExtra={'weapon':'axe,sword,aroowhead,battle ax,arrow,chariot fitting,point,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
+             'vessel':'pottery,rhyton,unguentarium,chalice,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
+             'statue':'statue,bust,idol,figure,engraving,bust,head fragment,anthropomorphic,statuette,stone carving,statuete,figurine,plaque,shabti',
+             'jewellery':'ring,band,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
              'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,fibula,gilt mount,cloth,shoe,buckle,button,belt',
-             'household':'smoking pipe,strapend,fire striker,headrest,furniture,key,razor,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,hammer,mirror,triptych',
+             'household':'smoking pipe,brick,strapend,fire striker,headrest,furniture,key,razor,coffee pot,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,hammer,mirror,triptych',
              'coin':'money,denarius,stater,follis,sceat,sceatta',
-             'religious':'cross,crucifix,qoran,quran,baptism,koran,holy,orthodox,buddha,hindu',
-             'tool':'scale,sickle,quern stone,adze,pestle,mortar,hook,knife,chisel,lithics,obsidian,chisle,spindle,weight,medical'}
+             'religious':'cross,crucifix,qoran,quran,deity,sekhmet,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
+             'tool':'scale,spur,sickle,awl,quern stone,walking stick,adze,stamp,whistle,pestle,comb,mortar,hook,knife,chisel,needle,lithics,obsidian,chisle,spindle,weight,medical'}
 
 words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
@@ -66,7 +65,67 @@ def findWholeWord(w,doc):
    
     return t
     
+def loadExtraData ():
+   
+    #This code changes the current directory so relative paths are used
+    pn=os.path.abspath(__file__)
+    pn=pn.split("src")[0]
+    pathway=os.path.join(pn,'inputData','objectExtra.csv')
 
+    
+   
+    with open(os.path.join(pathway),'rU') as csvfile:
+            reader = csv.DictReader(csvfile)
+
+            for objT in objectTypes:
+                if objT not in objectExtra:
+                    continue
+                
+                objTy=objectExtra.get(objT)
+                
+                if objTy is None:
+                    continue
+                
+                tys=objTy.split(",")
+                
+                for read in reader:
+                    r=read[objT]
+                    
+                    if r not in tys:
+                        tys.append(r)
+                    
+                stR=""
+                for r in tys:
+                    stR+=r+','  
+                
+                    objectExtra[objT]=stR
+                    
+            
+            for w in words:
+                if w not in equals:
+                    continue
+                wrds=equals[w]
+                
+                if wrds is None:
+                    continue
+                
+                tys=wrds.split(",")
+                
+               
+                
+                for read in reader:
+                    r=read[w]
+                    
+                    if r not in tys:
+                        tys.append(r)
+                    
+                stR=""
+                for r in tys:
+                    stR+=r+','  
+                
+                    equals[w]=stR
+                
+                        
 def preprocess(sent):
     sent = nltk.word_tokenize(sent)
     newSent = nltk.pos_tag(sent)
@@ -239,6 +298,7 @@ def lookAtNewText():
     
 def run():
 #    train_model()
+    loadExtraData()
     results=loadData()
     lookAtText(results)
     printResults(results)
