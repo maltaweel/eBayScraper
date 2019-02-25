@@ -24,10 +24,10 @@ objectExtra={'weapon':'axe,sword,aroowhead,battle ax,arrow,chariot fitting,point
              'jewellery':'ring,band,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
              'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
-             'household':'smoking pipe,brick,fire striker,strapend,strap end,headrest,furniture,key,razor,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,hammer,mirror,triptych',
+             'household':'smoking pipe,brick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
              'coin':'money,denarius,stater,follis,sceat,sceatta',
              'religious':'cross,crucifix,qoran,quran,deity,sekhmet,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
-             'tool':'scale,spur,sickle,awl,quern,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,chisel,needle,lithic,obsidian,chisle,spindle,weight,medical'}
+             'tool':'scale,spur,sickle,awl,quern,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,chisel,needle,lithic,obsidian,chisle,hammer,spindle,weight,medical'}
 
 words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
