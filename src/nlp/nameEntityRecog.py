@@ -19,7 +19,7 @@ nlp = spacy.load('en')
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
 
 objectExtra={'weapon':'axe,sword,aroowhead,battle ax,arrow,chariot fitting,point,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
-             'vessel':'pottery,rhyton,unguentarium,chalice,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
+             'vessel':'pottery,rhyton,unguentarium,chalice,urn,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
              'statue':'statue,bust,idol,figure,engraving,bust,head fragment,anthropomorphic,statuette,stone carving,statuete,figurine,plaque,shabti',
              'jewellery':'ring,band,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
              'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
@@ -239,6 +239,56 @@ def lookAtText(results):
         obj['objecT']=resultType   
         results[d]=obj     
 
+
+def emptyFiles (obj):
+    
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
+     
+    pn=os.path.abspath(__file__)
+    pn=pn.split("src")[0]
+    fileOutput=os.path.join(pn,'output',"namedEntityEmpty.csv")
+    
+    with open(fileOutput, 'wb') as csvf:
+        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
+
+        writer.writeheader()      
+    
+
+            
+        res0=obj['date']
+            
+        date=datetime.strptime(res0, '%b %d, %Y')
+            
+        res1=obj['object']
+        res2=obj['price']
+            
+        v=str(res2.replace("$","").strip()).replace(',','').strip()
+        res2F=float(v)
+        res3=obj['location'].split(",")
+            
+        loc=""
+        if len(res3)>1:
+            loc=res3[len(res3)-1].strip()
+        else:
+            loc=res3[0]
+            
+        if 'Russian Federation' in loc:
+            loc="Russia"
+            
+        if 'Yugoslavia' in loc:
+            loc='Serbia'
+                
+           
+        res4=obj['category']
+        res5=obj['links']
+            
+        res6=obj['objecT']
+            
+       
+            
+        writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
+                            'Object Type':str(res6), 'Link':str(res5)})
+            
 def printResults(results):
     
     fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
@@ -283,6 +333,9 @@ def printResults(results):
             res5=obj['links']
             
             res6=obj['objecT']
+            
+            if res6=='':
+                emptyFiles(obj)
             
             writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
                             'Object Type':str(res6), 'Link':str(res5)})
