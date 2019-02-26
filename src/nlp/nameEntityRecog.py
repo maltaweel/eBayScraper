@@ -29,21 +29,21 @@ objectExtra={'weapon':'axe,sword,aroowhead,battle ax,arrow,chariot fitting,point
              'religious':'cross,crucifix,qoran,quran,deity,sekhmet,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
              'tool':'scale,spur,sickle,awl,quern,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,chisel,needle,lithic,obsidian,chisle,hammer,spindle,weight,medical'}
 
-words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
+words={'roman','byzantine','scythian','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
-       'america','pre-historic','china','japan','buddhist','near east','mongul','indus'}
+       'america','pre-historic','china','japan','buddhist','near east','mongul','indus','central asia'}
 
 done=[]
 
-equals={'celt':'seltic,scythian','egytpian':'egypt', 
+equals={'celt':'seltic','egytpian':'egypt', 
         'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian,indian',
-        'islamic':'yemen,ottoman,afghan,khanate,arabic,koran,andalus,yamani,yemani,qajar,quran,persia,khazar,sulimani','buddhist':'bamiyan',
+        'islamic':'koran,andalus,qajar,quran,khazar,sulimani','buddhist':'bamiyan',
         'roman':'rome,romano', 'greek':'cypriot,athena,greco,mycenaean,macedonia',
          'russian':'russiam','indus':'indo,gandhara','pre-historic':'neolithic,pre historic,stone age,mesolithic,chalcolithic,paleolithic,palaeolithic',
-         'near east':'near east,persian,bactrian,judaea,holy land,phoenician,mesopotamia,middle east,israel,canaanite,crusader',
-         'egyptian':'pharao,ptolemaic','viking':'saxon,nordic',
+         'near east':'near east,yemen,arabic,yamani,yemani,persia,ottoman,persian,judaea,holy land,phoenician,mesopotamia,middle east,israel,canaanite,crusader',
+         'egyptian':'pharao,ptolemaic','viking':'saxon,norse,nordic',
          'china':'chinese','renaissance':'baroque,italian',
-         'japan':'japanese','khazar':'kazar'}
+         'japan':'japanese','central asia': 'central asia,scythian,scythian,sythian,khanate,bactria,kazar,khazar'}
 
 entities={}
 
@@ -238,56 +238,6 @@ def lookAtText(results):
         
         obj['objecT']=resultType   
         results[d]=obj     
-
-
-def emptyFiles (obj):
-    
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
-     
-    pn=os.path.abspath(__file__)
-    pn=pn.split("src")[0]
-    fileOutput=os.path.join(pn,'output',"namedEntityEmpty.csv")
-    
-    with open(fileOutput, 'wb') as csvf:
-        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
-
-        writer.writeheader()      
-    
-
-            
-        res0=obj['date']
-            
-        date=datetime.strptime(res0, '%b %d, %Y')
-            
-        res1=obj['object']
-        res2=obj['price']
-            
-        v=str(res2.replace("$","").strip()).replace(',','').strip()
-        res2F=float(v)
-        res3=obj['location'].split(",")
-            
-        loc=""
-        if len(res3)>1:
-            loc=res3[len(res3)-1].strip()
-        else:
-            loc=res3[0]
-            
-        if 'Russian Federation' in loc:
-            loc="Russia"
-            
-        if 'Yugoslavia' in loc:
-            loc='Serbia'
-                
-           
-        res4=obj['category']
-        res5=obj['links']
-            
-        res6=obj['objecT']
-            
-       
-            
-        writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
-                            'Object Type':str(res6), 'Link':str(res5)})
             
 def printResults(results):
     
@@ -330,12 +280,13 @@ def printResults(results):
                 
            
             res4=obj['category']
+            res4=res4.capitalize()
             res5=obj['links']
             
             res6=obj['objecT']
             
             if res6=='':
-                emptyFiles(obj)
+                res6='?'
             
             writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
                             'Object Type':str(res6), 'Link':str(res5)})
