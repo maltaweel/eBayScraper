@@ -4,7 +4,7 @@ Created on Jan 16, 2019
 @author: mark
 '''
 
-import spacy
+#import spacy
 import csv
 import nltk
 import os
@@ -12,8 +12,8 @@ import re
 from datetime import datetime
 from boto.mturk import price
 
-spacy.prefer_gpu()
-nlp = spacy.load('en')
+#spacy.prefer_gpu()
+#nlp = spacy.load('en')
 
 
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
@@ -38,12 +38,13 @@ done=[]
 equals={'celt':'seltic','egytpian':'egypt', 
         'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian,indian',
         'islamic':'koran,andalus,qajar,quran,khazar,sulimani','buddhist':'bamiyan',
-        'roman':'rome,romano', 'greek':'cypriot,athena,greco,mycenaean,macedonia',
+        'roman':'rome,romano', 'greek':'cypriot,athena,greco,mycenaean,macedonia,byzantine',
          'russian':'russiam','indus':'indo,gandhara','pre-historic':'neolithic,pre historic,stone age,mesolithic,chalcolithic,paleolithic,palaeolithic',
          'near east':'near east,yemen,arabic,yamani,yemani,persia,ottoman,persian,judaea,holy land,phoenician,mesopotamia,middle east,israel,canaanite,crusader',
          'egyptian':'pharao,ptolemaic','viking':'saxon,norse,nordic',
          'china':'chinese','renaissance':'baroque,italian',
-         'japan':'japanese','central asia': 'central asia,scythian,scythian,sythian,khanate,bactria,kazar,khazar'}
+         'japan':'japanese','central asia': 'central asia,scythian,scythian,sythian,khanate,bactria,kazar,khazar',
+         'cambodia':'cambodian','khmer':'cambodian','thailand':'thai','thai': 'thai'}
 
 entities={}
 
