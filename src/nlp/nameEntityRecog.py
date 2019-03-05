@@ -14,6 +14,7 @@ from datetime import datetime
 from boto.mturk import price
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
+from nltk.tag import StanfordNERTagger
 
 porter=PorterStemmer()
 reload(sys)
@@ -22,20 +23,19 @@ sys.setdefaultencoding('utf8')
 #spacy.prefer_gpu()
 #nlp = spacy.load('en')
 
-
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait'}
 
-objectExtra={'weapon':' axe ,sword,aroowhead,battle axe,arrow,chariot fitting, point , mace ,dagger,projectile,shield,sabre,helmet,arrowhead, spear ,military standard',
-             'vessel':'pottery,rhyton,unguentarium,coffee pot,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
-             'statue':'statue,statu,bust,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
-             'jewellery':'ring,band,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion, bead ,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
-             'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
+objectExtra={'weapon':'axe,sword,dager,sheath,sling,arowhead,aroowhead,battle axe,knife,knives,arrow,chariot fitting,point,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
+             'vessel':'pottery,flagon,rhyton,unguentarium,lantern,coffee pot, pot ,plate,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
+             'statue':'statue,statu,bust,relief,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
+             'jewellery':'ring,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
+             'text':'tablet,inscription,calligraphy,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
-             'household':'smoking pipe,brick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
-             'coin':'money,denarius,stater,follis,sceat,sceatta',
+             'household':'smoking pipe,brick,candlestick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
+             'coin':'money,denarius,stater,tetradrachm,follis,sceat,sceatta',
              'religious':'cross,crucifix,qoran,quran,deity,sekhmet,ritual,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
-             'painting':'paint',
-             'tool':'scale,spur,sickle,awl,quern,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,chisel,needle,lithic,obsidian,chisle,hammer,spindle,weight,medical'}
+             'painting':'paint','portrait':'portrait',
+             'tool':'scale,spur,sickle,awl,quern,wheel,strap fitting,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,knives,chisel,needle,lithic,obsidian,chisle,hammer,spindle,weight,medical'}
 
 words={'roman','byzantine','scythian','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
@@ -105,9 +105,13 @@ def printCantFindType(cantFind):
             res0=obj['date']
             
             date=datetime.strptime(res0, '%b %d, %Y')
-            
+            st = StanfordNERTagger('ner-model.ser.gz')
+           
             res1=obj['object']
             res2=obj['price']
+            
+            p=st.tag(res1.split())
+            print(p)
             
             v=str(res2.replace("$","").strip()).replace(',','').strip()
             res2F=float(v)
