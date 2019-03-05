@@ -23,17 +23,18 @@ sys.setdefaultencoding('utf8')
 #nlp = spacy.load('en')
 
 
-objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool'}
+objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting'}
 
-objectExtra={'weapon':'axe,sword,aroowhead,battle ax,arrow,chariot fitting,point,bow,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
+objectExtra={'weapon':' axe ,sword,aroowhead,battle axe,arrow,chariot fitting, point , bow , mace ,dagger,projectile,shield,sabre,helmet,arrowhead, spear ,military standard',
              'vessel':'pottery,rhyton,unguentarium,coffee pot,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
-             'statue':'statue,bust,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
-             'jewellery':'ring,band,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant,seal,signet,bracelet',
+             'statue':'statue,statu,bust,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
+             'jewellery':' ring , band ,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion, bead ,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
              'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
              'household':'smoking pipe,brick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
              'coin':'money,denarius,stater,follis,sceat,sceatta',
-             'religious':'cross,crucifix,qoran,quran,deity,sekhmet,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
+             'religious':'cross,crucifix,qoran,quran,deity,sekhmet,ritual,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
+             'painting':'paint',
              'tool':'scale,spur,sickle,awl,quern,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,chisel,needle,lithic,obsidian,chisle,hammer,spindle,weight,medical'}
 
 words={'roman','byzantine','scythian','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
@@ -239,8 +240,8 @@ def loadData():
                     else:
                           
                         
-                        objct=stemSentence(org)
-                        
+                      # objct=stemSentence(org)
+                        objct=org
                         
                         totalP=objct+' '+price
                     
@@ -306,7 +307,7 @@ def lookAtText(results):
         obj=results[d]
         
         objc=obj['object']
-       
+        
         resultType=''
         for x in objectTypes:
             if x not in objc.lower():
@@ -319,6 +320,7 @@ def lookAtText(results):
                 for wo in wrds:
                     if wo == '':
                         continue
+                    wo=' '+wo+' '
                     t=re.findall(wo, objc.lower())
                     if len(t)>0:
                         if x in resultType:
