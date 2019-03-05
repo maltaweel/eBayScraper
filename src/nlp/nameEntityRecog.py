@@ -8,9 +8,16 @@ Created on Jan 16, 2019
 import csv
 import nltk
 import os
+import sys
 import re
 from datetime import datetime
 from boto.mturk import price
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.stem import PorterStemmer
+
+porter=PorterStemmer()
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 #spacy.prefer_gpu()
 #nlp = spacy.load('en')
@@ -35,26 +42,39 @@ words={'roman','byzantine','scythian','islamic','egyptian','greek','viking','rev
 
 done=[]
 
+
 equals={'celt':'seltic','egytpian':'egypt', 
         'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian,indian',
-        'islamic':'koran,andalus,qajar,quran,khazar,sulimani','buddhist':'bamiyan',
+        'islamic':'koran,andalus,qajar,quran,khazar,sulimani','buddhist':'buddhist,bamiyan',
         'roman':'rome,romano', 'greek':'cypriot,athena,greco,mycenaean,macedonia,byzantine',
          'russian':'russiam','indus':'indo,gandhara','pre-historic':'neolithic,pre historic,stone age,mesolithic,chalcolithic,paleolithic,palaeolithic',
          'near east':'near east,yemen,arabic,yamani,yemani,persia,ottoman,persian,judaea,holy land,phoenician,mesopotamia,middle east,israel,canaanite,crusader',
-         'egyptian':'pharao,ptolemaic','viking':'saxon,norse,nordic',
+         'egyptian':'pharao,pharaoh,ptolemaic','viking':'saxon,norse,nordic',
          'china':'chinese','renaissance':'baroque,italian',
          'japan':'japanese','central asia': 'central asia,scythian,scythian,sythian,khanate,bactria,kazar,khazar',
          'cambodia':'cambodian','khmer':'cambodian','thailand':'thai','thai': 'thai'}
 
 entities={}
 
-def findWholeWord(w,doc):
+def stemSentence(sentence):
+    token_words=word_tokenize(sentence.decode('utf-8'))
+    token_words
+    stem_sentence=[]
+    for word in token_words:
+        stem_sentence.append(porter.stem(word))
+        stem_sentence.append(" ")
+    return "".join(stem_sentence)
 
+def findWholeWord(w,doc):
+    
     if w.lower() in equals:
-        d=equals[w]      
+        d=equals[w]
+        d=d.strip()     
         wrds=d.split(",")
         
         for wo in wrds:
+            if wo == "":
+                continue
             t=re.findall(wo, doc.lower())
             if len(t)>0:
                 return t
@@ -65,6 +85,59 @@ def findWholeWord(w,doc):
     
    
     return t
+
+def printCantFindType(cantFind):
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
+     
+    pn=os.path.abspath(__file__)
+    pn=pn.split("src")[0]
+    fileOutput=os.path.join(pn,'output',"cantFindEntity.csv")
+    
+    
+    with open(fileOutput, 'wb') as csvf:
+        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
+
+        writer.writeheader()      
+    
+        for obj in cantFind:
+            
+            res0=obj['date']
+            
+            date=datetime.strptime(res0, '%b %d, %Y')
+            
+            res1=obj['object']
+            res2=obj['price']
+            
+            v=str(res2.replace("$","").strip()).replace(',','').strip()
+            res2F=float(v)
+            res3=obj['location'].split(",")
+            
+            loc=""
+            if len(res3)>1:
+                loc=res3[len(res3)-1].strip()
+            else:
+                loc=res3[0]
+            
+            if 'Russian Federation' in loc:
+                loc="Russia"
+            
+            if 'Yugoslavia' in loc:
+                loc='Serbia'
+                
+           
+            res4=obj['category']
+            res4=res4.capitalize()
+            res5=obj['links']
+            
+            res6=obj['objecT']
+            
+            if res6=='':
+                res6='?'
+            
+            
+            writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
+                            'Object Type':str(res6), 'Link':str(res5)})
+    
     
 def loadExtraData ():
    
@@ -84,10 +157,11 @@ def loadExtraData ():
                 
                 objTy=objectExtra.get(objT)
                 
-                if objTy is None:
+                if objTy is None or objTy ==' ':
                     continue
                 
                 tys=objTy.split(",")
+                
                 
                 for read in reader:
                     r=read[objT]
@@ -97,8 +171,8 @@ def loadExtraData ():
                     
                 stR=""
                 for r in tys:
-                    stR+=r+','  
-                
+                    stR+=r+","  
+                    
                     objectExtra[objT]=stR
                     
             
@@ -121,18 +195,20 @@ def loadExtraData ():
                         tys.append(r)
                     
                 stR=""
+                
+                
                 for r in tys:
                     stR+=r+','  
                 
                     equals[w]=stR
                 
-                        
+'''                        
 def preprocess(sent):
     sent = nltk.word_tokenize(sent)
     newSent = nltk.pos_tag(sent)
     
     return newSent
-
+'''
 
 def loadData():
     #This code changes the current directory so relative paths are used
@@ -142,22 +218,29 @@ def loadData():
 
     results={}
     
-    for word in words:
+    
         
-        for fil in os.listdir(pathway):
-            with open(os.path.join(pathway,fil),'rU') as csvfile:
-                reader = csv.DictReader(csvfile)
+    for fil in os.listdir(pathway):
+        with open(os.path.join(pathway,fil),'rU') as csvfile:
+            reader = csv.DictReader(csvfile)
                 
                 
-                i=0
-                for row in reader:
+            i=0
+            for row in reader:
+                obj={}
+                org=row['Object']
+                price=row['Price']
+                date1=org.split("2019")
+                date2=org.split("2018")
+                
+                for word in words:
                     if i==0:
                         i+=1
                     else:
-                        obj={}
+                          
                         
-                        objct=row['Object']
-                        price=row['Price']
+                        objct=stemSentence(org)
+                        
                         
                         totalP=objct+' '+price
                     
@@ -184,9 +267,6 @@ def loadData():
                                 lst.append(objct)
                                 entities[word]=lst
                         
-                        date1=objct.split("2019")
-                        date2=objct.split("2018")
-                        
                         dateKeep=''
                             
                         if len(date1)>1:
@@ -207,7 +287,14 @@ def loadData():
                         obj["price"]=price
                         obj['links']=link
                         obj['location']=location
-                        obj['category']=word
+                        
+                        cat=''
+                        if obj.has_key('category'):
+                            cat=obj['category']
+                            obj['category']=word+" "+cat
+                        
+                        else:
+                            obj['category']=word
                         
                         results[objct]=obj
                         
@@ -230,9 +317,13 @@ def lookAtText(results):
                 wrds=wdds.split(",")
                 
                 for wo in wrds:
+                    if wo == '':
+                        continue
                     t=re.findall(wo, objc.lower())
                     if len(t)>0:
-                        resultType=x
+                        if x in resultType:
+                            continue
+                        resultType+=x+" "
             else:
                 resultType=x
          
@@ -247,6 +338,7 @@ def printResults(results):
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
     fileOutput=os.path.join(pn,'output',"namedEntity.csv")
+    cantFind=[]
     
     with open(fileOutput, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
@@ -288,10 +380,13 @@ def printResults(results):
             
             if res6=='':
                 res6='?'
+                cantFind.append(obj)
             
-            writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
-                            'Object Type':str(res6), 'Link':str(res5)})
-            
+            writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
+                            'Object Type':str(res6.decode('utf-8')), 'Link':str(res5.decode('utf-8'))})
+    
+    printCantFindType(cantFind)  
+     
 def lookAtNewText():
   
     for d in entities:
@@ -299,7 +394,6 @@ def lookAtNewText():
         
         print(d+" "+"Length: "+str(len(lst)))
     
-
     
 def run():
 #    train_model()
