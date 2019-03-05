@@ -23,12 +23,12 @@ sys.setdefaultencoding('utf8')
 #nlp = spacy.load('en')
 
 
-objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting'}
+objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait'}
 
-objectExtra={'weapon':' axe ,sword,aroowhead,battle axe,arrow,chariot fitting, point , bow , mace ,dagger,projectile,shield,sabre,helmet,arrowhead, spear ,military standard',
+objectExtra={'weapon':' axe ,sword,aroowhead,battle axe,arrow,chariot fitting, point , mace ,dagger,projectile,shield,sabre,helmet,arrowhead, spear ,military standard',
              'vessel':'pottery,rhyton,unguentarium,coffee pot,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
              'statue':'statue,statu,bust,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
-             'jewellery':' ring , band ,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion, bead ,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
+             'jewellery':'ring,band,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion, bead ,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
              'text':'tablet,inscription,writing,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
              'household':'smoking pipe,brick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
@@ -242,7 +242,7 @@ def loadData():
                         
                       # objct=stemSentence(org)
                         objct=org
-                        
+                        objct.replace(",","")
                         totalP=objct+' '+price
                     
                             
@@ -320,7 +320,7 @@ def lookAtText(results):
                 for wo in wrds:
                     if wo == '':
                         continue
-                    wo=' '+wo+' '
+                    wo=wo
                     t=re.findall(wo, objc.lower())
                     if len(t)>0:
                         if x in resultType:

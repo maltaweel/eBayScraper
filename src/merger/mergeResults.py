@@ -12,7 +12,8 @@ words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':
 
 
 objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STATUE','weapon':'WEAPON','text':'TEXT',
-      'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTING'}
+      'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTING',
+      'portrait':"PORTRAIT"}
 
 def load(dbF,csvName): 
     
