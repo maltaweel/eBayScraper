@@ -111,8 +111,14 @@ def printCantFindType(cantFind):
             res2=obj['price']
             
             p=st.tag(res1.split())
-            print(p)
             
+            tx='?'
+            for s in p:
+                b=s[1]
+                if b in objectExtra:
+                    print(b)
+                    tx=b
+                         
             v=str(res2.replace("$","").strip()).replace(',','').strip()
             res2F=float(v)
             res3=obj['location'].split(",")
@@ -136,9 +142,8 @@ def printCantFindType(cantFind):
             
             res6=obj['objecT']
             
-            if res6=='':
-                res6='?'
-            
+            if res6 =='?':
+                res6=tx
             
             writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
                             'Object Type':str(res6), 'Link':str(res5)})
