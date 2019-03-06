@@ -369,7 +369,6 @@ def printResults(results):
             writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
                             'Object Type':str(res6.decode('utf-8')), 'Link':str(res5.decode('utf-8'))})
     
-    printCantFindType(cantFind)  
      
 def lookAtNewText():
   
