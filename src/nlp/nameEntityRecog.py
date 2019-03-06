@@ -87,66 +87,35 @@ def findWholeWord(w,doc):
    
     return t
 
-def printCantFindType(cantFind):
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
-     
-    pn=os.path.abspath(__file__)
-    pn=pn.split("src")[0]
-    fileOutput=os.path.join(pn,'output',"cantFindEntity.csv")
+def printCantFindType(res1,obj,res4):
     
+    st = StanfordNERTagger('ner-model.ser.gz')
     
-    with open(fileOutput, 'wb') as csvf:
-        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
-
-        writer.writeheader()      
+            
+    p=st.tag(res1.split())
+            
     
-        for obj in cantFind:
+ 
+    for s in p:
+        b=s[1]
+#        print(b.lower())
             
-            res0=obj['date']
-            
-            date=datetime.strptime(res0, '%b %d, %Y')
-            st = StanfordNERTagger('ner-model.ser.gz')
-           
-            res1=obj['object']
-            res2=obj['price']
-            
-            p=st.tag(res1.split())
-            
+        if res4!='':
             tx='?'
-            for s in p:
-                b=s[1]
-                if b in objectExtra:
-                    print(b)
-                    tx=b
-                         
-            v=str(res2.replace("$","").strip()).replace(',','').strip()
-            res2F=float(v)
-            res3=obj['location'].split(",")
-            
-            loc=""
-            if len(res3)>1:
-                loc=res3[len(res3)-1].strip()
-            else:
-                loc=res3[0]
-            
-            if 'Russian Federation' in loc:
-                loc="Russia"
-            
-            if 'Yugoslavia' in loc:
-                loc='Serbia'
-                
+            if b.lower() in objectExtra:
+                tx=b
+            obj['objecT']=tx
+    
+        else:
+            res4=''
+            if b.lower() in equals:
+                res4=b
+                 
+                                
            
-            res4=obj['category']
-            res4=res4.capitalize()
-            res5=obj['links']
-            
-            res6=obj['objecT']
-            
-            if res6 =='?':
-                res6=tx
-            
-            writer.writerow({'Date': str(date),'Object':str(res1),'Price':str(res2F),'Location':str(loc),'Category':str(res4),
-                            'Object Type':str(res6), 'Link':str(res5)})
+    
+                
+    return obj, res4
     
     
 def loadExtraData ():
@@ -381,17 +350,21 @@ def printResults(results):
             
             if 'Yugoslavia' in loc:
                 loc='Serbia'
-                
-           
+                           
             res4=obj['category']
+            
+            if res4=='':
+                obj, res4=printCantFindType(res1,obj,res4) 
+                
             res4=res4.capitalize()
             res5=obj['links']
             
             res6=obj['objecT']
             
             if res6=='':
-                res6='?'
-                cantFind.append(obj)
+                obj, res4=printCantFindType(res1,obj,res4)
+                res6=obj['objecT']
+                
             
             writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
                             'Object Type':str(res6.decode('utf-8')), 'Link':str(res5.decode('utf-8'))})
@@ -404,8 +377,9 @@ def lookAtNewText():
         lst=entities[d]
         
         print(d+" "+"Length: "+str(len(lst)))
-    
-    
+   
+
+
 def run():
 #    train_model()
     loadExtraData()
