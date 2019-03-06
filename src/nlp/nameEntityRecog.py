@@ -29,7 +29,7 @@ objectExtra={'weapon':'axe,sword,dager,sheath,military fitting,sling,arowhead,ar
              'vessel':'pottery,flagon,rhyton,unguentarium,lantern,coffee pot, pot ,plate,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
              'statue':'statue,faience cat,statu,bust,relief,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
              'jewellery':'ring,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
-             'text':'tablet,inscription,calligraphy,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
+             'text':'tablet,inscription,calligraphy,papyrus,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
              'household':'smoking pipe,brick,candlestick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
              'coin':'money,denarius,stater,tetradrachm,follis,sceat,sceatta',
