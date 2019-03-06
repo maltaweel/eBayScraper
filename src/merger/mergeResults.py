@@ -27,7 +27,7 @@ def load(dbF,csvName):
     shp = pysal.open(filename.replace('.csv','.dbf'))
     
     
-    pathway=os.path.join(pn,'data',csvName)
+    pathway=os.path.join(pn,'output',csvName)
 
     results={}
     prices={}
@@ -203,7 +203,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs):
                         
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
-    csvF='namedEntity.csv'
+    csvF='namedEntityMerged.csv'
     
     results, prices, category, place, objTs=load(dbf,csvF)
     
