@@ -15,6 +15,8 @@ objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STATUE','weapon':'WEA
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTING',
       'portrait':"PORTRAIT"}
 
+mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE"}
+
 def load(dbF,csvName): 
     
     pn=os.path.abspath(__file__)
@@ -34,6 +36,7 @@ def load(dbF,csvName):
     category={}
     place={}
     objTs={}
+    matT={}
         
     with open(pathway) as csvfile:
             reader = csv.DictReader(csvfile)
@@ -51,6 +54,7 @@ def load(dbF,csvName):
                         link=row['Link']
                         loc=row['Location']
                         objectT=row['Object Type']
+                        mat=row['matType']
                         
                         if loc.strip() =='':
                                 continue
@@ -65,21 +69,25 @@ def load(dbF,csvName):
                                 prc=[]
                                 ctg=[]
                                 objT=[]
+                                mtT=[]
                                 if r in results:
                                     rslt=results[r]
                                     prc=prices[r]
                                     ctg=category[r]
                                     objT=objTs[r]
+                                    mtT=matT[r]
                                     
                                 rslt.append(loc)
                                 prc.append(float(price))
                                 ctg.append(cat)
                                 objT.append(objectT)
+                                mtT.append(mat)
                             
                                 results[r]=rslt
                                 prices[r]=prc
                                 category[r]=ctg
                                 objTs[r]=objT
+                                matT[r]=mtT
                                
                                 s=shp[ii]
                                 
@@ -89,7 +97,7 @@ def load(dbF,csvName):
                             ii+=1
                                
                                 
-            return results, prices, category, place, objTs           
+            return results, prices, category, place, objTs, matT           
                         
 
 def locationsO(objT,price):
@@ -110,7 +118,7 @@ def locationsO(objT,price):
             
     return lisN  
         
-def finalizeResults(results,prices,category,place,dbF,objTs):
+def finalizeResults(results,prices,category,place,dbF,objTs, matT):
     
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
@@ -144,16 +152,20 @@ def finalizeResults(results,prices,category,place,dbF,objTs):
         price=prices[r]
         cat=category[r]
         objT=objTs[r]
+        mtT=matT[r]
         
         objsN=locationsO(objT,price)
         listCats={}
         
         ii=0
         for c in cat:
-            if c in listCats:
-                listCats[c]=listCats[c]+price[ii]
-            else:
-                listCats[c]=price[ii]
+            ccs=c.split(" ")
+            
+            for cc in ccs:
+                if cc in listCats:
+                    listCats[cc]=listCats[cc]+price[ii]
+                else:
+                    listCats[cc]=price[ii]
             
             ii+=1
         
@@ -205,9 +217,9 @@ def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
     csvF='namedEntityMerged.csv'
     
-    results, prices, category, place, objTs=load(dbf,csvF)
+    results, prices, category, place, objTs, matT=load(dbf,csvF)
     
-    finalizeResults(results,prices,category,place,dbf,objTs)
+    finalizeResults(results,prices,category,place,dbf,objTs, matT)
     
     print("Finished")
    

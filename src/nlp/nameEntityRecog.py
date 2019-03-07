@@ -19,6 +19,7 @@ from nltk.tag import StanfordNERTagger
 porter=PorterStemmer()
 reload(sys)
 sys.setdefaultencoding('utf8')
+st = StanfordNERTagger('ner-model.ser.gz')
 
 #spacy.prefer_gpu()
 #nlp = spacy.load('en')
@@ -92,9 +93,6 @@ def findWholeWord(w,doc, eqls):
 
 
 def printCantFindType(res1,obj,res4,eqls):
-    
-    st = StanfordNERTagger('ner-model.ser.gz')
-    
             
     p=st.tag(res1.split())
             
@@ -220,7 +218,7 @@ def loadData():
                 for w in materialType:
                     m=findWholeWord(w,org.lower(),materialType)
                     if len(m)>0:
-                        mat+=m[0]+" "
+                        mat+=w+" "
                 
                 obj['matType']=mat
                 for word in words:
@@ -328,7 +326,6 @@ def printResults(results):
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
     fileOutput=os.path.join(pn,'output',"namedEntity.csv")
-    cantFind=[]
     
     with open(fileOutput, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
@@ -374,7 +371,7 @@ def printResults(results):
             mat=obj['matType']
                    
             if mat=='':
-                mat=printCantFindType(res1.lower(),obj,'',materialType)
+                obj, mat=printCantFindType(res1.lower(),obj,'',materialType)
                 
             
             if res6=='':
