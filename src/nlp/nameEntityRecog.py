@@ -25,9 +25,9 @@ sys.setdefaultencoding('utf8')
 
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait'}
 
-objectExtra={'weapon':'axe,sword,dager,sheath,military fitting,sling,arowhead,aroowhead,battle axe,knife,knives,arrow,chariot fitting,point,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
+objectExtra={'weapon':'axe,sword,cuiras,dager,sheath,military fitting,sling,arowhead,aroowhead,battle axe,knife,knives,arrow,chariot fitting,point,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
              'vessel':'pottery,flagon,rhyton,unguentarium,lantern,coffee pot, pot ,plate,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
-             'statue':'statue,faience cat,statu,bust,relief,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti',
+             'statue':'statue,faience cat,statu,bust,relief,idol,figure,engraving,bust,head fragment,statuette,stone carving,statuete,figurine,plaque,shabti,ushabti',
              'jewellery':'ring,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
              'text':'tablet,inscription,calligraphy,papyrus,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
@@ -36,6 +36,9 @@ objectExtra={'weapon':'axe,sword,dager,sheath,military fitting,sling,arowhead,ar
              'religious':'cross,crucifix,qoran,quran,deity,sekhmet,ritual,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
              'painting':'paint','portrait':'portrait',
              'tool':'scale,spur,fire starter,sickle,awl,quern,wheel,strap fitting,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,knives,chisel,needle,lithic,obsidian,chisle,hammer,spindle,weight,medical'}
+
+materialType={'terracotta':'terracotta,clay','metal':'metal,bronze,silver,gold,lead,tin,iron,copper','glass':'glass,glazed,vitrified,faience,',
+              'stone':'agate,carnelian,lapis,lazuli,stone'}
 
 words={'roman','byzantine','scythian','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','russian','celt',
@@ -66,10 +69,10 @@ def stemSentence(sentence):
         stem_sentence.append(" ")
     return "".join(stem_sentence)
 
-def findWholeWord(w,doc):
+def findWholeWord(w,doc, eqls):
     
-    if w.lower() in equals:
-        d=equals[w]
+    if w.lower() in eqls:
+        d=eqls[w]
         d=d.strip()     
         wrds=d.split(",")
         
@@ -87,7 +90,8 @@ def findWholeWord(w,doc):
    
     return t
 
-def printCantFindType(res1,obj,res4):
+
+def printCantFindType(res1,obj,res4,eqls):
     
     st = StanfordNERTagger('ner-model.ser.gz')
     
@@ -103,13 +107,13 @@ def printCantFindType(res1,obj,res4):
         if res4!='':
             tx='?'
             if b.lower() in objectExtra:
-                tx=b
+                tx+=b+" "
             obj['objecT']=tx
     
         else:
             res4=''
-            if b.lower() in equals:
-                res4=b
+            if b.lower() in eqls:
+                res4+=b+" "
                  
                                 
            
@@ -212,19 +216,25 @@ def loadData():
                 date1=org.split("2019")
                 date2=org.split("2018")
                 
+                mat=''
+                for w in materialType:
+                    m=findWholeWord(w,org.lower(),materialType)
+                    if len(m)>0:
+                        mat+=m[0]+" "
+                
+                obj['matType']=mat
                 for word in words:
                     if i==0:
                         i+=1
                     else:
                           
-                        
                       # objct=stemSentence(org)
                         objct=org
                         objct.replace(",","")
                         totalP=objct+' '+price
                     
                             
-                        df=findWholeWord(word,objct.lower())
+                        df=findWholeWord(word,objct.lower(),equals)
                         
                         
                         if len(df)==0:
@@ -313,7 +323,7 @@ def lookAtText(results):
             
 def printResults(results):
     
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
      
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
@@ -354,20 +364,26 @@ def printResults(results):
             res4=obj['category']
             
             if res4=='':
-                obj, res4=printCantFindType(res1,obj,res4) 
+                obj, res4=printCantFindType(res1,obj,res4,equals) 
                 
             res4=res4.capitalize()
             res5=obj['links']
             
             res6=obj['objecT']
             
+            mat=obj['matType']
+                   
+            if mat=='':
+                mat=printCantFindType(res1.lower(),obj,'',materialType)
+                
+            
             if res6=='':
-                obj, res4=printCantFindType(res1,obj,res4)
+                obj, res4=printCantFindType(res1,obj,res4,objectExtra)
                 res6=obj['objecT']
                 
             
             writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
-                            'Object Type':str(res6.decode('utf-8')), 'Link':str(res5.decode('utf-8'))})
+                            'Object Type':str(res6.decode('utf-8')),'Material':str(mat),'Link':str(res5.decode('utf-8'))})
     
      
 def lookAtNewText():

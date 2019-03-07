@@ -99,7 +99,7 @@ def locationsO(objT,price):
     for n in objT:
         if n is '':
             continue
-        nn=objTL[n]
+        nn=objTL[n.strip()]
         if nn in lisN:
             v=lisN[nn]+price[ii]
             lisN[nn]=v
