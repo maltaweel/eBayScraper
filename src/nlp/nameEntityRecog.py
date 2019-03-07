@@ -32,7 +32,7 @@ objectExtra={'weapon':'axe,sword,cuiras,dager,sheath,military fitting,sling,arow
              'jewellery':'ring,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
              'text':'tablet,inscription,calligraphy,papyrus,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphics',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt mount,cloth,buckle,button,belt',
-             'household':'smoking pipe,brick,candlestick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
+             'household':'smoking pipe,stylus,brick,candlestick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
              'coin':'money,denarius,stater,tetradrachm,follis,sceat,sceatta',
              'religious':'cross,crucifix,qoran,quran,deity,sekhmet,ritual,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
              'painting':'paint','portrait':'portrait',
