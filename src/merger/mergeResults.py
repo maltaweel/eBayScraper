@@ -100,7 +100,7 @@ def load(dbF,csvName):
             return results, prices, category, place, objTs, matT           
                         
 
-def locationsO(objT,price):
+def locationsO(objT,objTT,price):
     
     lisN={}
     
@@ -110,7 +110,7 @@ def locationsO(objT,price):
         for nn in nns:
             if nn is '':
                 continue
-            nSn=objTL[nn.strip()]
+            nSn=objTT[nn.strip()]
             if nSn in lisN:
                 v=lisN[nn]+price[ii]
                 lisN[nn]=v
@@ -157,8 +157,8 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         objT=objTs[r]
         mtT=matT[r]
         
-        objsN=locationsO(objT,price)
-        matsN=locationsO(mtT,price)
+        objsN=locationsO(objT,objTL,price)
+        matsN=locationsO(mtT,mat,price)
         
         listCats={}
         
@@ -176,7 +176,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         
         for c in listCats:   
             sCats=listCats[c]
-            w=words[c]
+            w=words[c.lower()]
             
             try:
                 rec[w]=sCats
