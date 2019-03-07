@@ -54,7 +54,7 @@ def load(dbF,csvName):
                         link=row['Link']
                         loc=row['Location']
                         objectT=row['Object Type']
-                        mat=row['matType']
+                        mat=row['Material']
                         
                         if loc.strip() =='':
                                 continue
@@ -103,18 +103,21 @@ def load(dbF,csvName):
 def locationsO(objT,price):
     
     lisN={}
-    ii=0
+    
     for n in objT:
-        if n is '':
-            continue
-        nn=objTL[n.strip()]
-        if nn in lisN:
-            v=lisN[nn]+price[ii]
-            lisN[nn]=v
-        else:
-            lisN[nn]=price[ii]
+        nns=n.split(" ")
+        ii=0
+        for nn in nns:
+            if nn is '':
+                continue
+            nSn=objTL[nn.strip()]
+            if nSn in lisN:
+                v=lisN[nn]+price[ii]
+                lisN[nn]=v
+            else:
+                lisN[nn]=price[ii]
         
-        ii+=1
+            ii+=1
             
     return lisN  
         
@@ -155,6 +158,8 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         mtT=matT[r]
         
         objsN=locationsO(objT,price)
+        matsN=locationsO(mtT,price)
+        
         listCats={}
         
         ii=0
@@ -196,6 +201,9 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         
         for t in objsN:
             rec[t]=objsN[t]
+        
+        for m in matsN:
+            rec[m]=matsN[t]
        
         rec["TOTAL"] = total
         rec["TOP"] = top.capitalize()
