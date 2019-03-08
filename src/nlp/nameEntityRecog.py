@@ -105,13 +105,13 @@ def printCantFindType(res1,obj,res4,eqls):
         if res4!='':
             tx='?'
             if b.lower() in objectExtra:
-                tx+=b+" "
+                tx+=b+" | "
             obj['objecT']=tx
     
         else:
             res4=''
             if b.lower() in eqls:
-                res4+=b+" "
+                res4+=b+" | "
                  
                                 
            
@@ -218,7 +218,7 @@ def loadData():
                 for w in materialType:
                     m=findWholeWord(w,org.lower(),materialType)
                     if len(m)>0:
-                        mat+=w+" "
+                        mat+=w+" | "
                 
                 obj['matType']=mat
                 for word in words:
@@ -311,7 +311,7 @@ def lookAtText(results):
                     if len(t)>0:
                         if x in resultType:
                             continue
-                        resultType+=x+" "
+                        resultType+=x+" | "
             else:
                 resultType=x
          

@@ -6,7 +6,7 @@ from dbfpy import dbf
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE',
-       'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT',
+       'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
        'mongul':'MONGUL','indus':'INDUS'}
 
@@ -80,8 +80,16 @@ def load(dbF,csvName):
                                 rslt.append(loc)
                                 prc.append(float(price))
                                 ctg.append(cat)
-                                objT.append(objectT)
-                                mtT.append(mat)
+                                if 'weapontool' in objectT:
+                                    print('stop')
+                                    
+                                objjt=objectT.split(" ")
+                                for o in objjt:
+                                    objT.append(o)
+                                
+                                mms=mat.split(" ")
+                                for mm in mms:
+                                    mtT.append(mm)
                             
                                 results[r]=rslt
                                 prices[r]=prc
@@ -105,19 +113,27 @@ def locationsO(objT,objTT,price):
     lisN={}
     
     for n in objT:
-        nns=n.split(" ")
+        nns=n.split("|")
         ii=0
         for nn in nns:
-            if nn is '':
+            if nn is '?' or nn is '':
                 continue
+            
+            if 'weapontool' in nn:
+                print('stop')
+                
             nSn=objTT[nn.strip()]
+            
             if nSn in lisN:
-                v=lisN[nn]+price[ii]
-                lisN[nn]=v
+                v=lisN[nSn]+price[ii]
+                lisN[nSn]=v
             else:
-                lisN[nn]=price[ii]
-        
-            ii+=1
+                try:
+                    lisN[nSn]=price[ii]
+                except:
+                    print('e')
+            if len(price)-1>ii:
+                ii+=1
             
     return lisN  
         
@@ -150,8 +166,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             else:
                 recs.append(re)
                 continue    
-       
-            
+              
         price=prices[r]
         cat=category[r]
         objT=objTs[r]
@@ -164,8 +179,8 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         
         ii=0
         for c in cat:
-            ccs=c.split(" ")
-            
+            ccs=c.split("|")
+           
             for cc in ccs:
                 if cc in listCats:
                     listCats[cc]=listCats[cc]+price[ii]
@@ -174,11 +189,12 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             
             ii+=1
         
-        for c in listCats:   
-            sCats=listCats[c]
-            w=words[c.lower()]
+        for c in listCats: 
             
+            sCats=listCats[c]
+        
             try:
+                w=words[c.lower()]
                 rec[w]=sCats
             except:
                 print('case')
@@ -203,7 +219,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             rec[t]=objsN[t]
         
         for m in matsN:
-            rec[m]=matsN[t]
+            rec[m]=matsN[m]
        
         rec["TOTAL"] = total
         rec["TOP"] = top.capitalize()
@@ -223,7 +239,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
                         
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
-    csvF='namedEntityMerged.csv'
+    csvF='namedEntity.csv'
     
     results, prices, category, place, objTs, matT=load(dbf,csvF)
     
