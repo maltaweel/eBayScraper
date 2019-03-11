@@ -8,14 +8,14 @@ words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE',
        'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
-       'mongul':'MONGUL','indus':'INDUS'}
+       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA'}
 
 
-objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STATUE','weapon':'WEAPON','text':'TEXT',
+objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'WEAPON','text':'TEXT',
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTING',
-      'portrait':"PORTRAIT"}
+      'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION'}
 
-mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE"}
+mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD'}
 
 def load(dbF,csvName): 
     
