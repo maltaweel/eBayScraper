@@ -6,13 +6,13 @@ from dbfpy import dbf
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE',
-       'iron age':'IRON_AGE','russian':'RUSSIAN','celt':'CELT', 'central asia': 'CENT_ASIA',
+       'iron age':'IRON_AGE','russian':'RUSSIAN','medieval':'MEDIEVAL','celt':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
        'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA'}
 
 
 objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'WEAPON','text':'TEXT',
-      'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTING',
+      'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTIN',
       'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION'}
 
 mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD'}
@@ -80,10 +80,14 @@ def load(dbF,csvName):
                                 rslt.append(loc)
                                 prc.append(float(price))
                                 ctg.append(cat)
+                                
+                                objjt=[]
                                 if 'weapontool' in objectT:
-                                    print('stop')
-                                    
-                                objjt=objectT.split(" ")
+                                    objjt[0]='weapon'
+                                    objjt[1]='tool'
+                                
+                                else:   
+                                    objjt=objectT.split(" ")
                                 for o in objjt:
                                     objT.append(o)
                                 
@@ -239,7 +243,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
                         
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
-    csvF='namedEntity.csv'
+    csvF='namedEntityMerged.csv'
     
     results, prices, category, place, objTs, matT=load(dbf,csvF)
     

@@ -16,6 +16,7 @@ categories=[]
 objectTypes=[]
 links=[]
 totalThings=[]
+matTypes=[]
 
 
 def loadData():
@@ -35,14 +36,15 @@ def loadData():
                 
             for row in reader:
                 date=row['Date']
-                object=row['Object']
+                obj=row['Object']
                 price=row['Price']
                 location=row['Location']
                 cat=row['Category']
                 objT=row['Object Type']
+                matType=row['Material']
                 link=row['Link']
                 
-                totalThing=object+" : "+price
+                totalThing=obj+" : "+price
                 
                 if totalThing in totalThings:
                     continue
@@ -50,19 +52,20 @@ def loadData():
                 else:
                     totalThings.append(totalThing)
                     dates.append(date)
-                    objects.append(object)
+                    objects.append(obj)
                     prices.append(price)
                     locations.append(location)
                     categories.append(cat)
                     objectTypes.append(objT)
                     links.append(link)
+                    matTypes.append(matType)
                 
                 
     return totals            
                         
 def printResults(results):
     
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Link']
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
      
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
@@ -76,7 +79,7 @@ def printResults(results):
         for i in range(0,len(objects)):
            
             writer.writerow({'Date': str(dates[i]),'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Category':
-                str(categories[i]),'Object Type':str(objectTypes[i]),'Link':str(links[i])})
+                str(categories[i]),'Object Type':str(objectTypes[i]),'Material':str(matTypes[i]),'Link':str(links[i])})
             
 def run():
 #    train_model()
