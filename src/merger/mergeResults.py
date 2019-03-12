@@ -5,10 +5,10 @@ from dbfpy import dbf
 
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
-       'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE',
+       'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE','scythian':'SCYTHIAN',
        'iron age':'IRON_AGE','russian':'RUSSIAN','medieval':'MEDIEVAL','celt':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
-       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA'}
+       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL'}
 
 
 objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'WEAPON','text':'TEXT',
@@ -134,8 +134,8 @@ def locationsO(objT,objTT,price):
             else:
                 try:
                     lisN[nSn]=price[ii]
-                except:
-                    print('e')
+                except Exception, e:
+                        print(e)
             if len(price)-1>ii:
                 ii+=1
             
@@ -183,9 +183,11 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         
         ii=0
         for c in cat:
-            ccs=c.split("|")
+            ccs=c.split(" | ")
            
             for cc in ccs:
+                if cc =='':
+                    continue
                 if cc in listCats:
                     listCats[cc]=listCats[cc]+price[ii]
                 else:
@@ -198,10 +200,14 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             sCats=listCats[c]
         
             try:
-                w=words[c.lower()]
+                if  c=='':
+                    c='OTHER'
+                    rec[c]=sCats
+                w=words[c.lower().strip()]
                 rec[w]=sCats
-            except:
-                print('case')
+            except Exception, e:
+                print(e) 
+                    
         
         top=''
         ss=0

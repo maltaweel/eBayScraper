@@ -32,14 +32,14 @@ objectExtra={'weapon':'axe,sword,cuiras,dager,sheath,military fitting,sling,armo
              'jewellery':'ring,diadem,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
              'text':'tablet,inscription,calligraphy,papyrus,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphic',
              'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt cloth,buckle,button,belt',
-             'household':'smoking pipe,brick,candlestick,fire striker,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
+             'household':'smoking pipe,brick,candlestick,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
              'coin':'money,denarius,stater,tetradrachm,follis,sceat,sceatta',
              'religious':'cross,crucifix,thor,qoran,anubis,quran,deity,horus,isis,sekhmet,hermes,ritual,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
-             'painting':'paint','portrait':'portrait',
-             'tool':'scale,spur,fire starter,stylus,lantern,sickle,awl,quern,mount,wheel,strap fitting,harness,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,knives,chisel,needle,lithic,obsidian,chisle,spindle,weight,medical'}
+             'painting':'paint','portrait':'portrait','decoration':'ornament','decoration'
+             'tool':'scale,spur,fire starter,fire striker,stylus,lantern,sickle,awl,quern,mount,wheel,strap fitting,harness,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,knives,chisel,needle,lithic,obsidian,chisle,spindle,weight,medical'}
 
 materialType={'terracotta':'terracotta,clay,glaze,faience','metal':'metal,bronze,silver,gold,lead,tin,iron,copper','glass':'glass,vitrified',
-              'stone':'agate,carnelian,flint,lapis,lazuli,stone'}
+              'stone':'agate,carnelian,flint,lapis,lazuli,stone','wood':'wood'}
 
 words={'roman','byzantine','scythian','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
        'khazar','mogul','bronze age','iron age','medieval','russian','celt','africa'
@@ -265,7 +265,7 @@ def loadData():
                         cat=''
                         if obj.has_key('category'):
                             cat=obj['category']
-                            obj['category']=w+" "+cat
+                            obj['category']=w+" | "+cat
                         
                         else:
                             obj['category']=w
