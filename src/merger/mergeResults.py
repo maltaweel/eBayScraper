@@ -8,12 +8,12 @@ words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE','scythian':'SCYTHIAN',
        'iron age':'IRON_AGE','russian':'RUSSIAN','medieval':'MEDIEVAL','celt':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
-       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL'}
+       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL','OTHER':'OTHER'}
 
 
 objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'WEAPON','text':'TEXT',
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTIN',
-      'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION'}
+      'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION','OTHER':'OTHER_O'}
 
 mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD'}
 
@@ -80,20 +80,11 @@ def load(dbF,csvName):
                                 rslt.append(loc)
                                 prc.append(float(price))
                                 ctg.append(cat)
+                                    
+                                objT.append(objectT)
                                 
-                                objjt=[]
-                                if 'weapontool' in objectT:
-                                    objjt[0]='weapon'
-                                    objjt[1]='tool'
                                 
-                                else:   
-                                    objjt=objectT.split(" ")
-                                for o in objjt:
-                                    objT.append(o)
-                                
-                                mms=mat.split(" ")
-                                for mm in mms:
-                                    mtT.append(mm)
+                                mtT.append(mat)
                             
                                 results[r]=rslt
                                 prices[r]=prc
@@ -115,19 +106,28 @@ def load(dbF,csvName):
 def locationsO(objT,objTT,price):
     
     lisN={}
-    
+    ii=0
     for n in objT:
-        nns=n.split("|")
-        ii=0
+        nns=n.split("| ")
+        
         for nn in nns:
-            if nn is '?' or nn is '':
+            nn=nn.lower()
+            if nn is '':
+                continue
+            elif nn.strip() == '?':
+                nn='OTHER'
+                if 'OTHER' in lisN:
+                    lisN[nn]=lisN[nn]+price[ii]
+                else:
+                    lisN[nn]=price[ii]
+                
                 continue
             
-            if 'weapontool' in nn:
-                print('stop')
+            try:
+                nSn=objTT[nn.strip()]
+            except Exception, e:
+                print(e)
                 
-            nSn=objTT[nn.strip()]
-            
             if nSn in lisN:
                 v=lisN[nSn]+price[ii]
                 lisN[nSn]=v
@@ -135,9 +135,9 @@ def locationsO(objT,objTT,price):
                 try:
                     lisN[nSn]=price[ii]
                 except Exception, e:
-                        print(e)
-            if len(price)-1>ii:
-                ii+=1
+                    print(e)
+        
+        ii+=1
             
     return lisN  
         
@@ -184,8 +184,9 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         ii=0
         for c in cat:
             ccs=c.split(" | ")
-           
+            
             for cc in ccs:
+                cc=cc.replace("|","").lower().strip()
                 if cc =='':
                     continue
                 if cc in listCats:
@@ -196,13 +197,14 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             ii+=1
         
         for c in listCats: 
-            
-            sCats=listCats[c]
-        
             try:
-                if  c=='':
+                c=c.replace('|','').strip()
+                sCats=listCats[c]
+                if  c=='?':
                     c='OTHER'
                     rec[c]=sCats
+                    continue
+                
                 w=words[c.lower().strip()]
                 rec[w]=sCats
             except Exception, e:
@@ -226,9 +228,14 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         s=place[r]
         
         for t in objsN:
+            if t=='?':
+                t='OTHER'
+                
             rec[t]=objsN[t]
         
         for m in matsN:
+            if m not in rec:
+                continue
             rec[m]=matsN[m]
        
         rec["TOTAL"] = total

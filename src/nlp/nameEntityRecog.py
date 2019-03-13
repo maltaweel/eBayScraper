@@ -27,7 +27,7 @@ st = StanfordNERTagger('ner-model.ser.gz')
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait','decoration'}
 
 objectExtra={'weapon':'axe,sword,cuiras,dager,sheath,military fitting,sling,armour,arowhead,aroowhead,battle axe,knife,knives,arrow,chariot fitting,point,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
-             'vessel':'pottery,trulla,kylix,flagon,rhyton,unguentarium,lantern,coffee pot, pot , plate ,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
+             'vessel':'pottery,olpe,trulla,kylix,flagon,rhyton,unguentarium,lantern,coffee pot, pot , plate ,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
              'statue':'statue,statuette,faience cat,statu,bust,relief,idol,figure,engraving,bust,head fragment,stone carving,statuete,figurine,plaque,shabti,ushabti',
              'jewellery':'ring,diadem,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
              'text':'tablet,inscription,calligraphy,papyrus,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphic',
@@ -271,6 +271,9 @@ def loadData():
                             obj['category']=w
                     else:
                         continue
+                
+                if obj['category']=='':
+                    obj['category']='?'
                     
                 results[objct]=obj
                         
