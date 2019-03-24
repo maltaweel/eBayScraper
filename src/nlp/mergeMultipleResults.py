@@ -24,7 +24,7 @@ def loadData():
     #This code changes the current directory so relative paths are used
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
-    pathway=os.path.join(pn,'totalData')
+    pathway=os.path.join(pn,'data')
     
     totals=[]
    
@@ -33,15 +33,16 @@ def loadData():
     for fil in os.listdir(pathway):
         with open(os.path.join(pathway,fil),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
-                
+            print(csvfile)
+             
             for row in reader:
-                date=row['Date']
+             #   date=row['Date']
                 obj=row['Object']
                 price=row['Price']
                 location=row['Location']
-                cat=row['Category']
-                objT=row['Object Type']
-                matType=row['Material']
+            #    cat=row['Category']
+            #    objT=row['Object Type']
+            #    matType=row['Material']
                 link=row['Link']
                 
                 totalThing=obj+" : "+price
@@ -51,22 +52,22 @@ def loadData():
                 
                 else:
                     totalThings.append(totalThing)
-                    dates.append(date)
+            #        dates.append(date)
                     objects.append(obj)
                     prices.append(price)
                     locations.append(location)
-                    categories.append(cat)
-                    objectTypes.append(objT)
+             #      categories.append(cat)
+             #       objectTypes.append(objT)
                     links.append(link)
-                    matTypes.append(matType)
+              #      matTypes.append(matType)
                 
                 
     return totals            
                         
 def printResults(results):
     
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
-     
+#    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
+    fieldnames = ['Object','Price','Location','Link']
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
     fileOutput=os.path.join(pn,'output',"namedEntityMerged.csv")
@@ -78,8 +79,10 @@ def printResults(results):
     
         for i in range(0,len(objects)):
            
-            writer.writerow({'Date': str(dates[i]),'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Category':
-                str(categories[i]),'Object Type':str(objectTypes[i]),'Material':str(matTypes[i]),'Link':str(links[i])})
+   #         writer.writerow({'Date': str(dates[i]),'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Category':
+   #             str(categories[i]),'Object Type':str(objectTypes[i]),'Material':str(matTypes[i]),'Link':str(links[i])})
+   
+            writer.writerow({'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Link':str(links[i])})
             
 def run():
 #    train_model()

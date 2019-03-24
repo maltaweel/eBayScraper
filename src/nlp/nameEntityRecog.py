@@ -11,53 +11,34 @@ import os
 import sys
 import re
 from datetime import datetime
-from boto.mturk import price
+
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.tag import StanfordNERTagger
+from nltk.stem import WordNetLemmatizer
 
 porter=PorterStemmer()
 reload(sys)
 sys.setdefaultencoding('utf8')
 st = StanfordNERTagger('ner-model.ser.gz')
+lemmatizer = WordNetLemmatizer()
+
 
 #spacy.prefer_gpu()
 #nlp = spacy.load('en')
 
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait','decoration'}
 
-objectExtra={'weapon':'axe,sword,cuiras,dager,arow,sheath,military fitting,lorica,sling,armour,arowhead,aroowhead,battle axe,knife,knives,arrow,chariot fitting,point,mace,dagger,projectile,shield,sabre,helmet,arrowhead,spear,military standard',
-             'vessel':'pottery,olpe,trulla,kylix,flagon,rhyton,unguentarium,lantern,coffee pot, pot , plate ,chalice,urn,purse,teapot,surma-dani,surma dani,soorma dani,skyphos,ware,cosmetic,pitcher,lamp,kettle,jar,cup,beaker,jug,flaggon,bottle,flask,vessel,bowl,cup,vase,pitcher',
-             'statue':'statue,statuette,faience cat,statu,bust,relief,idol,figure,engraving,bust,head fragment,stone carving,statuete,figurine,plaque,shabti,ushabti',
-             'jewellery':'ring,diadem,jewelry,band,amuelt,bangle,pendent,necklace,stone head,glass fish,ear plug,disc,disk,inlay,ornament,medallion,bead,earring,earing,amulet,scarab,scrab,pendant, seal ,signet,bracelet',
-             'text':'tablet,inscription,calligraphy,papyrus,writing,hieroglyphs,graffiti,inscribed,book,manuscript,foundation cone,hieroglyphic',
-             'clothing':'brooch,broach,pin,sock,shoe,fibula,gilt cloth,buckle,button,belt',
-             'household':'smoking pipe,brick,candlestick,strapend,strap end,headrest,furniture,key,dice,altar,spoon,cigarette holder,gaming,nail,box,mosaic,mirror,triptych',
-             'coin':'money,denarius,stater,tetradrachm,follis,sceat,sceatta',
-             'religious':'cross,crucifix,thor,qoran,anubis,quran,deity,horus,isis,sekhmet,hermes,ritual,sakhmet,sakhet,baptism,votive,koran,holy,orthodox,buddha,hindu',
-             'painting':'paint','portrait':'portrait','decoration':'ornament','decoration'
-             'tool':'scale,spur,fire starter,fire striker,stylus,lantern,sickle,awl,quern,mount,wheel,strap fitting,harness,walking stick,adze,stamp,razor,whistle,pestle,comb,mortar,hook,knife,knives,chisel,needle,lithic,obsidian,chisle,spindle,weight,medical'}
+objectExtra={}
 
-materialType={'terracotta':'terracotta,clay,glaze,faience','metal':'metal,bronze,silver,gold,lead,tin,iron,copper','glass':'glass,vitrified',
-              'stone':'agate,carnelian,flint,lapis,lazuli,stone','wood':'wood'}
+materialType={}
 
-words={'roman','byzantine','islamic','egyptian','greek','viking','revolutionary', 'renaissance',
-       'khazar','mogul','bronze age','iron age','medieval','russian','celt','africa'
-       'america','pre-historic','china','japan','buddhist','near east','mongul','indus','central asia'}
+cultures=[]
 
 done=[]
 
 
-equals={'celt':'seltic','egytpian':'egypt', 
-        'america':'columbian,maya,aztec,native american,pre columbian,mexico,pre-columbian,indian',
-        'islamic':'koran,andalus,qajar,quran,khazar,sulimani','buddhist':'buddhist,bamiyan',
-        'roman':'rome,romano', 'greek':'cypriot,athena,greco,mycenaean,macedonia,byzantine',
-         'russian':'russiam','indus':'indo,gandhara','pre-historic':'neolithic,pre historic,stone age,mesolithic,chalcolithic,paleolithic,palaeolithic',
-         'near east':'near east,yemen,bedouin,arabic,yamani,yemani,persia,ottoman,persian,judaea,holy land,phoenician,mesopotamia,middle east,israel,canaanite,crusader',
-         'egyptian':'pharao,pharaoh,ptolemaic','viking':'saxon,norse,nordic',
-         'china':'chinese','renaissance':'baroque,italian',
-         'japan':'japanese','central asia': 'central asia,scythian,scythian,sythian,khanate,bactria,kazar,khazar',
-         'cambodia':'cambodian','khmer':'cambodian','thailand':'thai','thai': 'thai'}
+equals={}
 
 entities={}
 
@@ -72,21 +53,28 @@ def stemSentence(sentence):
 
 def findWholeWord(w,doc, eqls):
     
+    t=''
     if w.lower() in eqls:
         d=eqls[w]
         d=d.strip()     
         wrds=d.split(",")
         
+       
         for wo in wrds:
             if wo == "":
                 continue
-            t=re.findall(wo, doc.lower())
-            if len(t)>0:
+            
+            s=re.findall(wo, doc.lower())
+            if len(s)==0:
+                t=re.findall(lemmatizer.lemmatize(wo), doc.lower())
+            if len(s)>0:
                 return t
         
     
-   
-    t=re.findall(w, doc.lower())
+    else:
+        t=re.findall(w, doc.lower())
+        if len(t)==0:
+            t=re.findall(lemmatizer.lemmatize(w), doc.lower())
     
    
     return t
@@ -132,64 +120,82 @@ def loadExtraData ():
     with open(os.path.join(pathway),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
 
-            for objT in objectTypes:
-                if objT not in objectExtra:
-                    continue
+           
+            for r in reader:
                 
-                objTy=objectExtra.get(objT)
-                
-                if objTy is None or objTy ==' ':
-                    continue
-                
-                tys=objTy.split(",")
-                
-                
-                for read in reader:
-                    r=read[objT]
+                for rn in r:
                     
-                    if r not in tys:
-                        tys.append(r)
+                    rt=rn.split(" | ")[0]
+                    if rt =='':
+                        continue
+                    ty=''
+                    try:
+                        ty=rn.split(" | ")[1]
+                        
+                        
+                    except:
+                        print('stop')
+                        
+                    its=r[rn]
                     
-                stR=""
-                for r in tys:
-                    stR+=r+","  
-                    
-                    objectExtra[objT]=stR
+                    if ty in 'objectExtra':
+                          
+                        xtz=''  
+                        
+                        if rt in objectExtra:
+                            xtz=objectExtra[rt]
+                            
+                            if its != "":
+                                xtz+=","+its  
+                            
+                        
+                        else:
+                            if its != "":
+                                xtz=rt+","+its
+                            else:
+                                xtz=rt
+                        objectExtra[rt]=xtz
+                        
+                        if rt not in objectTypes:
+                            objectTypes.add(rt)
+                        
+                    elif ty in 'materialType':
+                        
+                        xtz=''
+                         
+                        if rt in materialType:
+                            xtz=materialType[rt]
+                            
+                            if its != '':
+                                xtz+=","+its
+                            if its == xtz:
+                                continue 
+                        else:
+                            if its != "":
+                                xtz=rt+","+its
+                            else:
+                                xtz=rt
+                        materialType[rt]=xtz
+                        
+                    elif ty in 'cultures':
+                       
+                        if rt in equals:
+                            xtz=equals[rt]
+                            if its == xtz:
+                                continue
+                            if its !="":
+                                xtz+=","+its
+                            equals[rt]=xtz
+                        else:
+                            if its !='':
+                                equals[rt]=rt+","+its
+                            else:
+                                equals[rt]=rt
+                            if rt not in cultures:
+                                cultures.append(rt)
+                            
                     
             
-            for w in words:
-                if w not in equals:
-                    continue
-                wrds=equals[w]
-                
-                if wrds is None:
-                    continue
-                
-                tys=wrds.split(",")
-                
-               
-                
-                for read in reader:
-                    r=read[w]
-                    
-                    if r not in tys:
-                        tys.append(r)
-                    
-                stR=""
-                
-                
-                for r in tys:
-                    stR+=r+','  
-                
-                    equals[w]=stR
-                
-'''                        
-def preprocess(sent):
-    sent = nltk.word_tokenize(sent)
-    newSent = nltk.pos_tag(sent)
-    
-    return newSent
-'''
 
 def loadData():
     #This code changes the current directory so relative paths are used
@@ -198,14 +204,11 @@ def loadData():
     pathway=os.path.join(pn,'data')
 
     results={}
-    
-    
-        
+     
     for fil in os.listdir(pathway):
         with open(os.path.join(pathway,fil),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
-                
-          
+ 
             for row in reader:
                 obj={}
                 org=row['Object']
@@ -217,6 +220,9 @@ def loadData():
                 for w in materialType:
                     m=findWholeWord(w,org.lower(),materialType)
                     if len(m)>0:
+                        
+                        if m=='METAL' and 'age' in org.lower():
+                            continue
                         mat+=w+" | "
                 
                 obj['matType']=mat
@@ -258,7 +264,7 @@ def loadData():
                 obj['links']=link
                 obj['location']=location
                 obj['category']='' 
-                for w in words:
+                for w in cultures:
                     t=findWholeWord(w, objct, equals)
                     
                     if len(t) > 0:
@@ -287,7 +293,8 @@ def lookAtText(obj):
         resultType=''
         
         for x in objectTypes:
-            if x not in objc.lower():
+            x2=lemmatizer.lemmatize(x)
+            if x not in objc.lower() and x2 not in objc.lower():
                 if x not in objectExtra:
                     continue
                 
@@ -299,6 +306,11 @@ def lookAtText(obj):
                         continue
                     wo=wo
                     t=re.findall(wo, objc.lower())
+                    
+                    if len(t)==0:
+                        t=re.findall(lemmatizer.lemmatize(wo), objc.lower())
+
+                        
                     if len(t)>0:
                         if x in resultType:
                             continue
