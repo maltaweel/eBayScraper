@@ -6,16 +6,16 @@ from dbfpy import dbf
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE','scythian':'SCYTHIAN',
-       'iron age':'IRON_AGE','russian':'RUSSIAN','medieval':'MEDIEVAL','celt':'CELT', 'central asia': 'CENT_ASIA',
+       'iron age':'IRON_AGE','russian':'RUSSIA','medieval':'MEDIEVAL','celt':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
-       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL','OTHER':'OTHER'}
+       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL','european':'EUROPEAN','cambodian':'CAMBODIAN','OTHER':'OTHER'}
 
 
 objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'WEAPON','text':'TEXT',
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTIN',
       'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION','OTHER':'OTHER_O'}
 
-mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD'}
+mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE'}
 
 def load(dbF,csvName): 
     
@@ -65,6 +65,9 @@ def load(dbF,csvName):
                             if loc.lower().strip() in r.lower():
                                 if r == 'United States Virgin Islands' or r=='United States Minor Outlying Islands':
                                     continue
+                                
+      #                          print(loc+" : "+r)
+                                
                                 rslt=[]
                                 prc=[]
                                 ctg=[]
@@ -127,6 +130,7 @@ def locationsO(objT,objTT,price):
                 nSn=objTT[nn.strip()]
             except Exception, e:
                 print(e)
+                continue
                 
             if nSn in lisN:
                 v=lisN[nSn]+price[ii]
@@ -186,7 +190,8 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             ccs=c.split(" | ")
             
             for cc in ccs:
-                cc=cc.replace("|","").lower().strip()
+                cc=cc.replace("|","")
+                cc=cc.lower().strip()
                 if cc =='':
                     continue
                 if cc in listCats:
@@ -198,14 +203,15 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         
         for c in listCats: 
             try:
-                c=c.replace('|','').strip()
+                if c =='':
+                    continue
                 sCats=listCats[c]
                 if  c=='?':
                     c='OTHER'
                     rec[c]=sCats
                     continue
                 
-                w=words[c.lower().strip()]
+                w=words[c]
                 rec[w]=sCats
             except Exception, e:
                 print(e) 
@@ -256,7 +262,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
                         
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
-    csvF='namedEntityMerged.csv'
+    csvF='namedEntity.csv'
     
     results, prices, category, place, objTs, matT=load(dbf,csvF)
     
