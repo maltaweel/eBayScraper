@@ -68,44 +68,37 @@ def findWholeWord(w,doc, eqls):
             if len(s)==0:
                 t=re.findall(lemmatizer.lemmatize(wo), doc.lower())
             if len(s)>0:
-                return t
+                return w
         
     
     else:
         t=re.findall(w, doc.lower())
         if len(t)==0:
             t=re.findall(lemmatizer.lemmatize(w), doc.lower())
-    
+        if len(t)>0:
+            return w
    
     return t
 
 
-def printCantFindType(res1,obj,res4,eqls):
+def printCantFindType(res1,eqls):
             
     p=st.tag(res1.split())
             
     
- 
+    res=''
     for s in p:
         b=s[1]
 #        print(b.lower())
             
-        if res4!='':
-            tx=''
-            if b.lower() in objectExtra:
-                tx+=b+" | "
-            obj['objecT']=tx
-    
-        else:
-            res4=''
-            if b.lower() in eqls:
-                res4+=b+" | "
+        if b.lower() in eqls:
+            res=b+" | "
                
                                 
            
     
                 
-    return obj, res4
+    return res
     
     
 def loadExtraData ():
@@ -221,7 +214,7 @@ def loadData():
                     m=findWholeWord(w,org.lower(),materialType)
                     if len(m)>0:
                         
-                        if m=='METAL' and 'age' in org.lower():
+                        if m=='METAL' and 'bronze age' in org.lower() or m=='METAL' and 'iron age' in org.lower():
                             continue
                         mat+=w+" | "
                 
@@ -367,7 +360,7 @@ def printResults(results):
             res4=obj['category']
             
             if res4=='':
-                obj, res4=printCantFindType(res1,obj,res4,equals) 
+                res4=printCantFindType(res1.lower(),equals) 
                 
             res4=res4.capitalize()
             res5=obj['links']
@@ -378,12 +371,12 @@ def printResults(results):
             mat=obj['matType']
                    
             if mat=='':
-                obj, mat=printCantFindType(res1.lower(),obj,'',materialType)
+                mat=printCantFindType(res1.lower(),materialType)
                 
             
             if res6=='':
-                obj, res4=printCantFindType(res1,obj,res4,objectExtra)
-                res6=obj['objecT']
+                res6=printCantFindType(res1.lower(),objectExtra)
+               
                 
             
             writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
