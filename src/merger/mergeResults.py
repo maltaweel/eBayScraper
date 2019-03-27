@@ -6,7 +6,7 @@ from dbfpy import dbf
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE','scythian':'SCYTHIAN',
-       'iron age':'IRON_AGE','russian':'RUSSIA','medieval':'MEDIEVAL','celt':'CELT', 'central asia': 'CENT_ASIA',
+       'iron age':'IRON_AGE','russian':'RUSSIA','medieval':'MEDIEVAL','celtic':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
        'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL','european':'EUROPEAN','cambodian':'CAMBODIAN','OTHER':'OTHER'}
 
@@ -15,7 +15,7 @@ objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'W
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTIN',
       'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION','OTHER':'OTHER_O'}
 
-mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE'}
+mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE','ivory':'IVORY'}
 
 def load(dbF,csvName): 
     
@@ -240,9 +240,8 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             rec[t]=objsN[t]
         
         for m in matsN:
-            if m not in rec:
-                continue
-            rec[m]=matsN[m]
+            mm=mat[m.lower()]
+            rec[mm]=matsN[m]
        
         rec["TOTAL"] = total
         rec["TOP"] = top.capitalize()
