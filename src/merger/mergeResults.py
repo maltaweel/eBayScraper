@@ -15,7 +15,7 @@ objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'W
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTIN',
       'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION','OTHER':'OTHER_O'}
 
-mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE','ivory':'IVORY'}
+mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE','ivory':'IVORY','leather':'LEATHER'}
 
 def load(dbF,csvName): 
     
@@ -56,8 +56,8 @@ def load(dbF,csvName):
                         objectT=row['Object Type']
                         mat=row['Material']
                         
-                        if loc.strip() =='':
-                                continue
+                        if loc=='':
+                            continue
                         ii=0
 
                         for r in db.by_col['NAME']:
@@ -250,15 +250,10 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         location.append(s)
          
         i+=1
-    
-   
-        
+
            
     db.close()
-    
-    
-    
-                        
+                      
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
     csvF='namedEntity.csv'
