@@ -90,9 +90,11 @@ def printCantFindType(res1,eqls):
     for s in p:
         b=s[1]
 #        print(b.lower())
-            
+        
+        if b.lower() in res:
+            continue
         if b.lower() in eqls:
-            res=b+" | "
+            res+=b.lower()+" | "
                
                                 
            
@@ -109,8 +111,8 @@ def loadExtraData ():
     pathway=os.path.join(pn,'inputData','objectExtra.csv')
 
     
-   
-    with open(os.path.join(pathway),'rU') as csvfile:
+    try:
+        with open(os.path.join(pathway),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
 
            
@@ -186,7 +188,8 @@ def loadExtraData ():
                                 equals[rt]=rt
                             if rt not in cultures:
                                 cultures.append(rt)
-                            
+    except IOError:
+        print "Could not read file:", csvfile
                     
             
 
@@ -195,86 +198,106 @@ def loadData():
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
     pathway=os.path.join(pn,'data')
+    
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
+     
+    
+    fileOutput=os.path.join(pn,'output',"namedEntity.csv")
 
     results={}
-     
-    for fil in os.listdir(pathway):
-        with open(os.path.join(pathway,fil),'rU') as csvfile:
-            reader = csv.DictReader(csvfile)
+    
+    with open(fileOutput, 'wb') as csvf:
+        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
+
+        writer.writeheader() 
+        for fil in os.listdir(pathway):
+            with open(os.path.join(pathway,fil),'rU') as csvfile:
+                reader = csv.DictReader(csvfile)
  
-            for row in reader:
-                obj={}
-                org=row['Object']
-                price=row['Price']
-                date1=org.split("2019")
-                date2=org.split("2018")
+                for row in reader:
+                    obj={}
+                    org=row['Object']
+                    price=row['Price']
+                    date1=org.split("2019")
+                    date2=org.split("2018")
                 
-                mat=''
-                for w in materialType:
-                    m=findWholeWord(w,org.lower(),materialType)
-                    if len(m)>0:
-                        
-                        if m=='METAL' and 'bronze age' in org.lower() or m=='METAL' and 'iron age' in org.lower():
+                    mat=printCantFindType(org, materialType)
+                    for w in materialType:
+                        m=findWholeWord(w,org.lower(),materialType)
+                        if w.lower() in mat.lower():
                             continue
-                        mat+=w+" | "
+                        if len(m)>0:
+                            m=findWholeWord(w,org.lower(),materialType)
+                            if m=='metal' and 'bronze age' in org.lower() or m=='metal' and 'iron age' in org.lower():
+                                continue
+                        
+                            mat+=w+" | "
                 
-                obj['matType']=mat
+                    obj['matType']=mat
                 
                           
-                # objct=stemSentence(org)
-                objct=org
-                objct.replace(",","")
-                totalP=objct+' '+price
+                    # objct=stemSentence(org)
+                    objct=org
+                    objct.replace(",","")
+                    totalP=objct+' '+price
                     
                             
-                if totalP in done:
-                    continue
-                
-                done.append(totalP)
-
-                dateKeep=''
-                            
-                if len(date1)>1:
-                    s1=date1[0].replace("Sold","").strip()
-                    dateKeep=s1+" 2019"
-                            
-                else:
-                    s2=date2[0].replace("Sold","").strip()
-                    dateKeep=s2+" 2018"
-                        
-                        
-                        
-                location=row['Location']
-                link=row['Link']
-                        
-                obj['date']=dateKeep
-                obj["object"]=objct
-                        
-                obj=lookAtText(obj)
-                        
-                        
-                obj["price"]=price
-                obj['links']=link
-                obj['location']=location
-                obj['category']='' 
-                for w in cultures:
-                    t=findWholeWord(w, objct, equals)
-                    
-                    if len(t) > 0:
-                        cat=''
-                        if obj.has_key('category'):
-                            cat=obj['category']
-                            obj['category']=w+" | "+cat
-                        
-                        else:
-                            obj['category']=w
-                    else:
+                    if totalP in done:
                         continue
                 
-                if obj['category']=='':
-                    obj['category']='?'
+                    done.append(totalP)
+
+                    dateKeep=''
+                            
+                    if len(date1)>1:
+                        s1=date1[0].replace("Sold","").strip()
+                        dateKeep=s1+" 2019"
+                            
+                    else:
+                        s2=date2[0].replace("Sold","").strip()
+                        dateKeep=s2+" 2018"
+                        
+                        
+                        
+                    location=row['Location']
+                    link=row['Link']
+                        
+                    obj['date']=dateKeep
+                    obj["object"]=objct
+                        
+                    obj=lookAtText(obj)
+                        
+                        
+                    obj["price"]=price
+                    obj['links']=link
+                    obj['location']=location
+                    obj['category']=printCantFindType(objct, equals)
+                    for w in cultures:
+                        if w.lower() in obj['category'].lower():
+                            continue
+                        t=findWholeWord(w, objct, equals)
                     
-                results[objct]=obj
+                        if len(t) > 0:
+                            t=findWholeWord(w, objct, equals)
+                            cat=''
+                            if obj.has_key('category'):
+                                cat=obj['category']
+                                obj['category']=w+" | "+cat
+                        
+                            else:
+                                obj['category']=w
+                        else:
+                            continue
+                
+                    if obj['category']=='':
+                        obj['category']='?'
+                    
+                    results[objct]=obj
+                    
+                    writer.writerow({'Date': str(dateKeep),'Object':str(objct.decode('utf-8')),
+                            'Price':str(price),'Location':str(location.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
+                            'Object Type':str(obj['objecT'].decode('utf-8')),
+                            'Material':str(obj['matType']),'Link':str(link.decode('utf-8'))})
                         
     return results
 
@@ -283,9 +306,12 @@ def lookAtText(obj):
    
         objc=obj['object']
         
-        resultType=''
+        resultType=printCantFindType(objc, objectTypes)
+        
         
         for x in objectTypes:
+            if x.lower() in resultType.lower():
+                continue
             x2=lemmatizer.lemmatize(x)
             if x not in objc.lower() and x2 not in objc.lower():
                 if x not in objectExtra:
@@ -360,8 +386,9 @@ def printResults(results):
             res4=obj['category']
             
             if res4=='':
-                res4=printCantFindType(res1.lower(),equals) 
-                
+                #res4=printCantFindType(res1.lower(),equals) 
+                res4='?'
+                 
             res4=res4.capitalize()
             res5=obj['links']
             
@@ -371,12 +398,13 @@ def printResults(results):
             mat=obj['matType']
                    
             if mat=='':
-                mat=printCantFindType(res1.lower(),materialType)
+                #mat=printCantFindType(res1.lower(),materialType)
+                mat='?'
                 
             
             if res6=='':
-                res6=printCantFindType(res1.lower(),objectExtra)
-               
+                #res6=printCantFindType(res1.lower(),objectExtra)
+                res6='?'
                 
             
             writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
@@ -395,9 +423,10 @@ def lookAtNewText():
 def run():
 #    train_model()
     loadExtraData()
-    results=loadData()
+    loadData()
+ #   results=loadData()
  #  lookAtText(results)
-    printResults(results)
+ #  printResults(results)
     print("Finished")
    
 if __name__ == '__main__':
