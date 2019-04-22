@@ -81,7 +81,7 @@ def printResults():
     fieldnames = ['Object','Price','Location','Link']
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
-    fileOutput=os.path.join(pn,'output',"namedEntityToal.csv")
+    fileOutput=os.path.join(pn,'output',"namedEntityTotal.csv")
     
     with open(fileOutput, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)

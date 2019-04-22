@@ -100,7 +100,7 @@ def printResults():
 
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
-    fileOutput=os.path.join(pn,'output',"namedEntityE.csv")
+    fileOutput=os.path.join(pn,'output',"namedEntityMerged.csv")
     
     with open(fileOutput, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
