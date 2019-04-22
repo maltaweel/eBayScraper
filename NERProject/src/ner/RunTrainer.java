@@ -1,5 +1,6 @@
 package ner;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -12,15 +13,29 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.sequences.SeqClassifierFlags;
 import edu.stanford.nlp.util.StringUtils;
 
+/** This is the class used for the training of the NER classifier, a type of CRF classifier.
+ *  The class uses training data found in namedEntity in the data folder.
+ *  The properties of the trainer is found in the ner folder under properties.txt
+ *  A test of the classification created is done on the findEntity.csv file
+ *  The output classification is ner-moodel.ser.gz found in the data folder
+ *
+ *  @author Mark Altaweel
+ * 
+ */
 public class RunTrainer {
 	
+	/**
+	 * Main method that launches the trainer to create the classification output found in the data folder.
+	 * @param args the runtime arguments given (none used)
+	 * @throws Exception any exception that fails to create the classification.
+	 */
 	public static void main(String[] args) throws Exception {
 
 	   //String modelOutput="../NERProject/output/outputText.txt";
 	   String modelOutput="../NERProject/data/ner-model.ser.gz";
 	   String prop="../NERProject/src/ner/properties.txt";
 	   String trainingFilePath="../NERProject/data/namedEntity.txt";
-	   String fileScanner="../NERProject/data/cantFindEntity.csv";
+	   String fileScanner="../NERProject/data/findEntity.csv";
 	   
 	   RunTrainer rt = new RunTrainer();
 	   List<String> output=rt.parseText(fileScanner);
@@ -36,6 +51,12 @@ public class RunTrainer {
 			   
 	 }
 	
+	/**
+	 * Method to parse the test file findEntity.csv
+	 * 
+	 * @param file the file findEntity.csv
+	 * @return a list of parsed text in relation to the object description 
+	 */
 	public List<String>parseText(String file){
 		
 		List<String>output = new ArrayList<String>();
@@ -73,6 +94,13 @@ public class RunTrainer {
 		return output;
 	}
 	
+	/**
+	 * Method calls the CRF classifier from the Stanford NLP library.
+	 * 
+	 * @param modelOutPath the output path for the trained classification
+	 * @param prop the properties file used.
+	 * @param trainingFilepath the training data file path.
+	 */
 	public void trainAndWrite(String modelOutPath, String prop, String trainingFilepath) {
 		   Properties props = StringUtils.propFileToProperties(prop);
 		   props.setProperty("serializeTo", modelOutPath);
@@ -86,10 +114,20 @@ public class RunTrainer {
 		   crf.serializeClassifier(modelOutPath);
 		}
 	
+	/**
+	 * Method return the classifier model from the model path
+	 * @param modelPath the model path.
+	 * @return
+	 */
 	public CRFClassifier getModel(String modelPath) {
 	    return CRFClassifier.getClassifierNoExceptions(modelPath);
 	}
 	
+	/**
+	 * Method to tag and classify example text to view the efficacy of the classifier.
+	 * @param model the CRF model used.
+	 * @param input the input text to test
+	 */
 	public void doTagging(CRFClassifier model, String input) {
 		  input = input.trim();
 		  System.out.println(input + "=>"  +  model.classifyToString(input));
