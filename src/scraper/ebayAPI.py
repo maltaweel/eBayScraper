@@ -1,4 +1,7 @@
 '''
+Module used for eBay API
+Currently not in use but can be applied to the eBay API to find relevant data.
+
 Created on Jan 11, 2019
 
 @author: mark

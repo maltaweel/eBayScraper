@@ -1,7 +1,9 @@
 '''
+Module used to scrape data from sold eBay information on antiquities and cultural objects.
+
 Created on Jan 7, 2019
 
-@author: mark
+@author: 
 '''
 from bs4 import BeautifulSoup
 import requests
@@ -9,18 +11,22 @@ import os
 import csv
 import urllib2
 
-# List of item names to search on eBay
+# List of item names to search on eBay based on what is present on the eBay site.
 name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
              'Byzantine Antiquities','Celtic Antiquities','Far Eastern Antiquities','Greek Antiquities',
              'Holy Land Antiquities','Islamic Antiquities','Neolithic & Paleolithic Antiquities',
              'Roman Antiquities','South Italian Antiquities', 'Viking Antiquities', 'Other Antiquities']
-#name_list=['Byzantine Antiquities']
 
+#tracking numbers
 ii=0
 tt=0
 
 
-# Returns a list of urls that search eBay for an item
+'''
+Method that returns urls to search
+@param names- the names of eBay sites to search
+@return urls to search
+'''
 def make_urls(names):
   # eBay url that can be modified to search for a specific item on eBay
 #    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
@@ -39,8 +45,13 @@ def make_urls(names):
     # Returns the list of completed urls
     return urls
 
+'''
+Method to scrape data and print the individual object urls, location of objects sold, description of objects, 
+and price of the item result listed on eBay.
 
-# Scrapes and prints the url, name, and price of the first item result listed on eBay
+@param url- the url to scrape
+@param tt- the iteration number of each set of urls to scrape
+'''
 def ebay_scrape(url,tt):
     
     # Downloads the eBay page for processing
@@ -146,24 +157,12 @@ def ebay_scrape(url,tt):
                         break
             
             iit+=1
-#            src=im['src']
-#            alt=im['alt']
-            
-#            if 'images' not in src:
-                    
-                    
- #               try:
- #                   src=im['data-src']
- #               except:
- #                   continue
-                    
-#            figures[alt]=src
-            
-        
-##        print(tt)
-        
-        # Prints the url, listed item name, and the price of the item
 
+
+'''
+Method to print the images from a given description page
+@param ii- the image number to print
+'''
 def printImages(ii):
     
    
@@ -201,6 +200,10 @@ def printImages(ii):
         txt.close()
         ii+=1
 
+'''
+Method to output the eBay data scrapped.
+@param name- the name of the output file to put the data to. The output folder has the eBay data retrieved.
+'''
 def printResults(name):
     fieldnames = ['Object','Price','Location','Link']
      
@@ -254,11 +257,12 @@ def printResults(name):
     links.clear()
     location.clear()
 
+'''
+The file output path for printing results (to the src level of this project)
+@return rn- the output file path to use to the src level
+''' 
 def filenameToOutput():
-        '''
-        The file name to output the results
-        filename-- the filename for the output
-        '''  
+        
         pn=os.path.abspath(__file__)
         pn=pn.split("src")[0]  
         
