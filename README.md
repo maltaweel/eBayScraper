@@ -26,7 +26,7 @@ Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (se
 
 High-Level Overview
 
-eBayScraper
+<i>eBayScraper</i>
 
 1. src/merger
 
@@ -68,7 +68,7 @@ This folder contains a shapefile used to store data about different countries in
 
 Folder used to place files from scarping and/or NER/dictionary analysis outputs so that they can be merged into one data file. 
 
-NERProject
+<i>NERProject</i>
 
 1. bin/ner
 
