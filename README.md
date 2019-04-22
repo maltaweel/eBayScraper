@@ -70,23 +70,29 @@ Folder used to place files from scarping and/or NER/dictionary analysis outputs 
 
 <i>NERProject</i>
 
-1. bin/ner
+1. src/ner
+
+The folder contains two Java objects, which are NERDemo.java and RunTrainer.java respectively. NERDemo.java is an example NER project from the Stanford team that is included here as a demonstration on how to use NER. The RunTrainer.java is used for creating the ner-model.ser.gz file, which is used in the Python eBayScraper NER analysis. The properties.txt is used as a property file applied in RunTrainer.java and is based on requirements from the Stanford tool.
+
+2. bin/ner
 
 The bin folder for Java classes.
 
-2. classifiers
+3. classifiers
 
 Classifier libraries from the Stanford NLP group.
 
-3. data
+4. data
 
 Data files used in NERProject/src/ner/RunTrainer.java. The file findEntity.csv is a demo file that demonstrates how terms are parsed and classified using the CRF classifier. The namedEntity.txt file is use for training and creating the CRF model, which, when created, is called ner-model.ser.gz.
 
-4. lib
+5. doc
+
+The Java doc files which provide documentation and explanation of the Java utilised in the project folder.
+
+6. lib
 
 The Java libraries used from the Stanford CoreNLP tool.
 
-5. src/ner
-
-The folder contains two Java objects, which are NERDemo.java and RunTrainer.java respectively. NERDemo.java is an example NER project from the Stanford team that is included here as a demonstration on how to use NER. The RunTrainer.java is used for creating the ner-model.ser.gz file, which is used in the Python eBayScraper NER analysis. The properties.txt is used as a property file applied in RunTrainer.java and is based on requirements from the Stanford tool. 
+ 
 
