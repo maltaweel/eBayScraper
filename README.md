@@ -48,23 +48,27 @@ The memoryTest.py module is used to test memory availability and allocation in t
 
 The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object.
 
-6. images
+6. doc
+
+Folder containing general descriptions of the modules and functions utilised. More details can be found in the comments within the modules in the src folder.
+
+7. images
 
 Not used currently but could be a location for scraped images from eBay used for analysis.
 
-7. inputData
+8. inputData
 
 The folder used for dictionary (i.e., regular express) searches in the NER/dictionary model.
 
-8. output
+9. output
 
 The output folder used for outputting analysis results in the NER/dictionary model and merger outputs. The file namedEntityTotal.csv is the merged scraped data file, while namedEntityMerged.csv is the merged output of the NER/dictionary results.
 
-9. shp
+10. shp
 
 This folder contains a shapefile used to store data about different countries in the categories anlaysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated. 
 
-10. totalData
+11. totalData
 
 Folder used to place files from scarping and/or NER/dictionary analysis outputs so that they can be merged into one data file. 
 
