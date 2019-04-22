@@ -13,7 +13,8 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.sequences.SeqClassifierFlags;
 import edu.stanford.nlp.util.StringUtils;
 
-/** This is the class used for the training of the NER classifier, a type of CRF classifier.
+/** 
+ * This is the class used for the training of the NER classifier, a type of CRF classifier.
  *  The class uses training data found in namedEntity in the data folder.
  *  The properties of the trainer is found in the ner folder under properties.txt
  *  A test of the classification created is done on the findEntity.csv file
