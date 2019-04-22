@@ -1,22 +1,46 @@
+'''
+Module used to analyse outputs from eBay NER methodology and visualize spatially those outputs.
+
+Created on Feb 11, 2019
+
+@author: 
+'''
+
 import csv
 import os
 import pysal
 from dbfpy import dbf
 
+#cultrual terms to be assessed as categorisation
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
        'greek':'GREEK','viking':'VIKING','revolutionary':"REVOLUTION", 'renaissance':'RENAISSANC',
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE','scythian':'SCYTHIAN',
        'iron age':'IRON_AGE','russian':'RUSSIA','medieval':'MEDIEVAL','celtic':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
-       'mongul':'MONGUL','indus':'INDUS','africa':'AFRICA','medieval':'MEDIEVAL','european':'EUROPEAN','cambodian':'CAMBODIAN','OTHER':'OTHER'}
+       'mongul':'MONGUL','africa':'AFRICA','medieval':'MEDIEVAL','european':'EUROPEAN','cambodian':'CAMBODIAN',
+       'other':'OTHER','india':'INDIA'}
 
-
+#types of objects categorised in the outputs
 objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'WEAPON','text':'TEXT',
       'clothing':'CLOTHING','household':'HOUSEHOLD','coin':'COIN','mask':'MASK','religious':'RELIGIOUS','tool':'TOOL','painting':'PAINTIN',
       'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION','OTHER':'OTHER_O'}
 
+#material types categorised in the outputs
 mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE','ivory':'IVORY','leather':'LEATHER'}
 
+'''
+Method that loads a dbf file from a .shp file and finds the correct categories to assess and country-level data from the NER output file. 
+The end results is a dictionary that organizes the data according to the country in which it relates to.
+
+@param dbF- the .dbf file used from the shapefile to get categories and countries to affiliate the output data.
+@param csvName- the csv output file from the NER-based methodology and associated with given countries.
+@return results- the location results from the output file
+@return prices-  the price results from the output .csv file
+@return category- the cultural category results from the output .csv file
+@return place- the places from the shape file
+@return objTs- the object types from the output .csv file
+@return matT-  the material types from the output .csv file
+'''
 def load(dbF,csvName): 
     
     pn=os.path.abspath(__file__)
@@ -105,7 +129,14 @@ def load(dbF,csvName):
                                 
             return results, prices, category, place, objTs, matT           
                         
+'''
+Method to associate data with appropriate dictionaries and merge results for assessment on price.
+@param objT- categories retrieved from output data
+@param objTT- category types assessed
+@param price- the price dictionary for objects
 
+@return lisN a dictionary of objects and types with relevant prices 
+'''
 def locationsO(objT,objTT,price):
     
     lisN={}
@@ -144,7 +175,20 @@ def locationsO(objT,objTT,price):
         ii+=1
             
     return lisN  
-        
+
+'''
+Method takes .csv and .dbf outputs and integrates the results to the appropriate country-level output based on aggregating the 
+results from the NER output. The outputs include material type, culture type, and type of objects that are found in a 
+given country selling the objects. The total dollar value is then determined for those categories in a given country.
+
+@param results- the location results to assess from the output file
+@param prices- the price results to assess
+@param category- the cultural category  results to assess
+@param place- the country to associate data with
+@param dbF- the dbF file used for the shapefile
+@param objTs- the object types (i.e., object categories) from results on cultural objects
+@param matT- the material types from results
+'''      
 def finalizeResults(results,prices,category,place,dbF,objTs, matT):
     
     pn=os.path.abspath(__file__)
@@ -253,7 +297,10 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
 
            
     db.close()
-                      
+    
+'''
+Method to run the module
+'''                
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
     csvF='namedEntity.csv'
