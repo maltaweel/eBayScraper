@@ -8,8 +8,6 @@ Created on Feb 11, 2019
 
 import csv
 import os
-from docutils.nodes import row
-
 
 #The object descriptions to incorporate
 objects=[]
