@@ -1,7 +1,10 @@
 '''
+Module that performs Named Entity Recognition and dictionary searches on input terms.
+The modul takes an input file(s) from the data folder and then returns an output in the output folder (called namedEntity.csv)
+
 Created on Jan 16, 2019
 
-@author: mark
+@author: 
 '''
 
 #import spacy
@@ -16,6 +19,10 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.tag import StanfordNERTagger
 from nltk.stem import WordNetLemmatizer
+from textblob import TextBlob
+from textblob import Word
+from spellchecker import SpellChecker
+spell = SpellChecker()
 
 porter=PorterStemmer()
 reload(sys)
@@ -23,34 +30,71 @@ sys.setdefaultencoding('utf8')
 st = StanfordNERTagger('ner-model.ser.gz')
 lemmatizer = WordNetLemmatizer()
 
-
-#spacy.prefer_gpu()
-#nlp = spacy.load('en')
-
+#some default inputs included in this list of object types. Others can be added.
 objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait','decoration'}
 
+#dictionary used to reference a type of object with other terms affiliated with the object categorisation
 objectExtra={}
 
+#material references associated with a given category of material (e.g., bone, wood, etc.)
 materialType={}
 
+#list of cultures added and used in categorisation
 cultures=[]
 
+#list to keep track of redundant material that can be removed
 done=[]
 
-
+#dictionary of cultures that includes multiple references for the same cultural categorisation used 
+#(e.g., Ottoman, Phoenician, Hittite being Near East cultures)
 equals={}
 
-entities={}
+#entities={}
 
-def stemSentence(sentence):
-    token_words=word_tokenize(sentence.decode('utf-8'))
-    token_words
-    stem_sentence=[]
-    for word in token_words:
-        stem_sentence.append(porter.stem(word))
-        stem_sentence.append(" ")
-    return "".join(stem_sentence)
+'''
+Method to check spelling of an English word
+@param word- a word to check spelling for, returing the most likely spelling
 
+@return the corrected or 'best' spelling.
+'''
+def spelling(word):
+    
+    return spell.correction(word)
+   
+''''
+Method to parse a given sentence and then commence spell check, with the sentence then being reformed.
+
+@param sentence- the sentence to check
+@return sentence- the spell corrected sentence
+'''
+def spellCheck(sentence):
+    
+    try:
+        b = TextBlob(sentence)
+        lang=b.detect_language()
+        if lang!='en':
+            return sentence
+        sentence=sentence.replace("-"," ")
+        token_words=word_tokenize(sentence.decode('utf-8'))
+        token_words
+        stem_sentence=[]
+        for word in token_words:
+            stem_sentence.append(spelling(word))
+            stem_sentence.append(" ")
+        return "".join(stem_sentence)
+    
+    except:
+        return sentence
+
+'''
+Method to find a word in a text using regular expression searches
+@param w- the cateogory term to search (e.g., Roman, Celtic, European, etc.)
+@param doc- the document to search, which is the text description
+@param eqls- the dictionary containing the terms associated with a category term (e.g., Celtic is also Celt, Celts, Selts)
+
+@return s- the number of terms found
+@return t- the number of terms found
+'''
 def findWholeWord(w,doc, eqls):
     
     t=''
@@ -64,45 +108,74 @@ def findWholeWord(w,doc, eqls):
             if wo == "":
                 continue
             
-            s=re.findall(wo, doc.lower())
+
+            s=re.findall(wo.lower(), doc.lower())
             if len(s)==0:
-                t=re.findall(lemmatizer.lemmatize(wo), doc.lower())
-            if len(s)>0:
-                return w
+                t=re.findall(lemmatizer.lemmatize(wo.lower()), doc.lower())
+                if len(t)>0:
+                    return t
+            else:
+                return s
         
-    
+    ''' 
     else:
-        t=re.findall(w, doc.lower())
+        t=re.findall(w.lower(), doc.lower())
         if len(t)==0:
-            t=re.findall(lemmatizer.lemmatize(w), doc.lower())
-        if len(t)>0:
-            return w
-   
+            t=re.findall(lemmatizer.lemmatize(w.lower()), doc.lower())
+            if len(t)>0:
+                return t
+        
+        else:
+            return t
+    '''
     return t
 
 
-def printCantFindType(res1,eqls):
+'''
+Method where the main NER model is used. Here the Standford CRF classifier is used.
+@param obj- the dictionary containing information about the object entry, including information such as the material type and object type
+@param res1- the description of the cultural object
+'''
+def printCantFindType(obj,res1):
             
     p=st.tag(res1.split())
             
     
-    res=''
+    listT=[]
     for s in p:
         b=s[1]
 #        print(b.lower())
         
-        if b.lower() in res:
+        if b.lower() in listT:
             continue
-        if b.lower() in eqls:
-            res+=b.lower()+" | "
-               
+        
+        if b.lower() in equals:
+            term=obj['category']
+            if b.lower() in term:
+                continue
+            
+            obj['category']=term+b.lower()+" | "
+        
+        elif b.lower() in objectTypes:
+            obJT=obj['objectT']
+            if b.lower() in obJT:
+                continue
+            
+            obj['objectT']=obJT+b.lower()+" | "
+        
+        elif b.lower() in materialType:
+            matT=obj['matType']
+            if b.lower() in matT:
+                continue
+            obj['matType']=matT+b.lower()+" | "
                                 
-           
+        listT.append(b)
     
                 
-    return res
-    
-    
+'''
+Method that loads search terms from a dictionary on the type of cultural object, type of cultures, and material of the object's composition from
+an input file in the inputData folder. The terms are affiliated with given categories (e.g., seltic is part of the category term celtic).
+'''
 def loadExtraData ():
    
     #This code changes the current directory so relative paths are used
@@ -192,7 +265,10 @@ def loadExtraData ():
         print "Could not read file:", csvfile
                     
             
-
+'''
+The is the method that is called and obtains data from the input eBay data. The NER is first called and then a dictionary search.
+The results are also printed to the namedEntity.csv file in the output folder
+'''
 def loadData():
     #This code changes the current directory so relative paths are used
     pn=os.path.abspath(__file__)
@@ -200,13 +276,10 @@ def loadData():
     pathway=os.path.join(pn,'data')
     
     fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
-     
     
     fileOutput=os.path.join(pn,'output',"namedEntity.csv")
-
-    results={}
     
-    with open(fileOutput, 'wb') as csvf:
+    with open(fileOutput, 'wb',buffering=0) as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
         writer.writeheader() 
@@ -220,23 +293,7 @@ def loadData():
                     price=row['Price']
                     date1=org.split("2019")
                     date2=org.split("2018")
-                
-                    mat=printCantFindType(org, materialType)
-                    for w in materialType:
-                        m=findWholeWord(w,org.lower(),materialType)
-                        if w.lower() in mat.lower():
-                            continue
-                        if len(m)>0:
-                            m=findWholeWord(w,org.lower(),materialType)
-                            if m=='metal' and 'bronze age' in org.lower() or m=='metal' and 'iron age' in org.lower():
-                                continue
-                        
-                            mat+=w+" | "
-                
-                    obj['matType']=mat
-                
-                          
-                    # objct=stemSentence(org)
+                    org=spellCheck(org)
                     objct=org
                     objct.replace(",","")
                     totalP=objct+' '+price
@@ -245,7 +302,7 @@ def loadData():
                     if totalP in done:
                         continue
                 
-                    done.append(totalP)
+#                    done.append(totalP)
 
                     dateKeep=''
                             
@@ -257,7 +314,7 @@ def loadData():
                         s2=date2[0].replace("Sold","").strip()
                         dateKeep=s2+" 2018"
                         
-                        
+                    date=datetime.strptime(dateKeep, '%b %d, %Y')    
                         
                     location=row['Location']
                     link=row['Link']
@@ -265,168 +322,84 @@ def loadData():
                     obj['date']=dateKeep
                     obj["object"]=objct
                         
-                    obj=lookAtText(obj)
+                    #obj=lookAtText(obj)
                         
                         
                     obj["price"]=price
                     obj['links']=link
                     obj['location']=location
-                    obj['category']=printCantFindType(objct, equals)
-                    for w in cultures:
-                        if w.lower() in obj['category'].lower():
+                    obj['matType']=''
+                    obj['category']=''
+                    obj['objectT']=''
+                    
+                    mat=''
+                    oT=''
+                    cat=''
+                
+                    printCantFindType(obj,objct)
+                    for w in materialType:
+                        mat=obj['matType']
+                        if w.lower() in mat.lower():
                             continue
-                        t=findWholeWord(w, objct, equals)
+                        m=findWholeWord(w,org.lower(),materialType)
+                        if len(m)>0:
+                            obj['matType']+=w+" | "
+                
+                    if obj['matType']=="":
+                        obj['matType']='?'
+                
+                    for o in objectTypes:
+                        oT=obj['objectT']
+                        if o.lower() in oT.lower():
+                            continue
+                        mn=findWholeWord(o,org.lower(),objectExtra)
+                        if len(mn)>0:
+                            obj['objectT']+=o+" | "
+                
+                    if obj['objectT']=="":
+                        obj['objectT']='?'
+                        
+                    for c in cultures:
+                        cat=obj['category']
+                        if c.lower() in cat:
+                            continue
+                        t=findWholeWord(c, objct.lower(), equals)
                     
                         if len(t) > 0:
-                            t=findWholeWord(w, objct, equals)
-                            cat=''
-                            if obj.has_key('category'):
-                                cat=obj['category']
-                                obj['category']=w+" | "+cat
-                        
-                            else:
-                                obj['category']=w
-                        else:
-                            continue
-                
+                            obj['category']+=c+" | "
+                       
                     if obj['category']=='':
                         obj['category']='?'
                     
-                    results[objct]=obj
+ #                  results[objct]=obj
                     
-                    writer.writerow({'Date': str(dateKeep),'Object':str(objct.decode('utf-8')),
-                            'Price':str(price),'Location':str(location.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
-                            'Object Type':str(obj['objecT'].decode('utf-8')),
+                    loc=''
+                    res3=obj['location'].split(",")
+                    if len(location)>1:
+                        loc=res3[len(res3)-1].strip()
+                    else:
+                        loc=res3[0]
+            
+                    if 'Russian Federation' in location:
+                        loc="Russia"
+            
+                    if 'Yugoslavia' in location:
+                        loc='Serbia'
+                    
+                    v=str(price.replace("$","").strip()).replace(',','').strip()
+                    res2F=float(v)
+                    
+                    writer.writerow({'Date': str(date),'Object':str(objct.decode('utf-8')),
+                            'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
+                            'Object Type':str(obj['objectT'].decode('utf-8')),
                             'Material':str(obj['matType']),'Link':str(link.decode('utf-8'))})
-                        
-    return results
-
-def lookAtText(obj):
-    
-   
-        objc=obj['object']
-        
-        resultType=printCantFindType(objc, objectTypes)
-        
-        
-        for x in objectTypes:
-            if x.lower() in resultType.lower():
-                continue
-            x2=lemmatizer.lemmatize(x)
-            if x not in objc.lower() and x2 not in objc.lower():
-                if x not in objectExtra:
-                    continue
-                
-                wdds=objectExtra[x]
-                wrds=wdds.split(",")
-                
-                for wo in wrds:
-                    if wo == '':
-                        continue
-                    wo=wo
-                    t=re.findall(wo, objc.lower())
-                    
-                    if len(t)==0:
-                        t=re.findall(lemmatizer.lemmatize(wo), objc.lower())
-
-                        
-                    if len(t)>0:
-                        if x in resultType:
-                            continue
-                        resultType+=x+" | "
-            
-            else:
-                resultType+=x+" | "
-        
-        if resultType=='':
-            resultType='?'
-            
-        obj['objecT']=resultType   
-        return obj     
-            
-def printResults(results):
-    
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
-     
-    pn=os.path.abspath(__file__)
-    pn=pn.split("src")[0]
-    fileOutput=os.path.join(pn,'output',"namedEntity.csv")
-    
-    with open(fileOutput, 'wb') as csvf:
-        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
-
-        writer.writeheader()      
-    
-        for d in results:
-            obj=results[d]
-            
-            res0=obj['date']
-            
-            date=datetime.strptime(res0, '%b %d, %Y')
-            
-            res1=obj['object']
-            res2=obj['price']
-            
-            v=str(res2.replace("$","").strip()).replace(',','').strip()
-            res2F=float(v)
-            res3=obj['location'].split(",")
-            
-            loc=""
-            if len(res3)>1:
-                loc=res3[len(res3)-1].strip()
-            else:
-                loc=res3[0]
-            
-            if 'Russian Federation' in loc:
-                loc="Russia"
-            
-            if 'Yugoslavia' in loc:
-                loc='Serbia'
-                           
-            res4=obj['category']
-            
-            if res4=='':
-                #res4=printCantFindType(res1.lower(),equals) 
-                res4='?'
-                 
-            res4=res4.capitalize()
-            res5=obj['links']
-            
-            res6=obj['objecT']
-            
-            
-            mat=obj['matType']
-                   
-            if mat=='':
-                #mat=printCantFindType(res1.lower(),materialType)
-                mat='?'
-                
-            
-            if res6=='':
-                #res6=printCantFindType(res1.lower(),objectExtra)
-                res6='?'
-                
-            
-            writer.writerow({'Date': str(date),'Object':str(res1.decode('utf-8')),'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(res4.decode('utf-8')),
-                            'Object Type':str(res6.decode('utf-8')),'Material':str(mat),'Link':str(res5.decode('utf-8'))})
-    
-     
-def lookAtNewText():
-  
-    for d in entities:
-        lst=entities[d]
-        
-        print(d+" "+"Length: "+str(len(lst)))
-   
-
-
+'''
+Method to run the module and launch the analysis
+'''                    
 def run():
-#    train_model()
     loadExtraData()
     loadData()
- #   results=loadData()
- #  lookAtText(results)
- #  printResults(results)
+
     print("Finished")
    
 if __name__ == '__main__':
