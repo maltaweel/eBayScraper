@@ -1,13 +1,25 @@
 '''
+Module used for testing the results' quality by randomly selecting inputs that are then selected.
+External to this, the researcher should apply a precision-recall or other information retrieval test.
+
 Created on Mar 25, 2019
 
-@author: mark
+@author: 
 '''
 import os
 import random
 import csv
+import sys
 
-def selectRandom():
+'''
+Method to generate random numbers and provide test data to assess for evaluation in information retrieval methods.
+The selection of data is based on the length of the input (the output file from NER called namedEntity.csv in output) 
+and number of random selections to make.
+
+@param n- the number of random selections to make
+@return returns- the randomly selected data to print.
+'''
+def selectRandom(n):
     
     print "run random"
     pn=os.path.abspath(__file__)
@@ -25,18 +37,20 @@ def selectRandom():
         rows=[r for r in reader]
     
         numbers=[]
-        for i in range(1,400):
+        for i in range(1,n):
             numbers.append(random.randint(1,row_count))
     
         
-
-           
         for x in numbers:
-            returns.append(rows[x])
+            returns.append(rows[x-1])
                 
         
     return returns
 
+'''
+Method to print the results of the random selection of output data.
+@param the results to print from the random selection in a file called randomSelectionTest found in the output folder
+'''
 def printResults(results):
     
     fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
@@ -66,9 +80,12 @@ def printResults(results):
                              "Category":str(res4),'Object Type':str(res5),'Material':
                              str(res6),'Link':str(res7)})  
     
-    
+'''
+Method to run the module.
+'''    
 def run():
-    results=selectRandom()
+    n = int(sys.argv[1])
+    results=selectRandom(n)
     printResults(results)
    
 if __name__ == '__main__':
