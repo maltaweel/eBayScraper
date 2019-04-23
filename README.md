@@ -1,7 +1,7 @@
 # eBayScraper
 <b>Guide to eBayScraper and NERProject</b>
 
-This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities. The NERProject,  a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on the contents of the tool.
+This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on the contents of the tool.
 
 <b>Required Libraries</b>
 
@@ -34,7 +34,7 @@ Modules that merge different scraped data (mergeMultipleOutputs.py and mergeMult
 
 2. src/nlp
 
-Only module here is nameEntityRecog.py, which applies the named entity recognition technique using the CRF outputs from NERProject. The output is ner-model.ser.gz, located in the nlp folder. In addition, nameEntityRecog.py conducts dictionary regular expression searches, see inputData folder, as well as spell checks on descriptions. 
+The only module here is nameEntityRecog.py, which applies the named entity recognition technique using the CRF outputs from NERProject. In addition, nameEntityRecog.py conducts dictionary regular expression searches, see inputData folder, as well as spell checks on descriptions. The NER uses the NER model classification (ner-model.ser.gz), which is located in the nlp folder. The output of the analysis is namedEntity.csv placed in the output folder. 
 
 3. src/scraper
 
