@@ -42,7 +42,6 @@ priceExtra=[]
 
 '''
 Method to load input files from the totalData folder and combine into one output file
-@return totals- the data merged and to be given in an output.
 '''
 def loadData():
     
@@ -89,7 +88,7 @@ def loadData():
                     matTypes.append(matType)
                 
                 
-    return totals            
+         
 
 '''
 Method to print results of the merged files
@@ -118,8 +117,8 @@ def printResults():
 Method to run the module
 '''  
 def run():
-    results=loadData()
-    printResults(results)
+    loadData()
+    printResults()
     print("Finished")
    
 if __name__ == '__main__':
