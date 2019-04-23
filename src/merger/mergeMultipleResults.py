@@ -1,5 +1,5 @@
 '''
-Module used to merge multiple scrapped  data from eBay.
+Module used to merge multiple scraped  data from eBay.
 
 Created on Feb 11, 2019
 
