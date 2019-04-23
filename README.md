@@ -127,21 +127,26 @@ For terms below the title line, these represent additional terms for a given cat
 <b>Run Operations and Order</b>
 
 <i> Scraping </i>
+
 1. Run /src/scraper/scrapeData 
 2. Merge results using /src/merger/mergeMutipleResults.py
 
 <i>NER Model</i>
+
 3. Run /NERProject/src/RunTrainer.java. Can add additional training text to /data/namedEntity.txt
 
 <i>Run NER Analysis and Dictionary</i>
+
 4. Transfer the ner-model.ser.gz file from /NERProject/data/ to eBayScraper/src/nlp/ then run nameEntityRecog.py, with the scaped data files transfered to the data folder.
 
 5. If there are multiple runs, merge the outputs of the NER (taking the results from the output folder) and merge using /src/merger/mergeMutipleOutputs.py, which created namedEntityuTotal.csv in the output folder.
 
 <i>Make into Spatial Data</i>
+
 6. To merge results with location information into the shapefile, run /src/merger/mergeResults.py. Then assess output in the /shp file, which is the same as the shapefile input file (TM_WORLD_BORDERS-0.3.shp). The namedEntityTotal.csv is used as the input. 
 
 <i>Conduct Information Retrieval Tests</i>
+
 7. To select a random number of NER/dictionary results for further testng the utility of the approach (e.g., using precision-recall tests), run /src/test/randomSelector.py on the namedEntityTotal.csv file. 
 
 
