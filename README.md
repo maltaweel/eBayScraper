@@ -63,9 +63,8 @@ The folder used for dictionary (i.e., regular express) searches in the NER/dicti
 
 The output folder used for outputting analysis results in the NER/dictionary model and merger outputs. The file namedEntityTotal.csv is the merged scraped data file, while namedEntityMerged.csv is the merged output of the NER/dictionary results.
 
-10. shp
-
-This folder contains a shapefile used to store data about different countries in the categories anlaysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated. 
+10. shp 
+This folder contains a shapefile used to store data about different countries in the categories analysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated.
 
 11. totalData
 
