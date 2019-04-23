@@ -101,13 +101,15 @@ The Java libraries used from the Stanford CoreNLP tool.
  <b>Output and Required Input </b>
 
 <i>Key Outputs </i>
+
 To run the NER analysis, scraped data need to be placed in the data folder under eBayScraper. Scraped data are obtained from /src/scraper/scrapedData.py. The make_urls method creates the needed urls to scrape in that module. This will produce output files in the output folder in eBayScraper. These files can be merged together in src/merger/mergeMultipleResults.py, which produced the file namedEntityTotal.csv in the output folder. This process also removes any duplicates of sold data from eBay. The output of the scraping produces an object description, the sale price, the location of the seller, and link of the actual object sold.
 
 The analysis output of the NER is conducted in src/nlp/nameEntityRecog.py, with the output being nameEntity.csv in the output folder. If there are duplicates at this stage, they can be removed by using /src/merger/mergeMultipleOutputs.py. This module could also be used to merge multiple output files if there are multiple outputs. The merged outputs are placed in the outpus folder under the file namedEntityTotal.csv.
 
 The nameEntity.csv output has the following structure:
-
 Date (date of the sale),Object (description of the object as provided by eBay),Price (the sale price), Location (location where the object was sold),Category (the type of cultural category as determined by the NER/dictionary analysis (e.g., Roman)),Object Type (the type of object (e.g., vessel),Material (the material type of the object (e.g., terracotta),Link (the link to the original object sold).
+
+In the /shp folder in eBayScraper is the file TM_WORLD_BORDERS-0.3.shp. This is a shapefile of the world. The shapefile contains all the category names currently used (e.g., Jewellery, Roman, Viking, Terracotta, etc.) and determines the total dollar value of sales for countries and the top item sold. It also determines how much was sold for given cultural objects (e.g., Roman), material types (e.g., glass), and types of objects (e.g., jewellery). Other terms and categories could be added to the shapefile and analysis if needed by modifying the shapefile and words, objTl, and mat dictionaries in /src/merger/mergeResults.py module. These three dictionaries address cultural (words), object types (objTl), and materials for the objects (mat). The format used for what is currently there in the dictionaries in the module is applied to match cases used in the NER/dictionarhy analysis and that in the shapefile. 
 
 
 For the NERProject, the only output is ner-model.ser.gz, which is produced in the dat folder under NERProject. This file can be transfered to the /src/nlp folder in eBayScraper to be used for the NER analysis.
@@ -120,7 +122,7 @@ In addition to the scraped data, as discussed above, users can also add dictiona
 Example:  title line:  "jewellery | objectExtra"    
 This represents the category term (jewellery) with the "|" indicating the split used to designate if the term is an object description (objectExtra), cultural item (cultures), or a material description (materialType). Each of these three terms have to be used if an object, cultural item, or material description is used.
 
-For terms below the title line, these represent additional terms for a given category term. For example, "america", a cultures designated category, it has the terms "maya", "aztec", "native american", etc. These terms represent "america" based cultures. This is true for all the categories used. The terms below the title line are the terms searched, whereas the title line represents the designation used as the identifier in the outputs of nameEntity.csv. New categories and terms can be created and/or added or removed. 
+For terms below the title line, these represent additional terms for a given category term. For example, "america", a cultures designated category, it has the terms "maya", "aztec", "native american", etc. These terms represent "america" based cultures. This is true for all the categories used. The terms below the title line are the terms searched, whereas the title line represents the designation used as the identifier in the outputs of nameEntity.csv. New categories and terms can be created and/or added or removed. All the terms can be included irresspective of capitalization. 
 
 
 
