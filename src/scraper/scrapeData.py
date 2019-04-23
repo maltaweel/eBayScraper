@@ -23,7 +23,7 @@ tt=0
 
 
 '''
-Method that returns urls to search
+Method that returns urls to search and scrape data.
 @param names- the names of eBay sites to search
 @return urls to search
 '''
@@ -32,7 +32,10 @@ def make_urls(names):
 #    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
 #    url='https://www.ebay.com/sch/i.html?_from=R40&_nkw='
 #    url='https://www.ebay.com/sch/37907/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
+    
+    #the main url to search and then add additional names to scrape within eBay
     url='https://www.ebay.com/sch/37903/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27+'
+    
     # List of urls created
     urls = {}
 
