@@ -24,7 +24,7 @@ def selectRandom(n):
     print "run random"
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
-    pathway=os.path.join(pn,'output','namedEntity.csv')
+    pathway=os.path.join(pn,'output','namedEntityMerged.csv')
 
     returns=[]
     
@@ -81,7 +81,9 @@ def printResults(results):
                              str(res6),'Link':str(res7)})  
     
 '''
-Method to run the module.
+Method to run the module. An runtime input is required to provide the random
+number of selections to chose. This number is given in the command line arguments 
+(e.g., 400 for 400 random selections).
 '''    
 def run():
     n = int(sys.argv[1])
