@@ -29,7 +29,6 @@ priceExtra=[]
 
 '''
 Method to load data from input files in the totalData folder.
-@param totals- the total data to be given in a merged output.
 '''
 def loadData():
     
@@ -96,8 +95,8 @@ Method to run the module
 '''           
 def run():
 #    train_model()
-    results=loadData()
-    printResults(results)
+    loadData()
+    printResults()
     print("Finished")
    
 if __name__ == '__main__':
