@@ -24,7 +24,7 @@ The following libraries are used in NERProject and are required, including possi
 Java 8
 Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (see instructions; the lib folder in NERProject has Java libraries needed)
 
-High-Level Overview
+<i>High-Level Overview</i>
 
 <i>eBayScraper</i>
 
