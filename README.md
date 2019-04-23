@@ -45,8 +45,7 @@ The ebayAPI.py is not currently used but it can be applied to directly integrate
 The memoryTest.py module is used to test memory availability and allocation in the applied device. The randomSelector.py is used to produce random output from the NER/dictionary results that are applied in memory-recall or other information retrieval tests. 
 
 5. data
-
-The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object.
+The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The original raw files are outputted to the output folder but should be moved to this folder for the NER anlaysis or to the totalData folder for merging before NER/dictionary analysis. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object. The data can be merged together (namedEntityTotal.csv), which will be put in the output folder, or the raw scrape data can be directly incorporated to the data folder without merging.
 
 6. doc
 
@@ -70,7 +69,7 @@ This folder contains a shapefile used to store data about different countries in
 
 11. totalData
 
-Folder used to place files from scarping and/or NER/dictionary analysis outputs so that they can be merged into one data file. 
+Folder used to place files from scarping and/or NER/dictionary analysis outputs so that they can be merged into one data file. The merging of raw scraped data is done using files here or the outputs from the NER/dictionary analysis as well.
 
 <i>NERProject</i>
 
@@ -129,7 +128,7 @@ For terms below the title line, these represent additional terms for a given cat
 <i> Scraping </i>
 
 1. Run /src/scraper/scrapeData 
-2. Merge results using /src/merger/mergeMutipleResults.py
+2. Merge results using /src/merger/mergeMutipleResults.py. Be sure to have the scraped data in the totalData folder
 
 <i>NER Model</i>
 
@@ -139,7 +138,7 @@ For terms below the title line, these represent additional terms for a given cat
 
 4. Transfer the ner-model.ser.gz file from /NERProject/data/ to eBayScraper/src/nlp/ then run nameEntityRecog.py, with the scaped data files transfered to the data folder.
 
-5. If there are multiple runs, merge the outputs of the NER (taking the results from the output folder) and merge using /src/merger/mergeMutipleOutputs.py, which created namedEntityuTotal.csv in the output folder.
+5. If there are multiple runs, merge the outputs of the NER (taking the results from the output folder) and merge using /src/merger/mergeMutipleOutputs.py, which creates namedEntityuTotal.csv in the output folder. The multiple outputs should be put in totalData.
 
 <i>Make into Spatial Data</i>
 
