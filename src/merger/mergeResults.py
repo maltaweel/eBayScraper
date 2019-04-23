@@ -303,7 +303,7 @@ Method to run the module
 '''                
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
-    csvF='namedEntity.csv'
+    csvF='namedEntityTotal.csv'
     
     results, prices, category, place, objTs, matT=load(dbf,csvF)
     
