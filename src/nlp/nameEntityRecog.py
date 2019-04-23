@@ -20,7 +20,7 @@ from nltk.stem import PorterStemmer
 from nltk.tag import StanfordNERTagger
 from nltk.stem import WordNetLemmatizer
 from textblob import TextBlob
-from textblob import Word
+
 from spellchecker import SpellChecker
 spell = SpellChecker()
 
@@ -183,7 +183,7 @@ def loadExtraData ():
     pn=pn.split("src")[0]
     pathway=os.path.join(pn,'inputData','objectExtra.csv')
 
-    
+    #the below steps simply match the type of object, cultural type, and material of objects    
     try:
         with open(os.path.join(pathway),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
@@ -288,11 +288,15 @@ def loadData():
                 reader = csv.DictReader(csvfile)
  
                 for row in reader:
+                    
+                    #get some of the basic data from the scraped file, including description, sale price (in dollars) and date info.
                     obj={}
                     org=row['Object']
                     price=row['Price']
                     date1=org.split("2019")
                     date2=org.split("2018")
+                    
+                    #spell check launched here
                     org=spellCheck(org)
                     objct=org
                     objct.replace(",","")
@@ -324,7 +328,7 @@ def loadData():
                         
                     #obj=lookAtText(obj)
                         
-                        
+                    #put some of the scraped data as part of the output that will go in namedEntity.csv  
                     obj["price"]=price
                     obj['links']=link
                     obj['location']=location
@@ -335,8 +339,11 @@ def loadData():
                     mat=''
                     oT=''
                     cat=''
-                
+                    
+                    #this does the method for NER
                     printCantFindType(obj,objct)
+                    
+                    #this does the dictionary searches
                     for w in materialType:
                         mat=obj['matType']
                         if w.lower() in mat.lower():
@@ -397,7 +404,11 @@ def loadData():
 Method to run the module and launch the analysis
 '''                    
 def run():
+    
+    #first load an data we need for dictionary searches
     loadExtraData()
+    
+    #launch the analysis that will do NER and dictionary searches
     loadData()
 
     print("Finished")
