@@ -1,7 +1,7 @@
 # eBayScraper
 <b>Guide to eBayScraper and NERProject</b>
 
-This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on the contents of the tool.
+This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities/cultural objects. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using a conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on how to use the contents of the tool.
 
 <b>Required Libraries</b>
 
@@ -30,7 +30,7 @@ Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (se
 
 1. src/merger
 
-Modules that merge different scraped data (mergeMultipleOutputs.py and mergeMultipleResults.py). The module mergeMultipleOutputs.py merges the outputs of the NER method, while mergeMultipleResults.py merges scraped data. The mergeResults.py integrates the NER/dictionary results with associated countries where items were sold, providing a country-level spatial dataset of the NER/dictionary results. The spatial dataset provides information on cultures, materials of objects, and general types of objects sold in countries and the dollar value of those sales. 
+Modules that merge different scraped data (mergeMultipleOutputs.py and mergeMultipleResults.py). The module mergeMultipleOutputs.py merges the outputs of the NER method, while mergeMultipleResults.py merges scraped data. The mergeResults.py integrates the NER/dictionary results with associated countries where items were sold, providing a country-level spatial dataset of the NER/dictionary results. The spatial dataset produced by mergeResults.py provides information on cultures, materials of objects, and general types of objects sold in countries and the dollar value of those sales. 
 
 2. src/nlp
 
@@ -45,7 +45,7 @@ The ebayAPI.py is not currently used but it can be applied to directly integrate
 The memoryTest.py module is used to test memory availability and allocation in the applied device. The randomSelector.py is used to produce random output from the NER/dictionary results that are applied in memory-recall or other information retrieval tests. 
 
 5. data
-The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The original raw files are outputted to the output folder but should be moved to this folder for the NER anlaysis or to the totalData folder for merging before NER/dictionary analysis. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object. The data can be merged together (namedEntityTotal.csv), which will be put in the output folder, or the raw scrape data can be directly incorporated to the data folder without merging.
+The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The original raw files are outputted to the output folder but should be moved to this folder for the NER anlaysis or to the totalData folder for merging before NER/dictionary analysis. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object. The data can be merged together (namedEntityTotal.csv), which will be put in the output folder, or the raw scrape data can be directly incorporated to the data folder without merging and used in NER anlaysis.
 
 6. doc
 
@@ -61,7 +61,7 @@ The folder used for dictionary (i.e., regular express) searches in the NER/dicti
 
 9. output
 
-The output folder used for outputting analysis results in the NER/dictionary model and merger outputs. The file namedEntityTotal.csv is the merged scraped data file, while namedEntityMerged.csv is the merged output of the NER/dictionary results.
+The output folder used for outputting analysis results in the NER/dictionary model and merger outputs from src/merger. The file namedEntityTotal.csv is the merged scraped data file, while namedEntityMerged.csv is the merged output of the NER/dictionary results. The file nameEntity.csv is the single run output from the NER analysis.
 
 10. shp 
 This folder contains a shapefile used to store data about different countries in the categories analysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated.
