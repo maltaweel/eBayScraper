@@ -45,11 +45,12 @@ The ebayAPI.py is not currently used but it can be applied to directly integrate
 The memoryTest.py module is used to test memory availability and allocation in the applied device. The randomSelector.py is used to produce random output from the NER/dictionary results that are applied in memory-recall or other information retrieval tests. 
 
 5. data
+
 The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The original raw files are outputted to the output folder but should be moved to this folder for the NER anlaysis or to the totalData folder for merging before NER/dictionary analysis. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object. The data can be merged together (namedEntityTotal.csv), which will be put in the output folder, or the raw scrape data can be directly incorporated to the data folder without merging and used in NER anlaysis.
 
 6. doc
 
-Folder containing general descriptions of the modules and functions utilised. More details can be found in the comments within the modules in the src folder.
+Folder containing general document descriptions of the modules and functions utilised. More details can be found in the comments within the modules in the src folder.
 
 7. images
 
@@ -64,7 +65,8 @@ The folder used for dictionary (i.e., regular express) searches in the NER/dicti
 The output folder used for outputting analysis results in the NER/dictionary model and merger outputs from src/merger. The file namedEntityTotal.csv is the merged scraped data file, while namedEntityMerged.csv is the merged output of the NER/dictionary results. The file nameEntity.csv is the single run output from the NER analysis.
 
 10. shp 
-This folder contains a shapefile used to store data about different countries in the categories analysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated.
+
+This folder contains a shapefile (TM_WORLD_BORDERS-0.3.shp) used to store data about different countries in the categories analysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated.
 
 11. totalData
 
@@ -90,7 +92,7 @@ Data files used in NERProject/src/ner/RunTrainer.java. The file findEntity.csv i
 
 5. doc
 
-The Java doc files which provide documentation and explanation of the Java utilised in the project folder.
+The Java doc files which provide documentation and explanation of the Java classes utilised in the project folder.
 
 6. lib
 
@@ -115,18 +117,18 @@ For the NERProject, the only output is ner-model.ser.gz, which is produced in th
 
 <i>Key Inputs</i>
 
-In addition to the scraped data, as discussed above, users can also add dictionary terms. The long-term goal is not to require the use of a dictionary, as the NER analysis could potentially classify without using a dictionary. However, practically this might not be easy, thus a dictionary is included. The dictionary is in the inputData folder in eBayScraper under the file objectExtra.csv. The following structure is used for the inputs:
+In addition to the scraped data, as discussed above and produced by running /src/sraper/scrapeData.py, users can also add dictionary terms. The long-term goal is not to require the use of a dictionary, as the NER analysis could potentially classify without using a dictionary. However, practically this might not be easy, thus a dictionary is included. The dictionary is in the inputData folder in eBayScraper under the file objectExtra.csv. The following structure is used for the inputs:
 
 Example:  title line:  "jewellery | objectExtra"    
 This represents the category term (jewellery) with the "|" indicating the split used to designate if the term is an object description (objectExtra), cultural item (cultures), or a material description (materialType). Each of these three terms have to be used if an object, cultural item, or material description is used.
 
-For terms below the title line, these represent additional terms for a given category term. For example, "america", a cultures designated category, it has the terms "maya", "aztec", "native american", etc. These terms represent "america" based cultures. This is true for all the categories used. The terms below the title line are the terms searched, whereas the title line represents the designation used as the identifier in the outputs of nameEntity.csv. New categories and terms can be created and/or added or removed. All the terms can be included irresspective of capitalization. 
+For terms below the title line, these represent additional terms for a given category term. For example, "america", a cultures designated category, it has the terms "maya", "aztec", "native american", etc. These terms represent "america" based cultures. This is true for all the categories used. The terms below the title line are the terms searched, whereas the title line represents the designation used as the identifier in the outputs of nameEntity.csv. New categories and terms can be created and/or added or removed. All the terms can be included irrespective of capitalization. 
 
 <b>Run Operations and Order</b>
 
 <i> Scraping </i>
 
-1. Run /src/scraper/scrapeData 
+1. Run /src/scraper/scrapeData
 2. Merge results using /src/merger/mergeMutipleResults.py, which creates nameEntityTotal.csv. Be sure to have the scraped data in the totalData folder. This step could be skipped
 
 <i>NER Model</i>
@@ -135,7 +137,7 @@ For terms below the title line, these represent additional terms for a given cat
 
 <i>Run NER Analysis and Dictionary</i>
 
-4. Transfer the ner-model.ser.gz file from /NERProject/data/ to eBayScraper/src/nlp/ then run nameEntityRecog.py, with the scaped data files transfered to the data folder or use the nameEntityTotal.csv for the merged scraped data. The output of this will be nameEntity.csv
+4. Transfer the ner-model.ser.gz file from /NERProject/data/ to eBayScraper/src/nlp/ then run nameEntityRecog.py, with the scraped data files transferred to the data folder or use the nameEntityTotal.csv for the merged scraped data. The output of this will be nameEntity.csv
 
 5. If there are multiple runs, merge the outputs of the NER (taking the results from the output folder) and merge using /src/merger/mergeMutipleOutputs.py, which creates namedEntityuTotal.csv in the output folder. The multiple outputs should be put in totalData. If there is only a single output, this step should be skipped. 
 
@@ -143,15 +145,9 @@ For terms below the title line, these represent additional terms for a given cat
 
 6. To merge results with location information into the shapefile, run /src/merger/mergeResults.py. Then assess output in the /shp file, which is the same as the shapefile input file (TM_WORLD_BORDERS-0.3.shp). The namedEntityMerged.csv is used as the input. 
 
-<i>Conduct Information Retrieval Tests</i>
+<i>Conduct Outputs for Information Retrieval (IR) Tests</i>
 
 7. To select a random number of NER/dictionary results for further testng the utility of the approach (e.g., using precision-recall tests), run /src/test/randomSelector.py on the namedEntityMerged.csv file. 
 
-The first six steps from above are represented in the RunFlow diagram attached to this project.
-
-
-
-
-
-
-
+<i>Flow Diagram</i>
+The first six steps from above are represented in the RunFlow diagram attached to this project. The seventh step is for the IR tests used.
