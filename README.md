@@ -102,7 +102,7 @@ The Java libraries used from the Stanford CoreNLP tool.
 
 To run the NER analysis, scraped data need to be placed in the data folder under eBayScraper. Scraped data are obtained from /src/scraper/scrapedData.py. The make_urls method creates the needed urls to scrape in that module. This will produce output files in the output folder in eBayScraper. These files can be merged together in src/merger/mergeMultipleResults.py, which produced the file namedEntityTotal.csv in the output folder. This process also removes any duplicates of sold data from eBay. The output of the scraping produces an object description, the sale price, the location of the seller, and link of the actual object sold.
 
-The analysis output of the NER is conducted in src/nlp/nameEntityRecog.py, with the output being nameEntity.csv in the output folder. If there are duplicates at this stage, they can be removed by using /src/merger/mergeMultipleOutputs.py. This module could also be used to merge multiple output files if there are multiple outputs. The merged outputs are placed in the outpus folder under the file namedEntityTotal.csv.
+The analysis output of the NER is conducted in src/nlp/nameEntityRecog.py, with the output being nameEntity.csv in the output folder. If there are duplicates at this stage, they can be removed by using /src/merger/mergeMultipleOutputs.py. This module could also be used to merge multiple output files if there are multiple outputs. The merged outputs are placed in the output folder under the file namedEntityMerged.csv.
 
 The nameEntity.csv output has the following structure:
 Date (date of the sale),Object (description of the object as provided by eBay),Price (the sale price), Location (location where the object was sold),Category (the type of cultural category as determined by the NER/dictionary analysis (e.g., Roman)),Object Type (the type of object (e.g., vessel),Material (the material type of the object (e.g., terracotta),Link (the link to the original object sold).
@@ -127,7 +127,7 @@ For terms below the title line, these represent additional terms for a given cat
 <i> Scraping </i>
 
 1. Run /src/scraper/scrapeData 
-2. Merge results using /src/merger/mergeMutipleResults.py. Be sure to have the scraped data in the totalData folder
+2. Merge results using /src/merger/mergeMutipleResults.py, which creates nameEntityTotal.csv. Be sure to have the scraped data in the totalData folder
 
 <i>NER Model</i>
 
@@ -141,11 +141,11 @@ For terms below the title line, these represent additional terms for a given cat
 
 <i>Make into Spatial Data</i>
 
-6. To merge results with location information into the shapefile, run /src/merger/mergeResults.py. Then assess output in the /shp file, which is the same as the shapefile input file (TM_WORLD_BORDERS-0.3.shp). The namedEntityTotal.csv is used as the input. 
+6. To merge results with location information into the shapefile, run /src/merger/mergeResults.py. Then assess output in the /shp file, which is the same as the shapefile input file (TM_WORLD_BORDERS-0.3.shp). The namedEntityMerged.csv is used as the input. 
 
 <i>Conduct Information Retrieval Tests</i>
 
-7. To select a random number of NER/dictionary results for further testng the utility of the approach (e.g., using precision-recall tests), run /src/test/randomSelector.py on the namedEntityTotal.csv file. 
+7. To select a random number of NER/dictionary results for further testng the utility of the approach (e.g., using precision-recall tests), run /src/test/randomSelector.py on the namedEntityMerged.csv file. 
 
 
 
