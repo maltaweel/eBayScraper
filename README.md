@@ -8,14 +8,14 @@ This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named 
 <i>Python</i>
 The following libraries are used in eBayScraper and are required, including possibly newer versions of the listed libraries.
 
-Python 2.7+
-NLTK 3.4
-Beautiful Soup 4.4
-ebaysdk 2.1.5 (used only for eBayAPI in /src/scraper/ folder)
-pysal 2.0
-dbfpy 2.0
-SpellChecker 0.4
-TextBlob 0.15.2
+Python 2.7+,
+NLTK 3.4,
+Beautiful Soup 4.4,
+ebaysdk 2.1.5 (used only for eBayAPI in /src/scraper/ folder),
+pysal 2.0,
+dbfpy 2.0,
+SpellChecker 0.4,
+TextBlob 0.15.2,
 ctypes 1.0.2
 
 <i>Java</i>
