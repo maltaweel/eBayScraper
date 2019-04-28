@@ -127,7 +127,7 @@ For terms below the title line, these represent additional terms for a given cat
 <i> Scraping </i>
 
 1. Run /src/scraper/scrapeData 
-2. Merge results using /src/merger/mergeMutipleResults.py, which creates nameEntityTotal.csv. Be sure to have the scraped data in the totalData folder
+2. Merge results using /src/merger/mergeMutipleResults.py, which creates nameEntityTotal.csv. Be sure to have the scraped data in the totalData folder. This step could be skipped
 
 <i>NER Model</i>
 
@@ -135,9 +135,9 @@ For terms below the title line, these represent additional terms for a given cat
 
 <i>Run NER Analysis and Dictionary</i>
 
-4. Transfer the ner-model.ser.gz file from /NERProject/data/ to eBayScraper/src/nlp/ then run nameEntityRecog.py, with the scaped data files transfered to the data folder.
+4. Transfer the ner-model.ser.gz file from /NERProject/data/ to eBayScraper/src/nlp/ then run nameEntityRecog.py, with the scaped data files transfered to the data folder or use the nameEntityTotal.csv for the merged scraped data. The output of this will be nameEntity.csv
 
-5. If there are multiple runs, merge the outputs of the NER (taking the results from the output folder) and merge using /src/merger/mergeMutipleOutputs.py, which creates namedEntityuTotal.csv in the output folder. The multiple outputs should be put in totalData.
+5. If there are multiple runs, merge the outputs of the NER (taking the results from the output folder) and merge using /src/merger/mergeMutipleOutputs.py, which creates namedEntityuTotal.csv in the output folder. The multiple outputs should be put in totalData. If there is only a single output, this step should be skipped. 
 
 <i>Make into Spatial Data</i>
 
@@ -146,6 +146,8 @@ For terms below the title line, these represent additional terms for a given cat
 <i>Conduct Information Retrieval Tests</i>
 
 7. To select a random number of NER/dictionary results for further testng the utility of the approach (e.g., using precision-recall tests), run /src/test/randomSelector.py on the namedEntityMerged.csv file. 
+
+The first six steps from above are represented in the RunFlow diagram attached to this project.
 
 
 
