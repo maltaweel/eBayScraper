@@ -1053,7 +1053,8 @@ PANTHER	0
 Saharian	AFRICA
 NEOLITHIC	PRE-HISTORIC
 Quartzite	STONE
-HAND STONE	TOOL
+HAND	TOOL
+STONE	STONE
 
 Ancient	0
 Greek	GREEK
@@ -4328,3 +4329,174 @@ style	0
 bronze	METAL
 boar	0
 figurine	STATUE
+
+THRACE	GREEK
+/	0
+OLBIA	GREEK
+4	0
+DOLPHIN	0
+MONEY	COIN
+COINS	COIN
+d' 	0
+c.	0
+
+RARE	0
+VERY	0
+LARGE	0
+ANCIENT	0
+LURISTAIN	NEAR EAST
+BRONZE	METAL
+SPIKED	0
+AXE	WEAPON
+HEAD	0
+1000	IRON AGE
+CENT	0
+BC	0
+face	0
+
+VERY	0
+RARE	0
+LARGE	0
+GRECO	GREEK
+thrace	GREEK
+INTAGLIO	JEWELLERY
+SEAL	JEWELLERY
+BRONZE	METAL
+RING	JEWELLERY
+GOD	RELIGIOUS
+IMAGE	0
+
+Antique	0
+Korean	CHINA
+Silla	CHINA
+Dynasty	0
+Grayware	VESSEL
+Earthenware	TERRACOTTA
+Pottery	TERRACOTTA
+Tall	0
+Vase	VESSEL
+Vessel	VESSEL
+
+Inca	AMERICA
+wood	WOOD
+canopy	0
+in	0
+the	0
+figure	0
+of	0
+an	0
+Alpaca	0
+
+Authentic	0
+Ancient	0
+Antiquities	0
+MINIATURE	0
+sassanian	NEAR EAST
+CARNELIAN	STONE
+SEAL	JEWELLERY
+BULLS	0
+HEAD	0 
+
+Geometric	0
+Period	IRON AGE
+Ancient	0
+Greece	GREEK
+Museum	0
+Copy	0
+of	0
+700	IRON AGE
+BC	0
+Pitcher	VESSEL
+with	0
+Tag	0 
+
+Fine	0
+Chernyakhov	RUSSIAN
+culture	0
+Bronze	METAL
+Part	0
+of	0
+belt	CLOTHING
+,	0
+Strap	CLOTHING
+Clasp	0
+
+Christie	0
+is	0
+Catalogue	0
+:	0
+Antiquities	0
+Egyptian	EGYPTIAN
+Roman	ROMAN
+Attic	GREEK
+Cycladic	GREEK
+Etruscan	ROMAN
+examine	0
+
+Two	0
+ancient	0
+Etruscan	ROMAN
+pottery	TERRACOTTA
+dishes	VESSEL 
+
+Wonderful	0
+Antique	0
+Rare	0
+Old	0
+unique	0
+Agate	STONE
+Roman	ROMAN
+With	0
+2	0
+snake	0
+seal	JEWELLERY
+Bead	JEWELLERY
+
+EXCELLENT	0
+RARE	0
+AFGHAN	CENTRAL ASIA
+JADE	STONE
+DANCING	0
+HORSE	0
+INTAGLIO	JEWELLERY
+ANTIQUE	0
+RING	JEWELLERY 
+
+WONDERFUL	0
+AFGHAN	CENTRAL ASIA
+AGATE	STONE
+STONE	STONE
+HILL	0
+TRIBE	0
+BEAUTIFUL	0
+SILVER	METAL
+BOX	HOUSEHOLD
+
+Wonderful	0
+Ancient	0
+Rare	0
+Agate	STONE
+Evil	0
+Eyes	RELIGIOUS
+Powerful	0
+Wisdom	0
+Protection	0
+Stone	STONE
+
+Antique	0
+18thC	0
+authentic	0
+Original	0
+Ottoman	NEAR EAST
+Turkish	NEAR EAST
+Waistcoat	CLOTHING
+Vest	CLOTHING
+
+Sahara	AFRICA
+Neolithic	PRE-HISTORIC
+Stone	STONE
+Celts	TOOL
+,	0
+Prehistoric	PRE-HISTORIC
+African	AFRICA
+Artifacts	0 
