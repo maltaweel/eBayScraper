@@ -6,6 +6,7 @@ This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named 
 <b>Required Libraries</b>
 
 <i>Python</i>
+
 The following libraries are used in eBayScraper and are required, including possibly newer versions of the listed libraries.
 
 Python 2.7+,
@@ -19,6 +20,7 @@ TextBlob 0.15.2,
 ctypes 1.0.2
 
 <i>Java</i>
+
 The following libraries are used in NERProject and are required, including possibly newer versions of the listed libraries.
 
 Java 8
