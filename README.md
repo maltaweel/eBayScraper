@@ -62,7 +62,7 @@ Not used currently but could be a location for scraped images from eBay used for
 
 8. inputData
 
-The folder used for dictionary (i.e., regular express) searches in the NER/dictionary model.
+The folder used for dictionary (i.e., regular express) searches in the NER/dictionary model. See objectExtra.csv
 
 9. output
 
