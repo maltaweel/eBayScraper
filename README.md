@@ -154,4 +154,5 @@ For terms below the title line, these represent additional terms for a given cat
 7. To select a random number of NER/dictionary results for further testng the utility of the approach (e.g., using precision-recall tests), run /src/test/randomSelector.py on the namedEntityMerged.csv file. 
 
 <i>Flow Diagram</i>
+
 The first six steps from above are represented in the RunFlow diagram attached to this project. The seventh step is for the IR tests used.
