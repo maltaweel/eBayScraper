@@ -26,6 +26,10 @@ Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (se
 
 <b>High-Level Overview</b>
 
+<b>NER Category Definitions </b>
+
+For category definitions of the NER and dictionary used, see definitions.docx.
+
 <i>eBayScraper</i>
 
 1. src/merger
