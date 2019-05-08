@@ -157,4 +157,4 @@ For terms below the title line, these represent additional terms for a given cat
 
 <i>Flow Diagram</i>
 
-The first six steps from above are represented in the RunFlow diagram attached to this project. The seventh step is for the IR tests used.
+The first six steps from above are represented in the flow diagram attached to this project (RunFlow.jpg). The seventh step is for the IR tests used.
