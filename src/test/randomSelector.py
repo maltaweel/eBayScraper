@@ -28,6 +28,7 @@ def selectRandom(n):
 
     returns=[]
     
+    #this looks at the data and then returns the desired number of random samples
     row_count=0
     with open(os.path.join(pathway),'rU') as csvfile:
         row_count = sum(1 for row in csvfile)
@@ -38,6 +39,7 @@ def selectRandom(n):
     
         numbers=[]
         for i in range(1,n):
+  #          print(random.randint(10000,100000))
             numbers.append(random.randint(1,row_count))
     
         
@@ -59,6 +61,7 @@ def printResults(results):
     pn=pn.split("src")[0]
     fileOutput=os.path.join(pn,'output',"randomSelectionTest.csv")
     
+    #write output file including data from results of the NER/dictionary analysis
     with open(fileOutput, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
@@ -86,8 +89,13 @@ number of selections to chose. This number is given in the command line argument
 (e.g., 400 for 400 random selections).
 '''    
 def run():
+    #take an input argument (i.e., the number of random selections from results)
     n = int(sys.argv[1])
+    
+    #select random data
     results=selectRandom(n)
+    
+    #print those results of the random selection of analysed data
     printResults(results)
    
 if __name__ == '__main__':
