@@ -50,8 +50,10 @@ def selectRandom(n):
     return returns
 
 '''
-Method to print the results of the random selection of output data.
-@param the results to print from the random selection in a file called randomSelectionTest found in the output folder
+Method to print the results of the random selection of output data to a file called randomSelectionTest.csv based on 
+desired number of tests.
+
+@param the results to print from the random selection in a file called randomSelectionTest.csv found in the output folder
 '''
 def printResults(results):
     
