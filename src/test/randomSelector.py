@@ -13,8 +13,8 @@ import sys
 
 '''
 Method to generate random numbers and provide test data to assess for evaluation in information retrieval methods.
-The selection of data is based on the length of the input (the output file from NER called namedEntity.csv in output) 
-and number of random selections to make.
+The selection of data is based on the length of the input (the output file from NER/dictionary analysis called 
+namedEntityMerged.csv in output) and number of random selections to make.
 
 @param n- the number of random selections to make
 @return returns- the randomly selected data to print.
