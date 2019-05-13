@@ -26,7 +26,8 @@ objTL={'jewellery':'JEWELLERY','vessel':'VESSEL','statue':'STAT_FIG','weapon':'W
       'portrait':"PORTRAIT",'feature':'FEATURE','decoration':'DECORATION','OTHER':'OTHER_O'}
 
 #material types categorised in the outputs
-mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE','ivory':'IVORY','leather':'LEATHER'}
+mat={'terracotta':"TERRACOTTA",'metal':"METAL",'glass':"GLASS",'stone':"STONE",'wood':'WOOD','bone':'BONE','ivory':'IVORY','leather':'LEATHER',
+     'other':'OTHER','papyrus':'PAPYRUS'}
 
 '''
 Method that loads a dbf file from a .shp file and finds the correct categories to assess and country-level data from the NER output file. 
@@ -163,7 +164,8 @@ def locationsO(objT,objTT,price):
             try:
                 nSn=objTT[nn.strip()]
             except Exception, e:
-                print(e)
+                print('error: ')
+                print( e)
                 continue
                 
             if nSn in lisN:
@@ -173,6 +175,7 @@ def locationsO(objT,objTT,price):
                 try:
                     lisN[nSn]=price[ii]
                 except Exception, e:
+                    print('error: ')
                     print(e)
         
         ii+=1
@@ -264,6 +267,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
                 w=words[c]
                 rec[w]=sCats
             except Exception, e:
+                print('error: ')
                 print(e) 
                     
         
@@ -300,6 +304,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         rec["TOP"] = top.capitalize()
         rec.store()
         
+        print(s)
         location.append(s)
          
         i+=1
@@ -312,7 +317,7 @@ Method to run the module
 '''                
 def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
-    csvF='namedEntityTotal.csv'
+    csvF='namedEntityMerged.csv'
     
     #first load the data from namedEntityTotal.csv
     results, prices, category, place, objTs, matT=load(dbf,csvF)
