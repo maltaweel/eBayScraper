@@ -61,7 +61,8 @@ def load(dbF,csvName):
     place={}
     objTs={}
     matT={}
-        
+    
+    #open the csv and go through the results
     with open(pathway) as csvfile:
             reader = csv.DictReader(csvfile)
             
@@ -83,7 +84,9 @@ def load(dbF,csvName):
                         if loc=='':
                             continue
                         ii=0
-
+                        
+                        #results will be matched to the country in the dbf
+                        #this is done by looping through the dbf
                         for r in db.by_col['NAME']:
                                 
                             if loc.lower().strip() in r.lower():
@@ -191,6 +194,7 @@ given country selling the objects. The total dollar value is then determined for
 '''      
 def finalizeResults(results,prices,category,place,dbF,objTs, matT):
     
+    #this will output back to the shapefile of the world
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
     filename=os.path.join(pn,'shp',dbF.replace('.csv','.shp'))
@@ -208,6 +212,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
     i=0
     recs=[]
     
+    #loop through the results from the csv
     for r in results:
         rec=''
         for re in db:
@@ -229,6 +234,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         
         listCats={}
         
+        #below code goes through the material, cultural, and type of object data
         ii=0
         for c in cat:
             ccs=c.split(" | ")
@@ -287,7 +293,10 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
             mm=mat[m.lower()]
             rec[mm]=matsN[m]
        
+        #the total sales data is kep here for each country
         rec["TOTAL"] = total
+        
+        #the top selling culture is stored
         rec["TOP"] = top.capitalize()
         rec.store()
         
@@ -305,8 +314,10 @@ def run():
     dbf='TM_WORLD_BORDERS-0.3.csv'
     csvF='namedEntityTotal.csv'
     
+    #first load the data from namedEntityTotal.csv
     results, prices, category, place, objTs, matT=load(dbf,csvF)
     
+    #then output results to the .shp file, which is the same as the .csv file TM_WORLD
     finalizeResults(results,prices,category,place,dbf,objTs, matT)
     
     print("Finished")
