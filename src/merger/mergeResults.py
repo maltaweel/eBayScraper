@@ -75,7 +75,7 @@ def load(dbF,csvName):
                     else:
                         date=row['Date']
                         obj=row['Object']
-                        price=row['Price']
+                        price=float(row['Price'])
                         cat=row['Category']
                         link=row['Link']
                         loc=row['Location']
@@ -85,12 +85,14 @@ def load(dbF,csvName):
                         if loc=='':
                             continue
                         ii=0
+                        l=loc.split(",")
+                        ll=l[len(l)-1].strip().lower()
                         
                         #results will be matched to the country in the dbf
                         #this is done by looping through the dbf
                         for r in db.by_col['NAME']:
-                                
-                            if loc.lower().strip() in r.lower():
+                            
+                            if ll in r.lower():
                                 if r == 'United States Virgin Islands' or r=='United States Minor Outlying Islands':
                                     continue
                                 
@@ -109,7 +111,7 @@ def load(dbF,csvName):
                                     mtT=matT[r]
                                     
                                 rslt.append(loc)
-                                prc.append(float(price))
+                                prc.append(price)
                                 ctg.append(cat)
                                     
                                 objT.append(objectT)
@@ -130,8 +132,8 @@ def load(dbF,csvName):
                             
                             ii+=1
                                
-                                
-            return results, prices, category, place, objTs, matT           
+                            
+    return results, prices, category, place, objTs, matT           
                         
 '''
 Method to associate data with appropriate dictionaries and merge results for assessment on price.
@@ -304,7 +306,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         rec["TOP"] = top.capitalize()
         rec.store()
         
-        print(s)
+    #    print(s)
         location.append(s)
          
         i+=1
