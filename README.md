@@ -30,7 +30,7 @@ Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (se
 
 <b>NER Category Definitions </b>
 
-For category definitions of the NER and dictionary used, see definitions.docx.
+For category definitions of the NER and dictionary used, see definitions.docx or definitions.pdf.
 
 <i>eBayScraper</i>
 
