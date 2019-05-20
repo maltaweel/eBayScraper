@@ -38,7 +38,7 @@ def selectRandom(n):
         rows=[r for r in reader]
     
         numbers=[]
-        for i in range(1,n):
+        for i in range(1,n+1):
   #          print(random.randint(10000,100000))
             numbers.append(random.randint(1,row_count))
     
@@ -99,6 +99,8 @@ def run():
     
     #print those results of the random selection of analysed data
     printResults(results)
+    
+    print("Finished")
    
 if __name__ == '__main__':
     run()
