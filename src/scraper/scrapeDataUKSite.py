@@ -15,7 +15,6 @@ prt2='&_skc=50&rt=nc'
 name_list = ["British",'Chinese', 'Roman','Americas','Other Antiquities','Egyptian','Prehistoric',
              'Greek','Near Eastern','Scandinavian','European','Russian']
 
-
 def make_urls():
   # eBay url that can be modified to search for a specific item on eBay
 #    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
@@ -76,10 +75,22 @@ def ebay_scrape(urlFull):
         
         for s in sites:
             resS = requests.get(s)
+#            print(s)
             soupS = BeautifulSoup(resS.text, 'html.parser')
             priceI=soupS.find_all("span",{"itemprop":"price"})
-            descI=soupS.find_all("p",{'class':'sbin-title'})
+            priceII=soupS.find_all("span",{'id':"mm-saleDscPrc"})
+            #priceI=soupS.find_all("p",{"data-detail":"price"})
+            descI=soupS.find_all("title")
+            
             loc=soupS.find_all("span",{'itemprop':'availableAtOrFrom'})
+            seller=soupS.find_all("span",{'class':'mbg-nw'})
+            objImg=soupS.find_all("meta",{'name':'twitter:image'})
+            
+            descp=''
+            prce=''
+            location=''
+            sellR=''
+            obImg=''
             
             ccp=''
             for p in priceI:
@@ -94,42 +105,67 @@ def ebay_scrape(urlFull):
                         print('stop')
                         
                     price[s]=ccp
+                    prce=str(ccp.encode('utf-8').strip())
                     break
-                     
+
             for d in descI:
                 for cc in d.contents:
-                    desc[s]=str(cc)
-                    break
+                    desc[s]=str(cc.encode('utf-8').strip())
+                    descp=str(cc.encode('utf-8').strip())
+            
+                
+            if prce=='':
+                for pp in priceII:
+                    for cc in pp.contents:
+                        try:
+                            ccpT=cc.split(" ")
+                            if len(ccpT)>1:
+                                ccp=ccpT[1]
+                            else:
+                                ccp=ccpT[0].strip()
+                        except:
+                            print('stop')
+                        
+                        price[s]=ccp
+                        prce=str(ccp.encode('utf-8').strip())
+                        break
                 
             for l in loc:
                 for cc in l.contents:
                     locs[s]=str(cc)
+                    location=str(cc)
             
-            break
+            for se in seller:
+                for cc in se.contents:
+                    ssT=str(cc)
+                    sell[s]=ssT
+                    sellR=ssT
+            
+            
+            for img in objImg:
+                content= img['content']
+                obImg=str(content.encode('utf-8').strip())
+            
+            if run is True:
+                prinItem(descp,prce,location,s,sellR,obImg)
+                    
+            
     return run
 
-def printResults():
-    fieldnames = ['Object','Price','Location','Link']
-    
-    
-    filename=os.path.join(filenameToOutput(),'output','scrapedOutput.csv')
-    
-    #here we open the results which will the name of cultures scraped from eBay
-    with open(filename, 'wb') as csvf:
-        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
-        writer.writeheader()      
-        
-        i=0
-        
-        
-        for o in desc.keys():
-            d=desc[o].encode('utf-8').strip()
-            p=price[o].encode('utf-8').strip()
-            l=locs[o].encode('utf-8').strip()
+            
+def prinItem(descP,priceP,locP,linkP,sellerP,image):
+
+        d=descP.split("|")[0].strip()
+        p=priceP
+        l=locP.encode('utf-8').strip()
+        o=linkP.encode('utf-8').strip()
+        ss=sellerP.encode('utf-8').strip()
+        img=image
             
                 
-            writer.writerow({'Object':str(d),'Price':str(p),'Location':str(l),'Link':str(o).encode('utf-8').strip()})
+        writer.writerow({'Object':str(d),'Price':str(p),'Location':str(l),'Seller':str(ss),'Image':str(img),
+                         'Link':str(o).encode('utf-8').strip()})
             
 '''
 The file output path for printing results (to the src level of this project)
@@ -149,10 +185,20 @@ The main to launch this module
 price={}
 desc={}
 locs={}
+sell={}
 
 if __name__ == '__main__':
-    make_urls()
-    printResults()
-        
-    print('Finished')
+    fieldnames = ['Object','Price','Location','Seller','Image','Link']
+    
+    
+    filename=os.path.join(filenameToOutput(),'output','scrapedOutput.csv')
+    
+    #here we open the results which will the name of cultures scraped from eBay
+    with open(filename, 'wb') as csvf:
+        writer = csv.DictWriter(csvf, fieldnames=fieldnames)
+
+        writer.writeheader()  
+        make_urls()
+    
+        print('Finished')
 
