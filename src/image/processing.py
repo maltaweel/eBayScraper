@@ -43,20 +43,60 @@ def predict(img_path, model):
 def findDifference(f1, f2):
     return np.linalg.norm(f1-f2)
 
-def findDifferences(feature_vectors1,feature_vectors2):
-    similar = {}
-    keys = [k for k,v in feature_vectors1.items()]
+'''
+def findDifferences(feature_vectors):
+    similar: dict = {}
+    keys = [k for k,v in feature_vectors.items()]
     min = {}
     for k in keys:
         min[k] = 10000000
     possible_combinations=list(itertools.combinations(keys, 2))
-    for k, v in possible_combinations:
-       diff=findDifference(feature_vectors1[k],feature_vectors2[v])
+    for k,v in possible_combinations:
+       diff=findDifference(feature_vectors[k],feature_vectors[v])
        if(diff < min[k]):
            min[k] = diff
            similar[k] = v
            min[v] = diff
            similar[v] = k
+    return similar
+'''
+
+def findDifferences(feature_vectors1,feature_vectors2):
+    similar = {}
+    keys={}#
+    keys2={}
+    min={}
+    min2 = {}
+#   for k in feature_vectors1.items():
+#        keys[k]=k
+
+    keys = [k for k,v in feature_vectors1.items()]
+    
+    for k in keys:
+        min[k] = 10000000
+        
+    possible_combinations=list(itertools.combinations(keys, 2))
+    
+    
+    keys2 = [kk for kk,v in feature_vectors2.items()]
+#    for k in feature_vectors2.items():
+#        keys2[k]=k
+        
+   
+    for kk in keys2:
+        min2[kk] = 10000000
+        
+    possible_combinations2=list(itertools.combinations(keys2, 2))
+    
+    for k, v in possible_combinations:
+           for l, w in possible_combinations2:
+               diff=findDifference(feature_vectors1[k],feature_vectors2[w])
+               if(diff < min[k]):
+                   min[k] = diff
+                   similar[k] = w
+                   min[w] = diff
+                   similar[w] = k
+               
     return similar 
 
 def driver():
@@ -73,7 +113,7 @@ def driver():
     results=findDifferences(feature_vectors_eby,feature_vectors_pas)
     for k,v in results.items():
         print(k +" is most similar to: "+ v)    
-    #print('Predicted:', decode_predictions(preds, top=3)[0])
+   # print('Predicted:', decode_predictions(preds, top=3)[0])
     
 def path():
     pn=os.path.abspath(__file__)
