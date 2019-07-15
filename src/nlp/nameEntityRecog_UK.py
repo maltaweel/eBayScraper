@@ -31,7 +31,7 @@ st = StanfordNERTagger('ner-model.ser.gz')
 lemmatizer = WordNetLemmatizer()
 
 #some default inputs included in this list of object types. Others can be added.
-objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait','decoration'}
+objectTypes={'jewellery','vessel','statue','weapon','text','clothing','household','coin','mask','religious','tool','painting','portrait','decoration','detector'}
 
 #dictionary used to reference a type of object with other terms affiliated with the object categorisation
 objectExtra={}
@@ -266,6 +266,7 @@ def loadExtraData ():
                                 equals[rt]=rt
                             if rt not in cultures:
                                 cultures.append(rt)
+                    
     except IOError:
         print "Could not read file:", csvfile
                     
@@ -280,7 +281,7 @@ def loadData():
     pn=pn.split("src")[0]
     pathway=os.path.join(pn,'data')
     
-    fieldnames = ['Object','Price','Seller','Location','Category','Object Type','Material','Link']
+    fieldnames = ['Object','Unit','Price','Seller','Image','Location','Category','Object Type','Material','Link']
     
     fileOutput=os.path.join(pn,'output',"namedEntityUK.csv")
     
@@ -329,6 +330,7 @@ def loadData():
                     obj['matType']=''
                     obj['category']=''
                     obj['objectT']=''
+                    obj['Image']=image
                     
                     mat=''
                     oT=''
@@ -387,11 +389,18 @@ def loadData():
                     if 'Yugoslavia' in location:
                         loc='Serbia'
                     
-                    v=str(price.replace("$","").strip()).replace(',','').strip()
+                    unit='GBP'
+                    if u"\u0024" in price:
+                        unit='dollar'
+                    
+                    v=str(price.replace(u"\u0024",""))
+                    
+                    v=str(v.replace(u"\xA3",""))
+                    
                     res2F=float(v)
                     
-                    writer.writerow({'Object':str(objct.decode('utf-8')),
-                            'Price':str(res2F),'Seller':str(seller),'Location':str(loc.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
+                    writer.writerow({'Object':str(objct.decode('utf-8')),'Unit':str(unit),
+                            'Price':str(res2F),'Seller':str(seller),'Image':str(image.decode('utf-8')),'Location':str(loc.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
                             'Object Type':str(obj['objectT'].decode('utf-8')),
                             'Material':str(obj['matType']),'Link':str(link.decode('utf-8'))})
 '''
