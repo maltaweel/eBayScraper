@@ -377,11 +377,12 @@ def loadData():
  #                  results[objct]=obj
                     
                     loc=''
-                    res3=obj['location'].split(",")
+                    res3=obj['location']
                     if len(location)>1:
-                        loc=res3[len(res3)-1].strip()
+                        loc=res3
+                        #loc=res3[len(res3)-1].strip()
                     else:
-                        loc=res3[0]
+                        loc=res3
             
                     if 'Russian Federation' in location:
                         loc="Russia"
