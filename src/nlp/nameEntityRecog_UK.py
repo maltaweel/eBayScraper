@@ -394,6 +394,7 @@ def loadData():
                         unit='dollar'
                     
                     v=str(price.replace(u"\u0024",""))
+                    v=str(v.replace(',',""))
                     
                     v=str(v.replace(u"\xA3",""))
                     
