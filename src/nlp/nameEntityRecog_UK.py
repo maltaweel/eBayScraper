@@ -398,7 +398,10 @@ def loadData():
                     
                     v=str(v.replace(u"\xA3",""))
                     
-                    res2F=float(v)
+                    if v!='':
+                        res2F=float(v)
+                    else:
+                        res2F=0.0
                     
                     writer.writerow({'Object':str(objct.decode('utf-8')),'Unit':str(unit),
                             'Price':str(res2F),'Seller':str(seller),'Image':str(image.decode('utf-8')),'Location':str(loc.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
