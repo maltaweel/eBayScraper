@@ -14,18 +14,19 @@ site='https://finds.org.uk/database/search/results/q/'
 database='https://finds.org.uk/'
 
 
-partTwo='Spindle+Whorl+Early+Medieval+950+-1050'
+#partTwo='Spindle+Whorl+Early+Medieval+950+-1050'
 
 def loadSearchText():
     fInput=filenamePath()+'/output/'
     
-    with open(os.path.join(fInput,'namedEntityUK.csv'),'rU') as csvfile:
+    with open(os.path.join(fInput,'namedEntityUK.csv'),'rU',buffering=0) as csvfile:
                 reader = csv.DictReader(csvfile)
                 
                 for row in reader:
                     description=row['Object Type']
                     
-                    search=site+description.replace(" ","+")
+                    description=description.strip()
+                    search=site+description.replace("|","+")
                     results=runSearch(search)
                     
                     if results =='':
@@ -45,7 +46,7 @@ def printResults(data):
     image=data['image']
     
                    
-    writer.writerow({'Content':str(content),'Image':str(image),'Link':str(link)})
+    writer.writerow({'Object':str(content),'Image':str(image),'Link':str(link)})
         
 def runSearch(search):
     links=[]
@@ -123,7 +124,7 @@ The main to launch this module
 '''
 if __name__ == '__main__':
     
-    fieldnames = ['Content','Image','Link']
+    fieldnames = ['Object','Image','Link']
     
     
     filename=os.path.join(filenamePath(),'output','pasSiteOutput.csv')
