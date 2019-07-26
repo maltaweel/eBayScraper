@@ -1,0 +1,5 @@
+"OBJECTID","ID_0","ISO","NAME_0","ID_1","NAME_1","TYPE_1","ENGTYPE_1","NL_NAME_1","VARNAME_1"
+1,242,"GBR","United Kingdom",1,"England","Home Nation|Constituent Country","Kingdom",NA,NA
+2,242,"GBR","United Kingdom",2,"Northern Ireland","Home Nation|Constituent Country","Province",NA,"Ulster"
+3,242,"GBR","United Kingdom",3,"Scotland","Home Nation|Constituent Country","Kingdom",NA,"Alba"
+4,242,"GBR","United Kingdom",4,"Wales","Home Nation|Constituent Country","Principality",NA,"Cymru"
