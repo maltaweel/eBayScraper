@@ -11,10 +11,11 @@ import os
 import pysal
 from dbfpy import dbf
 from fiona.fio.cat import cat
-from Lib.types import ObjectType
+
 
 #types of objects categorised in the outputs
 objTL={'jewellery':'JEWELLERY','coin':"COIN",'brooch':"BROOCH",'silver':'SILVER','gold':'GOLD'}
+locationD={}
 
 names={}
 counties={}
@@ -35,6 +36,8 @@ def loadShape(data):
             for r in reader:
                 name=r['name']
                 county=r['countyname']
+                easting=r['easting']
+                northing=r['northing']
                 
                 c={}
                 if county in counties:
@@ -44,6 +47,9 @@ def loadShape(data):
                 counties[county]=c
                 
                 names[name]=0.0
+                locationD[name+","+county]=easting+","+northing
+                
+                
                 
                 
                     
@@ -337,7 +343,7 @@ def run():
     loadShape(dbf)
     
     #first load the data from namedEntityTotal.csv
-    load(csvF)
+   ## load(csvF)
     
     '''
     #then output results to the .shp file, which is the same as the .csv file TM_WORLD
