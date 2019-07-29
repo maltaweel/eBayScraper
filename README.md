@@ -82,7 +82,7 @@ Folder used to place files from scarping and/or NER/dictionary analysis outputs 
 
 1. src/ner
 
-The folder contains two Java objects, which are NERDemo.java and RunTrainer.java respectively. NERDemo.java is an example NER project from the Stanford team that is included here as a demonstration on how to use NER. The RunTrainer.java is used for creating the ner-model.ser.gz file, which is used in the Python eBayScraper NER analysis. The properties.txt is used as a property file applied in RunTrainer.java and is based on requirements from the Stanford tool.
+The folder contains two Java objects, which are NERDemo.java and RunTrainer.java respectively. NERDemo.java is an example NER project from the Stanford Natural Language Processing team that is included here as a demonstration on how to use NER. The RunTrainer.java is used for creating the ner-model.ser.gz file, using the Stanford NLP libraries, which is then used in the Python eBayScraper NER analysis (nameEntityRecog.py). The properties.txt is used as a property file applied in RunTrainer.java and is based on requirements from the Stanford tool.
 
 2. bin/ner
 
