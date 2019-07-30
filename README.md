@@ -38,47 +38,47 @@ For category definitions of the NER and dictionary used, see definitions.docx or
 1. src/gui
 This is a package with the GUI (simpleGUI.py) module. This GUI can be launched using the run.sh script. The GUI allows execution of the scraping, NER/dictionary analysis, removal of duplicate scarped data and output data of the NER/dictionary analysis, and creation of the summary shapefile for sellers. These functions can also be launched as discussed below or conducted via this GUI.
 
-1. src/merger
+2. src/merger
 
 Modules that merge different scraped data (mergeMultipleOutputs.py and mergeMultipleResults.py). The module mergeMultipleOutputs.py merges the outputs of the NER method, while mergeMultipleResults.py merges scraped data. The mergeResults.py integrates the NER/dictionary results with associated countries where items were sold, providing a country-level spatial dataset of the NER/dictionary results. The spatial dataset produced by mergeResults.py provides information on cultures, materials of objects, and general types of objects sold in countries and the dollar value of those sales. 
 
-2. src/nlp
+3. src/nlp
 
 The only module here is nameEntityRecog.py, which applies the named entity recognition technique using the CRF outputs from NERProject. In addition, nameEntityRecog.py conducts dictionary regular expression searches, see inputData folder, as well as spell checks on descriptions. The NER uses the NER model classification (ner-model.ser.gz), which is located in the nlp folder. The output of the analysis is namedEntity.csv placed in the output folder. 
 
-3. src/scraper
+4. src/scraper
 
 The ebayAPI.py is not currently used but it can be applied to directly integrate with the eBay API platform created by eBay. The scrapeData.py is used to scrape data applying the Beautiful Soup library.
 
-4. src/test
+5. src/test
 
 The memoryTest.py module is used to test memory availability and allocation in the applied device. The randomSelector.py is used to produce random output from the NER/dictionary results that are applied in memory-recall or other information retrieval tests. 
 
-5. data
+6. data
 
 The folder that contains the raw scraped data that will be used in the NER model and dictionary analysis done in src/nlp/nameEntityRecog.py. The original raw files are outputted to the output folder but should be moved to this folder for the NER anlaysis or to the totalData folder for merging before NER/dictionary analysis. The data files are .csv files that contain object descriptions, dates of when an eBay item was sold (in the description), the value of the sale, the location of the seller, and the link of the object. The data can be merged together (namedEntityTotal.csv), which will be put in the output folder, or the raw scrape data can be directly incorporated to the data folder without merging and used in NER anlaysis.
 
-6. doc
+7. doc
 
 Folder containing general document descriptions of the modules and functions utilised. More details can be found in the comments within the modules in the src folder.
 
-7. images
+8. images
 
 Not used currently but could be a location for scraped images from eBay used for analysis.
 
-8. inputData
+9. inputData
 
 The folder used for dictionary (i.e., regular express) searches in the NER/dictionary model. See objectExtra.csv
 
-9. output
+10. output
 
 The output folder used for outputting analysis results in the NER/dictionary model and merger outputs from src/merger. The file namedEntityTotal.csv is the merged scraped data file, while namedEntityMerged.csv is the merged output of the NER/dictionary results. The file nameEntity.csv is the single run output from the NER analysis.
 
-10. shp 
+11. shp 
 
 This folder contains a shapefile (TM_WORLD_BORDERS-0.3.shp) used to store data about different countries in the categories analysed for the NER results. The shapefile integrates NER/dictionary analysis data, using src/merger/mergeResults.py, to enable visualization of the results based on country. The data provide a dollar value of antiquities found in different countries as well as type of antiquities/cultural objects, the material in which these objects are made from, and the cultures in which they are associated.
 
-11. totalData
+12. totalData
 
 Folder used to place files from scarping and/or NER/dictionary analysis outputs so that they can be merged into one data file. The merging of raw scraped data is done using files here or the outputs from the NER/dictionary analysis as well.
 
