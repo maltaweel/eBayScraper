@@ -18,6 +18,7 @@ dbfpy 2.0,
 SpellChecker 0.4,
 TextBlob 0.15.2,
 ctypes 1.0.2
+appJar 0.94.0
 
 <i>Java</i>
 
@@ -33,6 +34,9 @@ Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (se
 For category definitions of the NER and dictionary used, see definitions.docx or definitions.pdf.
 
 <i>eBayScraper</i>
+
+1. src/gui
+This is a package with the GUI (simpleGUI.py) module. This GUI can be launched using the run.sh script. The GUI allows execution of the scraping, NER/dictionary analysis, removal of duplicate scarped data and output data of the NER/dictionary analysis, and creation of the summary shapefile for sellers. These functions can also be launched as discussed below or conducted via this GUI.
 
 1. src/merger
 
