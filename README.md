@@ -36,7 +36,7 @@ For category definitions of the NER and dictionary used, see definitions.docx or
 <i>eBayScraper</i>
 
 1. src/gui
-This is a package with the GUI (simpleGUI.py) module. This GUI can be launched using the run.sh script. The GUI allows execution of the scraping, NER/dictionary analysis, removal of duplicate scarped data and output data of the NER/dictionary analysis, and creation of the summary shapefile for sellers. These functions can also be launched as discussed below or conducted via this GUI.
+This is a package with the GUI (simpleGUI.py) module. This GUI can be launched using the run.sh script. The GUI allows execution of the scraping, NER/dictionary analysis, removal of duplicate scarped data and output data of the NER/dictionary analysis, and creation of the summary shapefile for sellers. These functions can also be launched as discussed below or conducted via this GUI. The runNER.sh is launched by the option "Build NER Model," which makes the assumption that a .jar called NER_Run.jar executable jar has been created to run the NER model builder. This option should only be used if the jar is created. The runNER.sh may need modification to point to the correct path of the jar, depending where it is placed. Additional modifications to data inputs might be needed, as the NER model creator assums additional data paths (see NERProject below).
 
 2. src/merger
 
