@@ -15,6 +15,10 @@ import sys
 import re
 from datetime import datetime
 
+tP=os.path.abspath(__file__).split("src")[0]
+pathJ=os.path.join(tP,"lib","stanford-ner.jar")
+sys.path.append(pathJ)
+
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.tag import StanfordNERTagger
@@ -24,10 +28,12 @@ from textblob import TextBlob
 from spellchecker import SpellChecker
 spell = SpellChecker()
 
+
 porter=PorterStemmer()
 reload(sys)
 sys.setdefaultencoding('utf8')
-st = StanfordNERTagger('ner-model.ser.gz')
+
+
 lemmatizer = WordNetLemmatizer()
 
 #some default inputs included in this list of object types. Others can be added.
@@ -69,6 +75,9 @@ Method to parse a given sentence and then commence spell check, with the sentenc
 '''
 def spellCheck(sentence):
     
+    #below code will tokenize the sentence to terms
+    #then check terms for their spelling
+    #the sentence is then put back together
     try:
         b = TextBlob(sentence)
         lang=b.detect_language()
@@ -97,6 +106,7 @@ Method to find a word in a text using regular expression searches
 '''
 def findWholeWord(w,doc, eqls):
     
+    
     t=''
     if w.lower() in eqls:
         d=eqls[w]
@@ -108,7 +118,7 @@ def findWholeWord(w,doc, eqls):
             if wo == "":
                 continue
             
-
+            #regular expression term search
             s=re.findall(wo.lower(), doc.lower())
             if len(s)==0:
                 t=re.findall(lemmatizer.lemmatize(wo.lower()), doc.lower())
@@ -137,10 +147,15 @@ Method where the main NER model is used. Here the Standford CRF classifier is us
 @param res1- the description of the cultural object
 '''
 def printCantFindType(obj,res1):
-            
+    #this applies the NER model      
+    tP=os.path.abspath(__file__).split("src")[0]
+    jar=os.path.join(tP,"lib","stanford-ner.jar")
+    pathGZ=os.path.abspath(__file__).split("nameEntityRecog.py")[0]
+    st = StanfordNERTagger(os.path.join(pathGZ,'ner-model.ser.gz'),jar,encoding='utf-8') 
     p=st.tag(res1.split())
             
-    
+    #then go through the results, getting the second output which fits one of three categories
+    #the three categories relate to object type, culture, and material of object
     listT=[]
     for s in p:
         b=s[1]
@@ -279,6 +294,7 @@ def loadData():
     
     fileOutput=os.path.join(pn,'output',"namedEntity.csv")
     
+    #open the output file so output can be written while applying the methods
     with open(fileOutput, 'wb',buffering=0) as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
@@ -405,7 +421,7 @@ Method to run the module and launch the analysis
 '''                    
 def run():
     
-    #first load an data we need for dictionary searches
+    #first load any data we need for dictionary searches
     loadExtraData()
     
     #launch the analysis that will do NER and dictionary searches
