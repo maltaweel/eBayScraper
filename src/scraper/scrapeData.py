@@ -21,6 +21,25 @@ name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The
 ii=0
 tt=0
 
+#lists and dictionaries for data to scrape and keep for outputting.
+
+#object information
+objects=[]
+
+sell={}
+
+#price data
+prices=[]
+
+#figures (images)
+figures={}
+figuresKeep={}
+
+#link data
+links={}
+
+#location of the sale data
+location={}
 
 '''
 Method that returns urls to search and scrape data.
@@ -28,7 +47,7 @@ Method that returns urls to search and scrape data.
 @return urls to search
 '''
 def make_urls(names):
-  # eBay url that can be modified to search for a specific item on eBay
+#    eBay url that can be modified to search for a specific item on eBay
 #    url = "https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1312.R1.TR11.TRC2.A0.H0.XIp.TRS1&_nkw="
 #    url='https://www.ebay.com/sch/i.html?_from=R40&_nkw='
 #    url='https://www.ebay.com/sch/37907/i.html?_sop=13&_sadis=15&LH_Auction=1&LH_Complete=1&LH_Sold=1&_stpos=90278-4805&_from=R40&_nkw=%27'
@@ -98,23 +117,30 @@ def ebay_scrape(url,tt):
         if tt>int(number):
                 run=False
                 break
+            
         # Scrapes the first listed item's name
         name = soup.find_all("h3", {"class": "s-item__title"})
+        nnt=soup.find_all("span", {"class":'s-item__ended-date s-item__endedDate'})
 
         # .get_text(separator=u" ")
         
         for n in name:
             info=n.get_text(separator=u" ")
-#          
+            tn=nnt[iit]
+            date=tn.get_text(separator=u" ")
+            date=date.split(" ")[0]
+            date=date.replace("-"," ")+", 2019"
+            info=date+ " "+info     
+            
             objects.append(info)
             localNames.append(info)
             tt+=1
             iit+=1
-                
             # Scrapes the first listed item's price
-       
+            
+        #scrape the price
         price = soup.find_all("span", {"class": "s-item__price"})
-                
+                   
         for p in price:
             pr=p.get_text(separator=u" ")
             prices.append(pr)
@@ -126,6 +152,7 @@ def ebay_scrape(url,tt):
         
         
         iit=0
+        #this gets data from the html
         for im in imags:
             name=localNames[iit]
             
@@ -135,35 +162,43 @@ def ebay_scrape(url,tt):
             
             location1 = soup2.find_all("div", {"class": "u-flL"})
             location2 = soup2.find_all("div",{"class": "sh-loc"})
+            seller=soup2.find_all("span",{'class':'mbg-nw'})
             
 #            print(href)
             links[name]=href
             
+            #location data
             tr=False
             for lc2 in location2:
                 prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
                 tr=True
-#                print(prr)
             
             loc=False
             if tr is False:
                 for lc3 in location1:
                     text=lc3.get_text(separator=u" ")
-                    if "location" in text:
+                    if "Item location" in text:
                         loc=True
                         continue
                     if loc is True:
                         prr=lc3.get_text(separator=u" ")
-#                        print(prr)
                         location[name]=prr
                         break
+                    
+            for se in seller:
+                for cc in se.contents:
+                    ssT=str(cc)
+                    sell[name]=ssT
+                    sellR=ssT
             
             iit+=1
+            
 
-
+        break
 '''
-Method to print the images from a given description page
+Method to print the images from a given description page,
+Method is not currently used.
 @param ii- the image number to print
 '''
 def printImages(ii):
@@ -196,7 +231,6 @@ def printImages(ii):
         txt = open(path_to_data, "wb")
     
         #write the binary data
-    
         txt.write(download_img.read())
 
         #close the image file
@@ -208,11 +242,12 @@ Method to output the eBay data scrapped.
 @param name- the name of the output file to put the data to. The output folder has the eBay data retrieved.
 '''
 def printResults(name):
-    fieldnames = ['Object','Price','Location','Link']
+    fieldnames = ['Object','Price','Location','Seller','Link']
      
     filename=filenameToOutput()
     filename=os.path.join(filename,'output',name+'.csv')
     
+    #here we open the results which will the name of cultures scraped from eBay
     with open(filename, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
@@ -227,7 +262,10 @@ def printResults(name):
             try:
                 no=o.split("2019 ")[1]
             except:
-                no=o.split("2018 ")[1]
+                try:
+                    no=o.split("2018 ")[1]
+                except:
+                    continue
             
             if no in figuresKeep.keys():
                 f=figuresKeep[no].encode('utf-8').strip()
@@ -236,10 +274,10 @@ def printResults(name):
             
             i+=1
             
-            o=o.encode('utf-8').strip()
             
             l=""
             liks=''
+            sel=''
             
             try:
                 l=location[o].encode('utf8').strip()
@@ -247,18 +285,26 @@ def printResults(name):
                 l=""
             
             try:
+                sel=sell[o].encode('utf8').strip()
+            except:
+                sel=""
+                
+            try:
                 liks=links[o].encode('utf8').strip()
             except:
                 liks=""
-                
-            writer.writerow({'Object':str(o),'Price':str(p),'Location':str(l),'Link':str(liks)})
+            
+            o=o.encode('utf-8').strip()  
+            writer.writerow({'Object':str(o),'Price':str(p),'Location':str(l),'Seller':str(sel),'Link':str(liks)})
     
-    objects[:]
-    prices[:]
+    #clear the containers
+    del objects[:]
+    del prices[:]
+    sell.clear()
+    location.clear()
+    links.clear()
     figures.clear()
     figuresKeep.clear()
-    links.clear()
-    location.clear()
 
 '''
 The file output path for printing results (to the src level of this project)
@@ -270,26 +316,29 @@ def filenameToOutput():
         pn=pn.split("src")[0]  
         
         return pn
-    
-''''
-The main to launch this module
-'''
-if __name__ == '__main__':
+
+def runModule():
     urls=make_urls(name_list)
     
-    ii=0
+    
     for name in urls.keys():
-        objects=[]
-        prices=[]
-        figures={}
-        figuresKeep={}
-        links={}
-        location={}
+       
         
         tt=0
+        
+        #url used
         url=urls[name]
+        
+        #scrape here
         ebay_scrape(url,tt)
 #       printImages(ii)
+
+        #print results
         printResults(name)
         
+#        break
+ 
     print('Finished')
+
+if __name__ == '__main__':
+    runModule()
