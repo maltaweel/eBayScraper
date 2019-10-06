@@ -195,7 +195,7 @@ def ebay_scrape(url,tt):
             iit+=1
             
 
-        break
+#        break
 '''
 Method to print the images from a given description page,
 Method is not currently used.
