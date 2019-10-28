@@ -9,7 +9,6 @@ Created on Feb 11, 2019
 import csv
 import os
 
-
 #dates of outputs
 dates=[]
 
@@ -40,6 +39,9 @@ matTypes=[]
 #prices of duplicate objects are traced using what is stored here
 priceExtra=[]
 
+#seller data
+sellers=[]
+
 '''
 Method to load input files from the totalData folder and combine into one output file
 '''
@@ -50,15 +52,13 @@ def loadData():
     pn=pn.split("src")[0]
     pathway=os.path.join(pn,'totalData')
     
-    totals=[]
-   
-    
-  
+    #loop through the directory of files
     for fil in os.listdir(pathway):
         with open(os.path.join(pathway,fil),'rU') as csvfile:
             reader = csv.DictReader(csvfile)
             print(csvfile)
              
+            #get data from rows
             for row in reader:
                 date=row['Date']
                 obj=row['Object']
@@ -68,9 +68,11 @@ def loadData():
                 objT=row['Object Type']
                 matType=row['Material']
                 link=row['Link']
+                seller=row['Seller']
                 
                 totalThing=obj
                 
+                #this will determine what a duplicate is and remove
                 if totalThing in totalThings:
                     if price in priceExtra:
                         continue
@@ -86,21 +88,22 @@ def loadData():
                     objectTypes.append(objT)
                     links.append(link)
                     matTypes.append(matType)
+                    sellers.append(seller)
                 
-                
-         
-
 '''
 Method to print results of the merged files
 '''                 
 def printResults():
     
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Seller','Link']
 
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
+    
+    #output is namedEntityMerged.csv
     fileOutput=os.path.join(pn,'output',"namedEntityMerged.csv")
     
+    #opens the output file and then puts the output in
     with open(fileOutput, 'wb') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
@@ -109,7 +112,7 @@ def printResults():
         for i in range(0,len(objects)):
            
             writer.writerow({'Date': str(dates[i]),'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Category':
-                str(categories[i]),'Object Type':str(objectTypes[i]),'Material':str(matTypes[i]),'Link':str(links[i])})
+                str(categories[i]),'Object Type':str(objectTypes[i]),'Material':str(matTypes[i]),'Seller':str(sellers[i]),'Link':str(links[i])})
    
 #           writer.writerow({'Object':str(objects[i]),'Price':str(prices[i]),'Location':str(locations[i]),'Link':str(links[i])})
 
@@ -117,8 +120,12 @@ def printResults():
 Method to run the module
 '''  
 def run():
+    #first load the data
     loadData()
+    
+    #then print the results
     printResults()
+    
     print("Finished")
    
 if __name__ == '__main__':

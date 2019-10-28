@@ -9,7 +9,10 @@ Created on Feb 11, 2019
 import csv
 import os
 import pysal
+import operator
 from dbfpy import dbf
+
+sellerT={}
 
 #cultrual terms to be assessed as categorisation
 words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':'EGYPTIAN',
@@ -62,6 +65,7 @@ def load(dbF,csvName):
     place={}
     objTs={}
     matT={}
+   
     
     #open the csv and go through the results
     with open(pathway) as csvfile:
@@ -81,6 +85,7 @@ def load(dbF,csvName):
                         loc=row['Location']
                         objectT=row['Object Type']
                         mat=row['Material']
+                        sel=row['Seller']
                         
                         if loc=='':
                             continue
@@ -103,12 +108,16 @@ def load(dbF,csvName):
                                 ctg=[]
                                 objT=[]
                                 mtT=[]
+                                sell=[]
+                                sellT={}
                                 if r in results:
                                     rslt=results[r]
                                     prc=prices[r]
                                     ctg=category[r]
                                     objT=objTs[r]
                                     mtT=matT[r]
+                                    sellT=sellerT[r]
+                                    
                                     
                                 rslt.append(loc)
                                 prc.append(price)
@@ -116,8 +125,9 @@ def load(dbF,csvName):
                                     
                                 objT.append(objectT)
                                 
-                                
+                                sell.append(sel)
                                 mtT.append(mat)
+                                
                             
                                 results[r]=rslt
                                 prices[r]=prc
@@ -129,6 +139,15 @@ def load(dbF,csvName):
                                 
                                 place[r]=s
                                 
+                                selT=price
+                                if sel in sellT:
+                                    selT+=sellT[sel]
+                                    
+                
+                                
+                                sellT[sel]=selT
+                                
+                                sellerT[r]=sellT
                             
                             ii+=1
                                
@@ -301,6 +320,16 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
        
         #the total sales data is kep here for each country
         rec["TOTAL"] = total
+        
+        sell=sellerT[r]
+        
+        
+        a=max(sell.iteritems(), key=operator.itemgetter(1))[0]
+        vp=sell[a]
+        
+            
+        rec['TopSeller']=a
+        rec['TopSellerT']=vp
         
         #the top selling culture is stored
         rec["TOP"] = top.capitalize()
