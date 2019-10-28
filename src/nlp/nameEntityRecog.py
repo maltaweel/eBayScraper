@@ -290,7 +290,7 @@ def loadData():
     pn=pn.split("src")[0]
     pathway=os.path.join(pn,'data')
     
-    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Link']
+    fieldnames = ['Date','Object','Price','Location','Category','Object Type','Material','Seller','Link']
     
     fileOutput=os.path.join(pn,'output',"namedEntity.csv")
     
@@ -394,8 +394,6 @@ def loadData():
                     if obj['category']=='':
                         obj['category']='?'
                     
- #                  results[objct]=obj
-                    
                     loc=''
                     res3=obj['location'].split(",")
                     if len(location)>1:
@@ -412,10 +410,11 @@ def loadData():
                     v=str(price.replace("$","").strip()).replace(',','').strip()
                     res2F=float(v)
                     
+                    #row['Seller']
                     writer.writerow({'Date': str(date),'Object':str(objct.decode('utf-8')),
                             'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
                             'Object Type':str(obj['objectT'].decode('utf-8')),
-                            'Material':str(obj['matType']),'Link':str(link.decode('utf-8'))})
+                            'Material':str(obj['matType']),'Seller':str(''),'Link':str(link.decode('utf-8'))})
 '''
 Method to run the module and launch the analysis
 '''                    
