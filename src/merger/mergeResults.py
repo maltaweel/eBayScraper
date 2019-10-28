@@ -20,7 +20,7 @@ words={'roman':'ROMAN','byzantine':'BYZANTINE','islamic':'ISLAMIC',  'egyptian':
        'khazar':'KHAZAR','mogul':'MOGUL','bronze age':'BRONZE_AGE','scythian':'SCYTHIAN',
        'iron age':'IRON_AGE','russian':'RUSSIA','medieval':'MEDIEVAL','celtic':'CELT', 'central asia': 'CENT_ASIA',
        'america':'AMERICA','pre-historic':'PRE_HISTOR','china':'CHINA','japan':'JAPAN','buddhist':'BUDDHIST','near east':'NEAR_EAST',
-       'mongol':'MONGUL','africa':'AFRICA','medieval':'MEDIEVAL','european':'EUROPEAN','cambodian':'CAMBODIAN',
+       'mongol':'MONGOL','africa':'AFRICA','medieval':'MEDIEVAL','european':'EUROPEAN','cambodian':'CAMBODIAN',
        'other':'OTHER','india':'INDIA'}
 
 #types of objects categorised in the outputs
