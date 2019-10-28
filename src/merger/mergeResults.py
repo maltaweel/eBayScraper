@@ -12,6 +12,7 @@ import pysal
 import operator
 from dbfpy import dbf
 
+#data on the seller and the total seller sells
 sellerT={}
 
 #cultrual terms to be assessed as categorisation
@@ -116,7 +117,8 @@ def load(dbF,csvName):
                                     ctg=category[r]
                                     objT=objTs[r]
                                     mtT=matT[r]
-                                    sellT=sellerT[r]
+                                    if sellerT.has_key(r):
+                                        sellT=sellerT[r]
                                     
                                     
                                 rslt.append(loc)
@@ -125,7 +127,9 @@ def load(dbF,csvName):
                                     
                                 objT.append(objectT)
                                 
-                                sell.append(sel)
+                                if sel !="":
+                                    sell.append(sel)
+                                    
                                 mtT.append(mat)
                                 
                             
@@ -139,15 +143,16 @@ def load(dbF,csvName):
                                 
                                 place[r]=s
                                 
+                                #associate sale with seller
                                 selT=price
-                                if sel in sellT:
-                                    selT+=sellT[sel]
+                                
+                                if sel!="":
+                                    if sel in sellT:
+                                        selT+=sellT[sel]
                                     
-                
+                                    sellT[sel]=selT
                                 
-                                sellT[sel]=selT
-                                
-                                sellerT[r]=sellT
+                                    sellerT[r]=sellT
                             
                             ii+=1
                                
@@ -321,15 +326,20 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         #the total sales data is kep here for each country
         rec["TOTAL"] = total
         
-        sell=sellerT[r]
+        if sellerT.has_key(r):
+            sell=sellerT[r]
         
         
-        a=max(sell.iteritems(), key=operator.itemgetter(1))[0]
-        vp=sell[a]
+            a=max(sell.iteritems(), key=operator.itemgetter(1))[0]
+            vp=sell[a]
         
-            
-        rec['TopSeller']=a
-        rec['TopSellerT']=vp
+        
+            rec['TopSeller']=a
+            rec['TopSellerT']=vp
+        
+        else:
+            rec['TopSeller']=''
+            rec['TopSellerT']=float(0.0)
         
         #the top selling culture is stored
         rec["TOP"] = top.capitalize()
