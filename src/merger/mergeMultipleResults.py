@@ -105,7 +105,7 @@ def printResults():
         for i in range(0,len(objects)):
             
             writer.writerow({'Object':str(objects[i]),'Price':str(prices[i]),'News':str(news[i]),
-                             'Seller':str(sell=sellers[i]),'Location':str(locations[i]),'Link':str(links[i])})
+                             'Seller':str(sellers[i]),'Location':str(locations[i]),'Link':str(links[i])})
 '''
 Method to run the module
 '''           
