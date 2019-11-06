@@ -21,7 +21,7 @@ namedEntityMerged.csv in output) and number of random selections to make.
 '''
 def selectRandom(n):
     
-    print "run random"
+    print("run random")
     pn=os.path.abspath(__file__)
     pn=pn.split("src")[0]
     pathway=os.path.join(pn,'output','namedEntityMerged.csv')
