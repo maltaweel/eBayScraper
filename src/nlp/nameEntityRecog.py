@@ -277,7 +277,7 @@ def loadExtraData ():
                             if rt not in cultures:
                                 cultures.append(rt)
     except IOError:
-        print "Could not read file:", csvfile
+        print("Could not read file:", csvfile)
                     
             
 '''
