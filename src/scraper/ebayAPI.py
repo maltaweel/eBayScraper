@@ -24,4 +24,4 @@ try:
 
 except ConnectionError as e:
     print(e)
-    print(e.response.dict())
+    print((e.response.dict()))
