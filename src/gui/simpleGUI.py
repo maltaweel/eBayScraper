@@ -3,7 +3,7 @@ Simple GUI to run analyses and different components of scraping and NER/dictiona
 
 Created on Jul 30, 2019
 
-@author: Mark Altaweel
+@author: 
 '''
 import sys
 import os
@@ -28,7 +28,7 @@ from nlp import nameEntityRecog
 
 '''
 Action button to launch options to run, clean, or analyze data
-@param button an action button selected
+@param button- an action button selected
 '''
 def press(button):
     if button == "Run Scraping":
@@ -36,7 +36,7 @@ def press(button):
     elif button=='Remove Duplicate Data':
         mergeMultipleResults.run()
     elif button=='Build NER Model':
-        nameEntityRecog.run()
+        os.system('sh runNER.sh')
     elif button=='Run NER/dictionary Analysis':
         nameEntityRecog.run()
     elif button=='Clean NER/Dictionary Results':
