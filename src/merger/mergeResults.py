@@ -117,7 +117,7 @@ def load(dbF,csvName):
                                     ctg=category[r]
                                     objT=objTs[r]
                                     mtT=matT[r]
-                                    if sellerT.has_key(r):
+                                    if r in sellerT:
                                         sellT=sellerT[r]
                                     
                                     
@@ -189,7 +189,7 @@ def locationsO(objT,objTT,price):
             
             try:
                 nSn=objTT[nn.strip()]
-            except Exception, e:
+            except Exception as e:
                 print('error: ')
                 print( e)
                 continue
@@ -200,7 +200,7 @@ def locationsO(objT,objTT,price):
             else:
                 try:
                     lisN[nSn]=price[ii]
-                except Exception, e:
+                except Exception as e:
                     print('error: ')
                     print(e)
         
@@ -292,7 +292,7 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
                 
                 w=words[c]
                 rec[w]=sCats
-            except Exception, e:
+            except Exception as e:
                 print('error: ')
                 print(e) 
                     
@@ -326,11 +326,11 @@ def finalizeResults(results,prices,category,place,dbF,objTs, matT):
         #the total sales data is kep here for each country
         rec["TOTAL"] = total
         
-        if sellerT.has_key(r):
+        if r in sellerT:
             sell=sellerT[r]
         
         
-            a=max(sell.iteritems(), key=operator.itemgetter(1))[0]
+            a=max(iter(sell.items()), key=operator.itemgetter(1))[0]
             vp=sell[a]
         
         
