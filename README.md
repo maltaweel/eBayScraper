@@ -1,7 +1,7 @@
 # eBayScraper
 <b>Guide to eBayScraper and NERProject</b>
 
-This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities/cultural objects. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using a conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on how to use the contents of the tool.
+This eBayScraper tool, a Python 3.8+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities/cultural objects. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using a conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on how to use the contents of the tool.
 
 <b>Required Libraries</b>
 
@@ -9,7 +9,7 @@ This eBayScraper tool, a Python 2.7+ tool, performs both web scraping and named 
 
 The following libraries are used in eBayScraper and are required, including possibly newer versions of the listed libraries.
 
-Python 2.7+,
+Python 3.8+,
 NLTK 3.4,
 Beautiful Soup 4.4,
 ebaysdk 2.1.5 (used only for eBayAPI in /src/scraper/ folder),
