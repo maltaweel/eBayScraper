@@ -66,13 +66,14 @@ Method to check spelling of an English word
 def spelling(word):
     
     return spell.correction(word)
-   
+  
 ''''
 Method to parse a given sentence and then commence spell check, with the sentence then being reformed.
 
 @param sentence- the sentence to check
 @return sentence- the spell corrected sentence
 '''
+
 def spellCheck(sentence):
     
     #below code will tokenize the sentence to terms
@@ -277,7 +278,7 @@ def loadExtraData ():
                             if rt not in cultures:
                                 cultures.append(rt)
     except IOError:
-        print("Could not read file:", csvfile)
+        print ("Could not read file:", csvfile)
                     
             
 '''
@@ -305,12 +306,17 @@ def loadData():
  
                 for row in reader:
                     
+                    now = datetime.datetime.now()
+                    
                     #get some of the basic data from the scraped file, including description, sale price (in dollars) and date info.
                     obj={}
                     org=row['Object']
                     price=row['Price']
-                    date1=org.split("2019")
-                    date2=org.split("2018")
+                    date1=org.split(str(now.year))
+                    date2=org.split(str(now.year-1))
+                    
+                    orgo=row['Object']
+                    
                     
                     #spell check launched here
                     org=spellCheck(org)
@@ -328,11 +334,11 @@ def loadData():
                             
                     if len(date1)>1:
                         s1=date1[0].replace("Sold","").strip()
-                        dateKeep=s1+" 2019"
+                        dateKeep=s1+" "+str(now.year)
                             
                     else:
                         s2=date2[0].replace("Sold","").strip()
-                        dateKeep=s2+" 2018"
+                        dateKeep=s2+" "+str(now.year-1)
                         
                     date=datetime.strptime(dateKeep, '%b %d, %Y')    
                         
@@ -351,6 +357,9 @@ def loadData():
                     obj['matType']=''
                     obj['category']=''
                     obj['objectT']=''
+                    
+                    #this does the method for NER
+                    printCantFindType(obj, orgo)
                     
                     mat=''
                     oT=''
@@ -410,11 +419,11 @@ def loadData():
                     v=str(price.replace("$","").strip()).replace(',','').strip()
                     res2F=float(v)
                     
-                    sell=row['Seller']
+                    s=row['Seller']
                     writer.writerow({'Date': str(date),'Object':str(objct.decode('utf-8')),
                             'Price':str(res2F),'Location':str(loc.decode('utf-8')),'Category':str(obj['category'].decode('utf-8')),
                             'Object Type':str(obj['objectT'].decode('utf-8')),
-                            'Material':str(obj['matType']),'Seller':str(sell),'Link':str(link.decode('utf-8'))})
+                            'Material':str(obj['matType']),'Seller':str(s),'Link':str(link.decode('utf-8'))})
 '''
 Method to run the module and launch the analysis
 '''                    
