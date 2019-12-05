@@ -32,6 +32,7 @@ spell = SpellChecker()
 porter=PorterStemmer()
 reload(sys)
 sys.setdefaultencoding('utf8')
+from datetime import timedelta
 
 
 lemmatizer = WordNetLemmatizer()
@@ -306,7 +307,7 @@ def loadData():
  
                 for row in reader:
                     
-                    now = datetime.datetime.now()
+                    now = datetime.now()
                     
                     #get some of the basic data from the scraped file, including description, sale price (in dollars) and date info.
                     obj={}
