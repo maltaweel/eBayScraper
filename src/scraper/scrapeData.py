@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import csv
-import urllib.request, urllib.error, urllib.parse
+import urllib2
+import datetime
 
 # List of item names to search on eBay based on what is present on the eBay site.
 name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
@@ -103,7 +104,7 @@ def ebay_scrape(url,tt):
         soup = BeautifulSoup(res.text, 'html.parser')
             
         num=soup.find('h1',{"class":'srp-controls__count-heading'})
-        number=num.get_text(separator=" ").split(" results")[0]
+        number=num.get_text(separator=u" ").split(" results")[0]
         number=number.replace(',','')
             
 #       print(int(number))
@@ -125,11 +126,11 @@ def ebay_scrape(url,tt):
         # .get_text(separator=u" ")
         
         for n in name:
-            info=n.get_text(separator=" ")
+            info=n.get_text(separator=u" ")
             tn=nnt[iit]
-            date=tn.get_text(separator=" ")
-            date=date.split(" ")[0]
-            date=date.replace("-"," ")+", 2019"
+            date=tn.get_text(separator=u" ")
+            date1=date.split(" ")[0]
+            date=date1.replace("-"," ")+", "+str(datetime.datetime.now().year)
             info=date+ " "+info     
             
             objects.append(info)
@@ -142,7 +143,7 @@ def ebay_scrape(url,tt):
         price = soup.find_all("span", {"class": "s-item__price"})
                    
         for p in price:
-            pr=p.get_text(separator=" ")
+            pr=p.get_text(separator=u" ")
             prices.append(pr)
             
           
@@ -170,19 +171,19 @@ def ebay_scrape(url,tt):
             #location data
             tr=False
             for lc2 in location2:
-                prr=lc2.get_text(separator=" ").split("location: ")[1]
+                prr=lc2.get_text(separator=u" ").split("location: ")[1]
                 location[name]=prr
                 tr=True
             
             loc=False
             if tr is False:
                 for lc3 in location1:
-                    text=lc3.get_text(separator=" ")
+                    text=lc3.get_text(separator=u" ")
                     if "Item location" in text:
                         loc=True
                         continue
                     if loc is True:
-                        prr=lc3.get_text(separator=" ")
+                        prr=lc3.get_text(separator=u" ")
                         location[name]=prr
                         break
                     
@@ -204,7 +205,7 @@ Method is not currently used.
 def printImages(ii):
     
    
-    for n in list(figures.keys()):
+    for n in figures.keys():
 #        print(n)
         
         f=figures[n]
@@ -213,9 +214,9 @@ def printImages(ii):
         #get the current time
         
         try:
-            download_img = urllib.request.urlopen(f)
+            download_img = urllib2.urlopen(f)
            
-        except urllib.error.HTTPError:
+        except urllib2.HTTPError:
             continue
         
         
@@ -267,7 +268,7 @@ def printResults(name):
                 except:
                     continue
             
-            if no in list(figuresKeep.keys()):
+            if no in figuresKeep.keys():
                 f=figuresKeep[no].encode('utf-8').strip()
             else:
                 f=""
@@ -321,7 +322,7 @@ def runModule():
     urls=make_urls(name_list)
     
     
-    for name in list(urls.keys()):
+    for name in urls.keys():
        
         
         tt=0
