@@ -10,6 +10,7 @@ import requests
 import os
 import csv
 import urllib2
+import datetime
 
 # List of item names to search on eBay based on what is present on the eBay site.
 name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
@@ -128,8 +129,8 @@ def ebay_scrape(url,tt):
             info=n.get_text(separator=u" ")
             tn=nnt[iit]
             date=tn.get_text(separator=u" ")
-            date=date.split(" ")[0]
-            date=date.replace("-"," ")+", 2019"
+            date1=date.split(" ")[0]
+            date=date1.replace("-"," ")+", "+str(datetime.datetime.now().year)
             info=date+ " "+info     
             
             objects.append(info)
