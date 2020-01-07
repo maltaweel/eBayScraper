@@ -55,11 +55,12 @@ def loadData():
     #loop through the directory of files
     for fil in os.listdir(pathway):
         with open(os.path.join(pathway,fil),'rU') as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = csv.DictReader(x.replace('\0', '') for x in csvfile)
             print(csvfile)
              
             #get data from rows
             for row in reader:
+                
                 date=row['Date']
                 obj=row['Object']
                 price=row['Price']
