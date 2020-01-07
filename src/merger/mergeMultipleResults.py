@@ -48,7 +48,7 @@ def loadData():
   
     for fil in os.listdir(pathway):
         with open(os.path.join(pathway,fil),'rU') as csvfile:
-            reader = csv.DictReader(csvfile)
+            reader = csv.DictReader(x.replace('\0', '') for x in csvfile)
             print(csvfile)
             new=0
             for row in reader:   
