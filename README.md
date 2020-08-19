@@ -1,24 +1,27 @@
 # eBayScraper
 <b>Guide to eBayScraper and NERProject</b>
 
-This eBayScraper tool, a Python 3.8+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities/cultural objects. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using a conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on how to use the contents of the tool.
+This eBayScraper tool, a Python 3.5+ tool, performs both web scraping and named entity recognition (NER) analysis of eBay sales data on antiquities/cultural objects. The tool also applies dictionary searches using regular expression searches. The spelling of object descriptions is checked prior to analysis. The NERProject, a Java 8 project included as a sub-tool and part of eBayScraper, provides a way to create a supervised classification using a conditional random field (CRF). The output of this tool is a classification that is used in the NER analysis within eBayScraper. The following provides a high-level overview of the tools provided as well as more detailed instructions on how to use the contents of the tool.
 
 <b>Required Libraries</b>
 
 <i>Python</i>
 
-The following libraries are used in eBayScraper and are required, including possibly newer versions of the listed libraries.
+The following libraries are used in eBayScraper and are required (see requirement.txt, used for pip installation, for python libraries), including possibly newer versions of the listed libraries.
 
-Python 3.8+,
-NLTK 3.4,
-Beautiful Soup 4.4,
-ebaysdk 2.1.5 (used only for eBayAPI in /src/scraper/ folder),
-pysal 2.0,
-dbfpy 2.0,
-SpellChecker 0.4,
-TextBlob 0.15.2,
-ctypes 1.0.2
-appJar 0.94.0
+Python 3.5+,
+nltk==3.4
+beautifulsoup4==4.4
+ebaysdk==2.1.5 
+pysal==2.0
+dbfpy==2.0
+spellchecker==0.4
+textblob==0.15.2
+ctypes==1.0.2
+numpy==1.19.1
+requests=2.24.0
+urllib3==1.25.6
+appJar==0.94.0
 
 <i>Java</i>
 
@@ -106,7 +109,7 @@ The Java doc files which provide documentation and explanation of the Java class
 
 6. lib
 
-The Java libraries used from the Stanford CoreNLP tool.
+The Java libraries (Java 8) used from the Stanford CoreNLP tool.
 
  <b>Output and Required Input </b>
 
