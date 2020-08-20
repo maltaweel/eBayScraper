@@ -24,14 +24,14 @@ from nltk.stem import PorterStemmer
 from nltk.tag import StanfordNERTagger
 from nltk.stem import WordNetLemmatizer
 from textblob import TextBlob
+import imp
 
 from spellchecker import SpellChecker
 spell = SpellChecker()
 
 
 porter=PorterStemmer()
-reload(sys)
-sys.setdefaultencoding('utf8')
+
 from datetime import timedelta
 
 
@@ -297,7 +297,7 @@ def loadData():
     fileOutput=os.path.join(pn,'output',"namedEntity.csv")
     
     #open the output file so output can be written while applying the methods
-    with open(fileOutput, 'wb',buffering=0) as csvf:
+    with open(fileOutput, 'w') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
         writer.writeheader() 
@@ -342,7 +342,7 @@ def loadData():
                         dateKeep=s2+" "+str(now.year-1)
                         
                     date=datetime.strptime(dateKeep, '%b %d, %Y')    
-                        
+                    
                     location=row['Location']
                     link=row['Link']
                         
