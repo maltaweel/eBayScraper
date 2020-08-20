@@ -15,20 +15,20 @@ beautifulsoup4==4.4
 ebaysdk==2.1.5 
 pysal==2.0
 dbfpy==2.0
-spellchecker==0.4
+pyspellchecker==0.5.5
 textblob==0.15.2
 ctypes==1.0.2
 numpy==1.19.1
 requests=2.24.0
 urllib3==1.25.6
 appJar==0.94.0
-
+indexer==0.6.2
 <i>Java</i>
 
 The following libraries are used in NERProject and are required, including possibly newer versions of the listed libraries.
 
 Java 8
-Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (see instructions; the lib folder in NERProject has Java libraries needed)
+Stanford CoreNLP 3.9.2:  https://stanfordnlp.github.io/CoreNLP/download.html (see instructions; the lib folder in NERProject has Java libraries needed). You can also need to have the stanford-ner.jar in the lib folder in the main eBayScraper project. This will along with ner-model.ser.gz (or ner model file) will enable the nameEntityReco.py module to function (see /src/nlp in eBayScraper).
 
 <b>High-Level Overview</b>
 
