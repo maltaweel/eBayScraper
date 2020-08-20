@@ -1,0 +1,13 @@
+certifi==2020.6.20
+nltk==3.4
+beautifulsoup4==4.4
+ebaysdk==2.1.5 
+pysal==2.0
+dbfpy==2.0
+pyspellchecker==0.5.5
+textblob==0.15.2
+ctypes==1.0.2
+numpy==1.19.1
+requests=2.24.0
+urllib3==1.25.6
+indexer==0.6.2
