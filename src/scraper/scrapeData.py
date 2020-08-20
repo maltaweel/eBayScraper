@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import csv
-import urllib2
 import datetime
+import urllib3
 
 # List of item names to search on eBay based on what is present on the eBay site.
 name_list = ["Near East Antiquities",'Egyptian Antiquities', 'Antiquities of The Americas',
@@ -214,9 +214,9 @@ def printImages(ii):
         #get the current time
         
         try:
-            download_img = urllib2.urlopen(f)
+            download_img = requests.get(f)
            
-        except urllib2.HTTPError:
+        except urllib3.exceptions.HTTPError:
             continue
         
         
@@ -249,7 +249,7 @@ def printResults(name):
     filename=os.path.join(filename,'output',name+'.csv')
     
     #here we open the results which will the name of cultures scraped from eBay
-    with open(filename, 'wb') as csvf:
+    with open(filename, 'w') as csvf:
         writer = csv.DictWriter(csvf, fieldnames=fieldnames)
 
         writer.writeheader()      
