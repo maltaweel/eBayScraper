@@ -23,6 +23,8 @@ requests=2.24.0
 urllib3==1.25.6
 appJar==0.94.0
 indexer==0.6.2
+
+see requirements.txt
 <i>Java</i>
 
 The following libraries are used in NERProject and are required, including possibly newer versions of the listed libraries.
